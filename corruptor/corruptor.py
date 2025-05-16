@@ -1,4 +1,4 @@
-import Faker
+from faker import Faker
 import numpy
 import random
 import numpy as np
@@ -92,14 +92,23 @@ def calculated_corruption_noise(
     )
 
     # Rows
-    rows = np.random.randint(0, dataset_dimensions[0], amount_rows_to_corrupt)
-    row_coordinates = np.array(
-        [(row, col) for row in rows for col in range(dataset_dimensions[1])]
-    )
+    if amount_rows_to_corrupt > 0:
+        rows = np.random.randint(0, dataset_dimensions[0], amount_rows_to_corrupt)
+        row_coordinates = np.array(
+            [(row, col) for row in rows for col in range(dataset_dimensions[1])]
+        )
+    else:
+        rows = np.array([], dtype=int)
+        row_coordinates = np.empty((0, 2), dtype=int)
 
     # Cells
-    x_coords = np.random.randint(0, dataset_dimensions[0], amount_cells_to_corrupt)
-    y_coords = np.random.randint(0, dataset_dimensions[1], amount_cells_to_corrupt)
+    if amount_cells_to_corrupt > 0:
+        x_coords = np.random.randint(0, dataset_dimensions[0], amount_cells_to_corrupt)
+        y_coords = np.random.randint(0, dataset_dimensions[1], amount_cells_to_corrupt)
+        cell_coordinates = np.column_stack((x_coords, y_coords))
+    else:
+        cell_coordinates = np.empty((0, 2), dtype=int)
+
 
     # Combine into (x, y) pairs
     cell_coordinates = np.column_stack((x_coords, y_coords))
@@ -167,4 +176,7 @@ def analyze_dataset(
 
 
 if __name__ == "__main__":
+    dataset = pd.read_csv("./simple_dataset.csv")
+    print(dataset)
+    print(calculated_corruption_noise(dataset_dimensions=dataset.shape, severity=0.1))
     pass

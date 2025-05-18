@@ -69,8 +69,22 @@ def delete_rows(dataset: pd.DataFrame, rows_to_delete: list[int] = None) -> pd.D
 
 
 # Franzi
-def missing_values(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
-    pass
+def missing_values(dataset: pd.DataFrame, cell_coordinates: np.ndarray, severity: float) -> pd.DataFrame:
+    """
+    Set a subset of the specified cell coordinates to NaN, based on severity.
+    cell_coordinates: np.ndarray of shape (N, 2), where each row is (row_idx, col_idx)
+    severity: float between 0 and 1, fraction of cell_coordinates to corrupt
+    """
+    n_total = len(cell_coordinates)
+    n_corrupt = max(1, int(severity * n_total)) if n_total > 0 else 0
+    if n_corrupt == 0:
+        return dataset
+    # Randomly select indices to corrupt
+    selected_indices = np.random.choice(n_total, n_corrupt, replace=False)
+    for idx in selected_indices:
+        row, col = cell_coordinates[idx]
+        dataset.iat[row, col] = np.nan
+    return dataset
 
 
 # Franzi

@@ -26,13 +26,46 @@ class CorruptionTypes(Enum):
 
 
 # Franzi
-def swap_rows(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
-    pass
+def swap_rows(dataset: pd.DataFrame, rows_to_swap: list[int] = None) -> pd.DataFrame:
+    n_rows = dataset.shape[0]
+
+    if not rows_to_swap:
+        raise ValueError("You must provide a non-empty list of row indices to swap.")
+
+    # Pick one row index from the provided list
+    selected_row = random.choice(rows_to_swap)
+
+    if selected_row >= n_rows:
+        raise IndexError(f"Row index {selected_row} is out of bounds for dataset with {n_rows} rows.")
+
+    # Pick a different random row index to swap with
+    other_row = random.choice([i for i in range(n_rows) if i != selected_row])
+
+    # Swap the rows
+    temp = dataset.iloc[selected_row].copy()
+    dataset.iloc[selected_row] = dataset.iloc[other_row]
+    dataset.iloc[other_row] = temp
+
+    return dataset
 
 
 # Franzi
-def delete_rows(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
-    pass
+def delete_rows(dataset: pd.DataFrame, rows_to_delete: list[int] = None) -> pd.DataFrame:
+    n_rows = dataset.shape[0]
+
+    if not rows_to_delete:
+        raise ValueError("You must provide a non-empty list of row indices to delete.")
+
+    # Pick one row index from the provided list
+    selected_row = random.choice(rows_to_delete)
+
+    if selected_row >= n_rows:
+        raise IndexError(f"Row index {selected_row} is out of bounds for dataset with {n_rows} rows.")
+
+    # Drop the selected row
+    dataset = dataset.drop(index=selected_row).reset_index(drop=True)
+
+    return dataset
 
 
 # Franzi
@@ -41,8 +74,23 @@ def missing_values(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
 
 
 # Franzi
-def duplicate_rows(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
-    pass
+def duplicate_rows(dataset: pd.DataFrame, rows_to_duplicate: list[int] = None) -> pd.DataFrame:
+    n_rows = dataset.shape[0]
+
+    if not rows_to_duplicate:
+        raise ValueError("You must provide a non-empty list of row indices to duplicate.")
+
+    # Pick one row index from the provided list
+    selected_row = random.choice(rows_to_duplicate)
+
+    if selected_row >= n_rows:
+        raise IndexError(f"Row index {selected_row} is out of bounds for dataset with {n_rows} rows.")
+
+    # Duplicate the selected row
+    row_to_duplicate = dataset.iloc[[selected_row]]
+    dataset = pd.concat([dataset.iloc[:selected_row + 1], row_to_duplicate, dataset.iloc[selected_row + 1:]], ignore_index=True)
+
+    return dataset
 
 
 # Franzi

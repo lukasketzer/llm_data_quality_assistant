@@ -1,33 +1,10 @@
+import os
+import sys
 from faker import Faker
 from ollama import generate
 import pandas as pd
-import re
-import io
 
-
-def csv_str_to_dataframe(response_text: str) -> pd.DataFrame:
-    return pd.read_csv(io.StringIO(response_text), sep=",")
-
-
-def extract_think_tag(response_text: str):
-    return response_text
-
-
-def extract_csv(response_text: str):
-    # Match from first line with commas till end
-    try:
-        return csv_str_to_dataframe(response_text)
-    except OSError:
-        pass
-
-    pattern = r"```csv(.*?)```"
-    match = re.search(pattern, response_text, re.DOTALL)
-    if match:
-        content = match.group(1).strip()
-        print(content)
-        return csv_str_to_dataframe(response_text)
-    return None
-
+from helper_functions.csv_helper import extract_csv_from_prompt
 
 """
 Dataset generator for generating a dataset using LLMs.
@@ -35,10 +12,8 @@ Dataset generator for generating a dataset using LLMs.
 
 
 def llm_dataset(
-    n_rows: int, column_headers: list[str], model: str = "qwen3:1.7b"
+    n_rows: int, column_headers: list[str], model: str = "gemma3:1b"
 ) -> pd.DataFrame:
-    print(f"rows: {n_rows}")
-
     theme = f"""
     Create data representing students at the techincal university of munich. Create data represents realistic names, grades, ethnicity, ages etc.
     """
@@ -61,7 +36,7 @@ def llm_dataset(
     for chunk in response:
         print(chunk.response, end="", flush=True)
         message += chunk.response
-    return extract_csv(response.response)
+    return extract_csv_from_prompt(message)
 
 
 """
@@ -73,7 +48,6 @@ Data is just simple random data.
 def simple_dataset(n_rows: int, n_cols: int) -> pd.DataFrame:
     faker = Faker()
 
-    df = pd.DataFrame()
     data = []
     for r in range(n_rows):
         data.append(
@@ -99,4 +73,4 @@ if __name__ == "__main__":
     column_headers = [
         "name, date_of_birth, address, country, email, phone_number, job, company, average_bachelors_grade on european grade system"
     ]
-    print(llm_dataset(20, column_headers=column_headers))
+    print(llm_dataset(20, column_headers=column_headers, model="deepseek-r1:1.5b"))

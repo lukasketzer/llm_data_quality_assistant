@@ -93,12 +93,14 @@ def calculated_corruption_noise(
 
     # Rows
     if amount_rows_to_corrupt > 0:
-        rows = np.random.randint(0, dataset_dimensions[0], amount_rows_to_corrupt)
+        row_indices = np.random.randint(
+            0, dataset_dimensions[0], amount_rows_to_corrupt
+        )
         row_coordinates = np.array(
-            [(row, col) for row in rows for col in range(dataset_dimensions[1])]
+            [(row, col) for row in row_indices for col in range(dataset_dimensions[1])]
         )
     else:
-        rows = np.array([], dtype=int)
+        row_indices = np.array([], dtype=int)
         row_coordinates = np.empty((0, 2), dtype=int)
 
     # Cells
@@ -109,7 +111,6 @@ def calculated_corruption_noise(
     else:
         cell_coordinates = np.empty((0, 2), dtype=int)
 
-
     # Combine into (x, y) pairs
     cell_coordinates = np.column_stack((x_coords, y_coords))
 
@@ -117,7 +118,7 @@ def calculated_corruption_noise(
     merged_coordinates = np.vstack((row_coordinates, cell_coordinates))
 
     return (
-        rows,  # np.ndarray of row indices
+        row_indices,  # np.ndarray of row indices
         cell_coordinates,  # np.ndarray of individual cell coordinates
         merged_coordinates,  # np.ndarray of all merged coordinates
     )
@@ -176,7 +177,15 @@ def analyze_dataset(
 
 
 if __name__ == "__main__":
-    dataset = pd.read_csv("./simple_dataset.csv")
+    dataset = pd.read_csv("datasets/public_dataset/wine.data", header=None)
     print(dataset)
-    print(calculated_corruption_noise(dataset_dimensions=dataset.shape, severity=0.1))
+    row_indices, cell_coordinates, merged_coordinates = calculated_corruption_noise(
+        dataset_dimensions=dataset.shape, severity=0.15
+    )
+    print(f"row_indices: {row_indices}")
+    print(f"Cell coordinates: {cell_coordinates}")
+    print(f"Merged coordinates: {merged_coordinates}")
+    print(
+        f"corrution percentage: {len(merged_coordinates) / (dataset.shape[0] * dataset.shape[1])}"
+    )
     pass

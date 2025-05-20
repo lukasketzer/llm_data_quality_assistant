@@ -108,8 +108,44 @@ def duplicate_rows(dataset: pd.DataFrame, rows_to_duplicate: list[int] = None) -
 
 
 # Franzi
-def typo(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
-    pass
+def typo(dataset: pd.DataFrame, cell_coordinates: np.ndarray, severity: float) -> pd.DataFrame:
+    """
+    Introduce typos into a subset of the specified cell coordinates, based on severity.
+    Only string-valued cells are considered for typo corruption.
+    """
+    def introduce_typo(s: str) -> str:
+        if len(s) < 1:
+            return s
+        typo_type = random.choice(["swap", "delete", "replace"])
+        idx = random.randint(0, len(s) - 1)
+        if typo_type == "swap" and len(s) > 1 and idx < len(s) - 1:
+            s_list = list(s)
+            s_list[idx], s_list[idx + 1] = s_list[idx + 1], s_list[idx]
+            return "".join(s_list)
+        elif typo_type == "delete" and len(s) > 1:
+            return s[:idx] + s[idx + 1:]
+        elif typo_type == "replace":
+            random_char = random.choice('abcdefghijklmnopqrstuvwxyz')
+            return s[:idx] + random_char + s[idx + 1:]
+        else:
+            return s
+
+    # Filter cell_coordinates to only those where the value is a string
+    str_cell_indices = [i for i, (row, col) in enumerate(cell_coordinates)
+                        if isinstance(dataset.iat[row, col], str)]
+    n_total = len(cell_coordinates)
+    n_corrupt = max(1, int(severity * n_total)) if n_total > 0 else 0
+    if n_corrupt == 0:
+        return dataset
+    # Randomly select indices to corrupt from string-only cells
+    if(len(str_cell_indices) < n_corrupt):
+        n_corrupt = len(str_cell_indices)
+    selected_indices = np.random.choice(str_cell_indices, n_corrupt, replace=False)
+    for idx in selected_indices:
+        row, col = cell_coordinates[idx]
+        value = dataset.iat[row, col]
+        dataset.iat[row, col] = introduce_typo(value)
+    return dataset
 
 
 # Franzi

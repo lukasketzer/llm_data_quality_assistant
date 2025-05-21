@@ -1,0 +1,19 @@
+from enum import Enum
+
+
+class OllamaModels(Enum):
+    LLAMA3 = "llama3"
+    MISTRAL = "mistral"
+    GEMMA = "gemma"
+    PHI = "phi"
+    QWEN = "qwen"
+    DEEPSEEK = "deepseek-coder"
+    CODELLAMA = "codellama"
+    WIZARDLM = "wizardlm"
+    NEURAL_CHAT = "neural-chat"
+
+
+class OpenAIModels(Enum):
+    GPT_3_5_TURBO = "gpt-3.5-turbo"
+    GPT_4 = "gpt-4"
+    GPT_4O = "gpt-4o"

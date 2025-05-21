@@ -19,3 +19,6 @@ Desktop.ini
 *.swo
 *.bak
 *.tmp
+
+venv/
+.venv/

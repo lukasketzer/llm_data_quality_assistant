@@ -8,9 +8,6 @@ class OllamaModels(Enum):
     PHI = "phi"
     QWEN = "qwen"
     DEEPSEEK = "deepseek-coder"
-    CODELLAMA = "codellama"
-    WIZARDLM = "wizardlm"
-    NEURAL_CHAT = "neural-chat"
 
 
 class OpenAIModels(Enum):

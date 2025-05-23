@@ -7,55 +7,48 @@ import pandas as pd
 import math
 
 
-class CorruptionTypes(Enum):
-    """
-    Enum for the different types of corruption that can be applied to a dataset.
-    """
-
+class RowCorruptionTypes(Enum):
     SWAP_ROWS = "swap_rows"
     DELETE_ROWS = "delete_rows"
-    MISSING_VALUES = "missing_values"
     DUPLICATE_ROWS = "duplicate_rows"
-    TYPO = "typo"
+    SHUFFLE_COLUMNS = "shuffle_columns"
+
+
+class CellCorruptionTypes(Enum):
+    MISSING_VALUES = "missing_values"
     OUTLIER = "outlier"
     NULL = "null"
     CONTRADICTORY_DATA = "contradictory_data"
     INCORRECT_DATATYPE = "incorrect_datatype"
     INCONSISTENT_FORMAT = "inconsistent_format"
-    SHUFFLE_COLUMNS = "shuffle_columns"
+    ADJACENT_ERROR = "adjacent_error"
 
 
 # Franzi
-def swap_rows(dataset: pd.DataFrame, rows_to_swap: list[int] = []) -> pd.DataFrame:
+def swap_rows(dataset: pd.DataFrame, rows_to_swap: np.ndarray) -> pd.DataFrame:
     n_rows = dataset.shape[0]
 
-    if not rows_to_swap:
+    if rows_to_swap.size == 0:
         raise ValueError("You must provide a non-empty list of row indices to swap.")
 
-    # Pick one row index from the provided list
-    selected_row = random.choice(rows_to_swap)
+    if np.any(rows_to_swap >= n_rows):
+        raise IndexError("Row indices out of bounds.")
 
-    if selected_row >= n_rows:
-        raise IndexError(
-            f"Row index {selected_row} is out of bounds for dataset with {n_rows} rows."
-        )
-
-    # Pick a different random row index to swap with
-    other_row = random.choice([i for i in range(n_rows) if i != selected_row])
-
-    # Swap the rows
-    temp = dataset.iloc[selected_row].copy()
-    dataset.iloc[selected_row] = dataset.iloc[other_row]
-    dataset.iloc[other_row] = temp
+    # Generate a derangement (no index stays in place)
+    while True:
+        perm = np.random.permutation(rows_to_swap)
+        if not np.any(perm == rows_to_swap):
+            dataset.iloc[rows_to_swap] = dataset.iloc[perm].values
+            break
 
     return dataset
 
 
 # Franzi
-def delete_rows(dataset: pd.DataFrame, rows_to_delete: list[int] = []) -> pd.DataFrame:
+def delete_rows(dataset: pd.DataFrame, rows_to_delete: np.ndarray) -> pd.DataFrame:
     n_rows = dataset.shape[0]
 
-    if not rows_to_delete:
+    if rows_to_delete.size == 0:
         raise ValueError("You must provide a non-empty list of row indices to delete.")
 
     # Pick one row index from the provided list
@@ -73,33 +66,12 @@ def delete_rows(dataset: pd.DataFrame, rows_to_delete: list[int] = []) -> pd.Dat
 
 
 # Franzi
-def missing_values(
-    dataset: pd.DataFrame, cell_coordinates: np.ndarray, severity: float
-) -> pd.DataFrame:
-    """
-    Set a subset of the specified cell coordinates to NaN, based on severity.
-    cell_coordinates: np.ndarray of shape (N, 2), where each row is (row_idx, col_idx)
-    severity: float between 0 and 1, fraction of cell_coordinates to corrupt
-    """
-    n_total = len(cell_coordinates)
-    n_corrupt = max(1, int(severity * n_total)) if n_total > 0 else 0
-    if n_corrupt == 0:
-        return dataset
-    # Randomly select indices to corrupt
-    selected_indices = np.random.choice(n_total, n_corrupt, replace=False)
-    for idx in selected_indices:
-        row, col = cell_coordinates[idx]
-        dataset.iat[row, col] = np.nan
-    return dataset
-
-
-# Franzi
 def duplicate_rows(
-    dataset: pd.DataFrame, rows_to_duplicate: list[int] = []
+    dataset: pd.DataFrame, rows_to_duplicate: np.ndarray
 ) -> pd.DataFrame:
     n_rows = dataset.shape[0]
 
-    if not rows_to_duplicate:
+    if rows_to_duplicate.size == 0:
         raise ValueError(
             "You must provide a non-empty list of row indices to duplicate."
         )
@@ -127,74 +99,197 @@ def duplicate_rows(
 
 
 # Franzi
-def typo(
-    dataset: pd.DataFrame, cell_coordinates: np.ndarray, severity: float
+def shuffle_columns(
+    dataset: pd.DataFrame, rows_to_shuffle: list[int], severity: float
 ) -> pd.DataFrame:
     """
-    Introduce typos into a subset of the specified cell coordinates, based on severity.
-    Only string-valued cells are considered for typo corruption.
+    Shuffle the columns for the specified rows in the dataset.
     """
-
-    def introduce_typo(s: str) -> str:
-        if len(s) < 1:
-            return s
-        typo_type = random.choice(["swap", "delete", "replace"])
-        idx = random.randint(0, len(s) - 1)
-        if typo_type == "swap" and len(s) > 1 and idx < len(s) - 1:
-            s_list = list(s)
-            s_list[idx], s_list[idx + 1] = s_list[idx + 1], s_list[idx]
-            return "".join(s_list)
-        elif typo_type == "delete" and len(s) > 1:
-            return s[:idx] + s[idx + 1 :]
-        elif typo_type == "replace":
-            random_char = random.choice("abcdefghijklmnopqrstuvwxyz")
-            return s[:idx] + random_char + s[idx + 1 :]
-        else:
-            return s
-
-    # Filter cell_coordinates to only those where the value is a string
-    str_cell_indices = [
-        i
-        for i, (row, col) in enumerate(cell_coordinates)
-        if isinstance(dataset.iat[row, col], str)
-    ]
-    n_total = len(cell_coordinates)
-    n_corrupt = max(1, int(severity * n_total)) if n_total > 0 else 0
-    if n_corrupt == 0:
-        return dataset
-    # Randomly select indices to corrupt from string-only cells
-    if len(str_cell_indices) < n_corrupt:
-        n_corrupt = len(str_cell_indices)
-    selected_indices = np.random.choice(str_cell_indices, n_corrupt, replace=False)
-    for idx in selected_indices:
-        row, col = cell_coordinates[idx]
-        value = dataset.iat[row, col]
-        dataset.iat[row, col] = introduce_typo(value)
+    for row in rows_to_shuffle:
+        dataset.iloc[row] = np.random.permutation(dataset.iloc[row])
     return dataset
 
 
 # Franzi
-def outlier(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
+def missing_values(
+    dataset: pd.DataFrame, cell_coordinates: np.ndarray, severity: float
+) -> pd.DataFrame:
+    """
+    Set a subset of the specified cell coordinates to NaN, based on severity.
+    cell_coordinates: np.ndarray of shape (N, 2), where each row is (row_idx, col_idx)
+    severity: float between 0 and 1, fraction of cell_coordinates to corrupt
+    """
+    n_total = len(cell_coordinates)
+    n_corrupt = max(1, int(severity * n_total)) if n_total > 0 else 0
+    if n_corrupt == 0:
+        return dataset
+    # Randomly select indices to corrupt
+    selected_indices = np.random.choice(n_total, n_corrupt, replace=False)
+    for idx in selected_indices:
+        row, col = cell_coordinates[idx]
+        dataset.iat[row, col] = np.nan
+    return dataset
+
+
+def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
+    for row, col in cell_coordinates:
+        if isinstance(dataset.iat[row, col], (int, float)):
+            # Generate a random outlier value
+            outlier_value = dataset.iat[row, col] * random.uniform(10, 100)
+            dataset.iat[row, col] = outlier_value
+        if isinstance(dataset.iat[row, col], str):
+            # Generate a random string as an outlier
+            outlier_value = "".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=20))
+            dataset.iat[row, col] = outlier_value
+
+    return dataset
+
+
+def null(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
+    for row, col in cell_coordinates:
+        dataset.iat[row, col] = None
+    return dataset
+
+
+def adjacent_error(
+    dataset: pd.DataFrame, cell_coordinates: np.ndarray, severity: float
+) -> pd.DataFrame:
+    """
+    Introduce small, plausible errors into a subset of the specified cell coordinates, based on severity.
+    Handles strings, numbers, booleans, dates, and other common types.
+    """
+
+    import datetime
+
+    def introduce_adjacent_error(value):
+        # Strings: swap, delete, or replace a character with a similar one
+        if isinstance(value, str):
+            if len(value) < 1:
+                return value
+            error_type = random.choice(["swap", "delete", "replace"])
+            idx = random.randint(0, len(value) - 1)
+            if error_type == "swap" and len(value) > 1 and idx < len(value) - 1:
+                s_list = list(value)
+                s_list[idx], s_list[idx + 1] = s_list[idx + 1], s_list[idx]
+                return "".join(s_list)
+            elif error_type == "delete" and len(value) > 1:
+                return value[:idx] + value[idx + 1 :]
+            elif error_type == "replace":
+                # TODO: rework
+
+                keyboard_flat = [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "0",
+                    "q",
+                    "w",
+                    "e",
+                    "r",
+                    "t",
+                    "y",
+                    "u",
+                    "i",
+                    "o",
+                    "p",
+                    "a",
+                    "s",
+                    "d",
+                    "f",
+                    "g",
+                    "h",
+                    "j",
+                    "k",
+                    "l",
+                    "z",
+                    "x",
+                    "c",
+                    "v",
+                    "b",
+                    "n",
+                    "m",
+                ]
+                char = value[idx]
+
+                replacement = keyboard_flat.index(char) + random.choice([-1, 1])
+                return value[:idx] + keyboard_flat[replacement] + value[idx + 1 :]
+            else:
+                return value
+
+        # Integers and floats: add or subtract a small random value
+        elif isinstance(value, (int, float)):
+            if value == 0:
+                return value + random.uniform(0.1, 1.0)
+            noise = value * random.uniform(0.01, 0.1)
+            if random.random() < 0.5:
+                return value + noise
+            else:
+                return value - noise
+
+        # Booleans: flip the value
+        elif isinstance(value, bool):
+            return not value
+
+        # Dates and datetimes: add or subtract a small timedelta
+        elif isinstance(value, (datetime.date, datetime.datetime, np.datetime64)):
+            # Convert np.datetime64 to datetime for manipulation
+            if isinstance(value, np.datetime64):
+                value = pd.to_datetime(value)
+            delta_days = random.randint(1, 5)
+            if random.random() < 0.5:
+                return value + datetime.timedelta(days=delta_days)
+            else:
+                return value - datetime.timedelta(days=delta_days)
+
+        # Timedelta: add or subtract a small amount
+        elif isinstance(value, datetime.timedelta):
+            delta = datetime.timedelta(days=random.randint(1, 3))
+            if random.random() < 0.5:
+                return value + delta
+            else:
+                return value - delta
+
+        # Fallback: return value unchanged
+        else:
+            return value
+
+    n_total = len(cell_coordinates)
+    n_corrupt = max(1, int(severity * n_total)) if n_total > 0 else 0
+    if n_corrupt == 0:
+        return dataset
+
+    selected_indices = np.random.choice(n_total, n_corrupt, replace=False)
+    for idx in selected_indices:
+        row, col = cell_coordinates[idx]
+        value = dataset.iat[row, col]
+        dataset.iat[row, col] = introduce_adjacent_error(value)
+    return dataset
+
+
+# TODO:
+def contradictory_data(
+    dataset: pd.DataFrame, cell_coordinates: np.ndarray, severity: float
+) -> pd.DataFrame:
     return pd.DataFrame()
 
 
-def null(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
+# TODO:
+def incorrect_datatype(
+    dataset: pd.DataFrame, cell_coordinates: np.ndarray, severity: float
+) -> pd.DataFrame:
     return pd.DataFrame()
 
 
-def contradictory_data(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
-    return pd.DataFrame()
-
-
-def incorrect_datatype(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
-    return pd.DataFrame()
-
-
-def inconsistent_format(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
-    return pd.DataFrame()
-
-
-def shuffle_columns(dataset: pd.DataFrame, severity: float) -> pd.DataFrame:
+# TODO:
+def inconsistent_format(
+    dataset: pd.DataFrame, cell_coordinates: np.ndarray, severity: float
+) -> pd.DataFrame:
     return pd.DataFrame()
 
 
@@ -247,12 +342,74 @@ def calculated_corruption_noise(
     )
 
 
+def apply_row_corruptions(
+    corruption_types: list[RowCorruptionTypes],
+    row_indices: np.ndarray,
+    dataset: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Apply the specified row corruption types to the dataset using the provided row indices.
+    """
+    splits: list[np.ndarray] = np.array_split(row_indices, len(corruption_types))
+    for split, c in zip(splits, corruption_types):
+        match c:
+            case RowCorruptionTypes.SWAP_ROWS:
+                dataset = swap_rows(dataset, rows_to_swap=split)
+            case RowCorruptionTypes.DELETE_ROWS:
+                dataset = delete_rows(dataset, rows_to_delete=split)
+            case RowCorruptionTypes.DUPLICATE_ROWS:
+                dataset = duplicate_rows(dataset, rows_to_duplicate=split.tolist())
+            case RowCorruptionTypes.SHUFFLE_COLUMNS:
+                dataset = shuffle_columns(
+                    dataset, rows_to_shuffle=split.tolist(), severity=0
+                )  # severity not used
+            case _:
+                raise ValueError(f"Unknown corruption type: {c}")
+    return dataset
+
+
+def apply_cell_corruptions(
+    corruption_types: list[CellCorruptionTypes],
+    cell_coordinates: np.ndarray,
+    dataset: pd.DataFrame,
+    severity: float,
+) -> pd.DataFrame:
+    """
+    Apply the specified cell corruption types to the dataset using the provided cell coordinates.
+    Each corruption type is applied to an even split of the cell coordinates.
+    """
+    splits: list[np.ndarray] = np.array_split(cell_coordinates, len(corruption_types))
+    for split, c in zip(splits, corruption_types):
+        match c:
+            case CellCorruptionTypes.MISSING_VALUES:
+                dataset = missing_values(dataset, split, severity)
+            case CellCorruptionTypes.ADJACENT_ERROR:
+                dataset = adjacent_error(dataset, split, severity)
+            case CellCorruptionTypes.OUTLIER:
+                dataset = outlier(dataset, split)
+            case CellCorruptionTypes.NULL:
+                dataset = null(dataset, split)
+            case CellCorruptionTypes.CONTRADICTORY_DATA:
+                dataset = contradictory_data(dataset, split, severity)
+            case CellCorruptionTypes.INCORRECT_DATATYPE:
+                dataset = incorrect_datatype(dataset, split, severity)
+            case CellCorruptionTypes.INCONSISTENT_FORMAT:
+                dataset = inconsistent_format(dataset, split, severity)
+            case _:
+                raise ValueError(f"Unknown cell corruption type: {c}")
+    return dataset
+
+
 def corrupt_dataset(
     gold_standard: pd.DataFrame,
-    corruption_type: list[CorruptionTypes] = [CorruptionTypes.SWAP_ROWS],
+    row_corruption_type: list[RowCorruptionTypes] = [RowCorruptionTypes.SWAP_ROWS],
+    cell_corruption_type: list[CellCorruptionTypes] = [
+        CellCorruptionTypes.MISSING_VALUES,
+        CellCorruptionTypes.ADJACENT_ERROR,
+    ],
     severity: float = 0.1,  # Severity of corruption (0.0 to 1.0)
     output_size: int = 5,
-) -> list(pd.DataFrame):
+) -> list[pd.DataFrame]:
     """
     Apply a corruption type to the dataset with a given severity.
     """
@@ -260,31 +417,21 @@ def corrupt_dataset(
     corrupt_datasets = []
     for d in range(output_size):
         dataset = gold_standard.copy()
+        row_indices, cell_coordinates, merged_coordinates = calculated_corruption_noise(
+            dataset_dimensions=dataset.shape, severity=severity
+        )
+        dataset = apply_row_corruptions(
+            corruption_types=row_corruption_type,
+            row_indices=row_indices,
+            dataset=dataset,
+        )
+        dataset = apply_cell_corruptions(
+            corruption_types=cell_corruption_type,
+            cell_coordinates=cell_coordinates,
+            dataset=dataset,
+            severity=severity,
+        )
 
-        for corruption in corruption_type:
-            match corruption:
-                case CorruptionTypes.SWAP_ROWS:
-                    dataset = swap_rows(dataset, severity)
-                case CorruptionTypes.DELETE_ROWS:
-                    dataset = delete_rows(dataset, severity)
-                case CorruptionTypes.MISSING_VALUES:
-                    dataset = missing_values(dataset, severity)
-                case CorruptionTypes.DUPLICATE_ROWS:
-                    dataset = duplicate_rows(dataset, severity)
-                case CorruptionTypes.TYPO:
-                    dataset = typo(dataset, severity)
-                case CorruptionTypes.OUTLIER:
-                    dataset = outlier(dataset, severity)
-                case CorruptionTypes.NULL:
-                    dataset = null(dataset, severity)
-                case CorruptionTypes.CONTRADICTORY_DATA:
-                    dataset = contradictory_data(dataset, severity)
-                case CorruptionTypes.INCORRECT_DATATYPE:
-                    dataset = incorrect_datatype(dataset, severity)
-                case CorruptionTypes.INCONSISTENT_FORMAT:
-                    dataset = inconsistent_format(dataset, severity)
-                case CorruptionTypes.SHUFFLE_COLUMNS:
-                    dataset = shuffle_columns(dataset, severity)
         corrupt_datasets.append(dataset)
     return corrupt_datasets
 

@@ -61,8 +61,7 @@ def delete_rows(dataset: pd.DataFrame, rows_to_delete: np.ndarray) -> pd.DataFra
             f"Row index {selected_row} is out of bounds for dataset with {n_rows} rows."
         )
 
-    # Drop the selected row
-    dataset = dataset.drop(index=selected_row).reset_index(drop=True)
+    dataset.iloc[selected_row] = None
 
     return dataset
 

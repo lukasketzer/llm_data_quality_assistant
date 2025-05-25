@@ -3,6 +3,7 @@ import sys
 from faker import Faker
 from ollama import generate
 import pandas as pd
+from llm_models import OllamaModel
 
 from helper_functions.csv_helper import extract_csv_from_prompt
 
@@ -12,7 +13,7 @@ Dataset generator for generating a dataset using LLMs.
 
 
 def llm_dataset(
-    n_rows: int, column_headers: list[str], model: str = "gemma3:1b"
+    n_rows: int, column_headers: list[str], model_name: str = "gemma3:1b"
 ) -> pd.DataFrame:
     theme = f"""
     Create data representing students at the techincal university of munich. Create data represents realistic names, grades, ethnicity, ages etc.
@@ -31,12 +32,12 @@ def llm_dataset(
     All of the data entries should follow the theme {theme}.
     Your output will be used for further processing. So DO NOT OUTPUT ANYTHING OTHER THAN THE CSV. Otherwise bad things will happen to the production line, and you dont want this to happen.
     """
-    response = generate(model=model, prompt=prompt, stream=True)
-    message = ""
-    for chunk in response:
-        print(chunk.response, end="", flush=True)
-        message += chunk.response
-    return extract_csv_from_prompt(message)
+    model = OllamaModel(model_name=model_name)
+    message = model.generate(prompt, stream=False)
+    if type(message) == str:
+        return extract_csv_from_prompt(message)
+    else:
+        return pd.DataFrame()
 
 
 """
@@ -73,4 +74,4 @@ if __name__ == "__main__":
     column_headers = [
         "name, date_of_birth, address, country, email, phone_number, job, company, average_bachelors_grade on european grade system"
     ]
-    print(llm_dataset(20, column_headers=column_headers, model="deepseek-r1:1.5b"))
+    print(llm_dataset(20, column_headers=column_headers, model_name="gemma3:4b"))

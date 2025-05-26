@@ -1,8 +1,9 @@
 from typing import Iterator
 import ollama
-import google.generativeai as genai
+from google import genai
 from abc import ABC, abstractmethod
 from enums import Models
+import os 
 
 
 class ChatResponse:
@@ -96,7 +97,9 @@ class GeminiModel(AbstractLLMModel):
         Initialize the Gemini model with a specific model name.
         """
         super().__init__(model_name)
-        self.model = genai.GenerativeModel(model_name)
+        API_KEY = os.getenv("GOOGLE_API_KEY")
+        self.client = genai.Client(api_key=API_KEY)
+
 
     def chat(self, messages, stream=False) -> str | Iterator[str]:
         """
@@ -105,10 +108,10 @@ class GeminiModel(AbstractLLMModel):
         # Gemini expects a single prompt string, so concatenate messages
         prompt = "\n".join([msg.get("content", str(msg)) for msg in messages])
         if stream:
-            response = self.model.generate_content(prompt, stream=True)
+            response = self.client.models.generate_content(prompt, stream=True)
             return (chunk.text for chunk in response)
         else:
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(model=self.model_name, contents=prompt)
             return response.text
 
     def generate(self, prompt, stream=False) -> str | Iterator[str]:
@@ -116,10 +119,10 @@ class GeminiModel(AbstractLLMModel):
         Generate a response using the Gemini model.
         """
         if stream:
-            response = self.model.generate_content(prompt, stream=True)
+            response = self.client.models.generate_content(model=self.model_name, contents=prompt, stream=True)
             return (chunk.text for chunk in response)
         else:
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(model=self.model_name, contents=prompt)
             return response.text
 
 
@@ -148,7 +151,7 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
     # List available Gemini models
-    gemini_model = GeminiModel("models/gemini-1.5-pro")  # Use your available Gemini model name
+    gemini_model = GeminiModel("models/gemini-2.0-flash")  # Use your available Gemini model name
     prompt = "Tell me a fun fact about space."
     response = gemini_model.generate(prompt)
     print(response)

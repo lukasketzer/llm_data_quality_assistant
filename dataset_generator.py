@@ -4,6 +4,7 @@ from faker import Faker
 from ollama import generate
 import pandas as pd
 from llm_models import OllamaModel
+from enums import Models
 
 from helper_functions.csv_helper import extract_csv_from_prompt
 
@@ -13,7 +14,7 @@ Dataset generator for generating a dataset using LLMs.
 
 
 def llm_dataset(
-    n_rows: int, column_headers: list[str], model_name: str = "gemma3:1b"
+    n_rows: int, column_headers: list[str], model_name=Models.OllamaModels.GEMMA3_4B
 ) -> pd.DataFrame:
     theme = f"""
     Create data representing students at the techincal university of munich. Create data represents realistic names, grades, ethnicity, ages etc.
@@ -74,4 +75,8 @@ if __name__ == "__main__":
     column_headers = [
         "name, date_of_birth, address, country, email, phone_number, job, company, average_bachelors_grade on european grade system"
     ]
-    print(llm_dataset(20, column_headers=column_headers, model_name="gemma3:4b"))
+    print(
+        llm_dataset(
+            20, column_headers=column_headers, model_name=Models.OllamaModels.GEMMA3_4B
+        )
+    )

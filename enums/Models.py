@@ -2,11 +2,6 @@ from enum import Enum
 
 
 class OllamaModels(Enum):
-    LLAMA3 = "llama3"
-    MISTRAL = "mistral"
-    PHI = "phi"
-    QWEN = "qwen"
-    DEEPSEEK = "deepseek-coder"
     GEMMA3_4B = "gemma3:4b"
     GEMMA3_12B = "gemma3:12b"
     GEMMA3_1B = "gemma3:1b"

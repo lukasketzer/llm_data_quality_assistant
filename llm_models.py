@@ -133,9 +133,9 @@ def get_model(model) -> AbstractLLMModel:
     """
     if isinstance(model, Models.OllamaModels):
         return OllamaModel(model.value)
-    elif hasattr(Models, "OpenAIModels") and isinstance(model, Models.OpenAIModels):
+    elif isinstance(model, Models.OpenAIModels):
         return OpenAIModel(model.value)
-    elif hasattr(Models, "GeminiModels") and isinstance(model, Models.GeminiModels):
+    elif isinstance(model, Models.GeminiModels):
         return GeminiModel(model.value)
     else:
         raise ValueError(f"Unknown model type: {model}")

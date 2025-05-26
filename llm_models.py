@@ -1,5 +1,6 @@
 from typing import Iterator
 import ollama
+import google.generativeai as genai
 from abc import ABC, abstractmethod
 from enums import Models
 
@@ -36,6 +37,7 @@ class OllamaModel(AbstractLLMModel):
         Initialize the Ollama model with a specific model name.
         """
         super().__init__(model_name)
+
 
     def chat(self, messages, stream=False) -> str | Iterator[str]:
         """
@@ -88,21 +90,65 @@ class OpenAIModel(AbstractLLMModel):
         raise NotImplementedError("OpenAI API integration is not implemented yet.")
 
 
+class GeminiModel(AbstractLLMModel):
+    def __init__(self, model_name):
+        """
+        Initialize the Gemini model with a specific model name.
+        """
+        super().__init__(model_name)
+        self.model = genai.GenerativeModel(model_name)
+
+    def chat(self, messages, stream=False) -> str | Iterator[str]:
+        """
+        Run the Gemini model with the given messages and return the response.
+        """
+        # Gemini expects a single prompt string, so concatenate messages
+        prompt = "\n".join([msg.get("content", str(msg)) for msg in messages])
+        if stream:
+            response = self.model.generate_content(prompt, stream=True)
+            return (chunk.text for chunk in response)
+        else:
+            response = self.model.generate_content(prompt)
+            return response.text
+
+    def generate(self, prompt, stream=False) -> str | Iterator[str]:
+        """
+        Generate a response using the Gemini model.
+        """
+        if stream:
+            response = self.model.generate_content(prompt, stream=True)
+            return (chunk.text for chunk in response)
+        else:
+            response = self.model.generate_content(prompt)
+            return response.text
+
+
 def get_model(model) -> AbstractLLMModel:
     """
     Factory function to create an LLM model instance based on the model enum.
-    Accepts either an OllamaModels or OpenAIModels enum value.
+    Accepts either an OllamaModels, OpenAIModels, or GeminiModels enum value.
     """
     if isinstance(model, Models.OllamaModels):
         return OllamaModel(model.value)
-    elif isinstance(model, model.OpenAIModels):
+    elif hasattr(Models, "OpenAIModels") and isinstance(model, Models.OpenAIModels):
         return OpenAIModel(model.value)
+    elif hasattr(Models, "GeminiModels") and isinstance(model, Models.GeminiModels):
+        return GeminiModel(model.value)
     else:
         raise ValueError(f"Unknown model type: {model}")
 
-
+"""
 if __name__ == "__main__":
     gemma_model = OllamaModel("gemma3:1b")
     response = gemma_model.generate("tell me a story abount a dragon", stream=True)
     for chunk in response:
         print(chunk, end="", flush=True)
+"""
+    
+
+if __name__ == "__main__":
+    # List available Gemini models
+    gemini_model = GeminiModel("models/gemini-1.5-pro")  # Use your available Gemini model name
+    prompt = "Tell me a fun fact about space."
+    response = gemini_model.generate(prompt)
+    print(response)

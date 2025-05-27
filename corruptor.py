@@ -408,12 +408,13 @@ def corrupt_dataset(
     cell_corruption_type: list[CellCorruptionTypes],
     severity: float = 0.1,  # Severity of corruption (0.0 to 1.0)
     output_size: int = 5,
-) -> tuple[list[pd.DataFrame], np.ndarray]:
+) -> tuple[list[pd.DataFrame], list[np.ndarray]]:
     """
     Apply a corruption type to the dataset with a given severity.
     """
 
     corrupt_datasets = []
+    corrupted_coords = []
     for d in range(output_size):
         dataset = gold_standard.copy()
         row_indices, cell_coordinates, merged_coordinates = calculated_corruption_noise(
@@ -422,7 +423,9 @@ def corrupt_dataset(
             cell_corruption_type=cell_corruption_type,
             severity=severity,
         )
-        print(row_indices)
+        print(f"merged coords: {merged_coordinates.shape}")
+        corrupted_coords.append(merged_coordinates)
+
         dataset = apply_row_corruptions(
             corruption_types=row_corruption_type,
             row_indices=row_indices,
@@ -435,26 +438,7 @@ def corrupt_dataset(
         )
 
         corrupt_datasets.append(dataset)
-    return corrupt_datasets, merged_coordinates
-
-
-def add_padding(
-    dataset_a: pd.DataFrame,
-    dataset_b: pd.DataFrame,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """
-    Add padding to the datasets to make them the same size,
-    preserving existing values and columns.
-    """
-    # Union of all columns
-    all_columns = list(dataset_a.columns.union(dataset_b.columns))
-    max_rows = max(dataset_a.shape[0], dataset_b.shape[0])
-
-    # Reindex both datasets to have the same rows and columns
-    dataset_a = dataset_a.reindex(index=range(max_rows), columns=all_columns)
-    dataset_b = dataset_b.reindex(index=range(max_rows), columns=all_columns)
-
-    return dataset_a, dataset_b
+    return corrupt_datasets, corrupted_coords
 
 
 def analyze_dataset(
@@ -464,9 +448,7 @@ def analyze_dataset(
     """
     Analyze a dataset for a given corruption type and severity.
     """
-    gold_standard, corrupted_dataset = add_padding(
-        dataset_a=gold_standard, dataset_b=corrupted_dataset
-    )
+
     print(gold_standard)
     print(corrupted_dataset)
 
@@ -479,7 +461,7 @@ def analyze_dataset(
 
 if __name__ == "__main__":
     dataset = pd.read_csv("datasets/selfwritte_dataset/dataset.csv")
-    # dataset = pd.read_csv("datasets/public_dataset/wine.data")
+    dataset = pd.read_csv("datasets/public_dataset/wine.data")
     print(dataset)
     print(dataset.dtypes)
     # Test 1: Only cell corruption (NULL)
@@ -487,7 +469,7 @@ if __name__ == "__main__":
         gold_standard=dataset,
         row_corruption_type=[RowCorruptionTypes.DELETE_ROWS],
         cell_corruption_type=[],
-        severity=0.10,
+        severity=0.14,
         output_size=1,
     )
     for i, corrupted_dataset in enumerate(corrupted_datasets):

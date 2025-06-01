@@ -49,10 +49,6 @@ class Pipeline:
     ):
         print(datasets)
         merged_df = merge_dataset(model_name, datasets)
-        print("/n")
-        print("Merged dataset:")
-        print("/n")
-        print(merged_df)
         return merged_df
 
 
@@ -65,6 +61,7 @@ if __name__ == "__main__":
     cell_corruption_types = [
         CellCorruptionTypes.INCORRECT_DATATYPE,
         CellCorruptionTypes.INCONSISTENT_FORMAT,
+        CellCorruptionTypes.OUTLIER
     ]
 
     corrupted_datasets, corrupted_coords = pipeline.generate_corrupted_datasets(
@@ -79,5 +76,6 @@ if __name__ == "__main__":
 
     # Example: merge the corrupted datasets using LLM
     merged_df = pipeline.merge_with_llm(corrupted_datasets)
+    print("\n")
     print("Merged dataset:")
     print(merged_df)

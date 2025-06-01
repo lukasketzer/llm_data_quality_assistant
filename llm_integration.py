@@ -16,7 +16,8 @@ def merge_dataset(model_name, datasets: list[pd.DataFrame]) -> pd.DataFrame:
     prompt = (
         "You are given multiple datasets about the same thing, but they may contain errors. "
         "Your task is to merge them into a single dataset, choosing the most likely true value for each cell. "
-        "Output the merged dataset as a CSV, with the same columns as the input.\n\n" + "\n".join(csvs)
+        "Output the merged dataset as a CSV, with the same columns as the input."
+        "Output only valid CSV data without any additional text or formatting that could interfere with production processes.\n\n" + "\n".join(csvs)
     )
 
     # Get the merged dataset from the LLM

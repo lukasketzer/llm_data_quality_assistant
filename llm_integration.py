@@ -14,10 +14,14 @@ def merge_dataset(model_name, datasets: list[pd.DataFrame]) -> pd.DataFrame:
     for i, df in enumerate(datasets):
         csvs.append(f"Dataset {i+1}:\n" + df.to_csv(index=False))
     prompt = (
-        "You are given multiple datasets about the same thing, but they may contain errors. "
+        "You are a CSV data merging assistant. "
+        "You will be given multiple datasets about the same topic, but they may contain errors or inconsistencies. "
         "Your task is to merge them into a single dataset, choosing the most likely true value for each cell. "
-        "Output the merged dataset as a CSV, with the same columns as the input."
-        "Output only valid CSV data without any additional text or formatting that could interfere with production processes.\n\n" + "\n".join(csvs)
+        "IMPORTANT: Output ONLY the merged dataset as a valid CSV string, with the same columns as the input. "
+        "DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the CSV data. "
+        "If you include anything other than the CSV, the production process will fail. "
+        "Here are the datasets to merge:\n\n"
+        + "\n".join(csvs)
     )
 
     # Get the merged dataset from the LLM

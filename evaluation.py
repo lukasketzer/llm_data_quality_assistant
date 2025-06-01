@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
+from pprint import pprint
 
 
 def precision(true_positive: int, false_positive: int) -> float:
@@ -62,7 +63,35 @@ def false_negative_rate(false_negative: int, true_positive: int) -> float:
     return false_negative / (false_negative + true_positive)
 
 
-def evaluate_datsets(
+def calculate_stats(
+    true_positive: int,
+    false_positive: int,
+    false_negative: int,
+    true_negative: int,
+) -> dict:
+    prec = precision(true_positive, false_positive)
+    rec = recall(true_positive, false_negative)
+    f1 = f1_score(true_positive, false_positive, false_negative)
+    acc = accuracy(true_positive, true_negative, false_positive, false_negative)
+    fpr = false_positive_rate(false_positive, true_negative)
+    fnr = false_negative_rate(false_negative, true_positive)
+    stats = {
+        "true_positive": true_positive,
+        "false_positive": false_positive,
+        "false_negative": false_negative,
+        "true_negative": true_negative,
+        "precision": prec,
+        "recall": rec,
+        "f1_score": f1,
+        "accuracy": acc,
+        "false_positive_rate": fpr,
+        "false_negative_rate": fnr,
+    }
+
+    return stats
+
+
+def evaluate_datset_micro(
     gold_standard: pd.DataFrame,
     generated_dataset: pd.DataFrame,
     corrupted_coords: np.ndarray,
@@ -81,11 +110,11 @@ def evaluate_datsets(
         raise ValueError("Datasets must have the same shape for evaluation.")
     n_rows, n_cols = gold_standard.shape
 
-    # Calculate basic statistics
     stats = {
         "num_rows": n_rows,
         "num_columns": n_cols,
-        "column_names": list(generated_dataset.columns),
+        "column_names": list(dataset.columns),
+        "theoretical_corruption_rate": len(corrupted_coords) / (n_rows * n_cols),
     }
 
     true_positive = 0
@@ -109,28 +138,79 @@ def evaluate_datsets(
                 true_negative += 1
 
     # Calculate metrics
-    prec = precision(true_positive, false_positive)
-    rec = recall(true_positive, false_negative)
-    f1 = f1_score(true_positive, false_positive, false_negative)
-    acc = accuracy(true_positive, true_negative, false_positive, false_negative)
-    fpr = false_positive_rate(false_positive, true_negative)
-    fnr = false_negative_rate(false_negative, true_positive)
     stats.update(
-        {
-            "true_positive": true_positive,
-            "false_positive": false_positive,
-            "false_negative": false_negative,
-            "true_negative": true_negative,
-            "precision": prec,
-            "recall": rec,
-            "f1_score": f1,
-            "accuracy": acc,
-            "false_positive_rate": fpr,
-            "false_negative_rate": fnr,
-        }
+        calculate_stats(
+            true_positive=true_positive,
+            false_positive=false_positive,
+            false_negative=false_negative,
+            true_negative=true_negative,
+        )
     )
 
     return stats
+
+
+def evaluate_dataset_macro(
+    gold_standard: pd.DataFrame,
+    generated_dataset: pd.DataFrame,
+    corrupted_coords: np.ndarray,
+) -> dict:
+    """
+    Evaluate the generated dataset against a gold standard dataset using macro metrics.
+
+    Args:
+        gold_standard (pd.DataFrame): The ground truth dataset.
+        generated_dataset (pd.DataFrame): The dataset to evaluate.
+
+    Returns:
+        dict: A dictionary containing evaluation metrics.
+    """
+    if gold_standard.shape != generated_dataset.shape:
+        raise ValueError("Datasets must have the same shape for evaluation.")
+    n_rows, n_cols = gold_standard.shape
+
+    stats_per_column = {
+        "num_rows": n_rows,
+        "num_columns": n_cols,
+        "column_names": list(gold_standard.columns),
+        "stats": [],
+    }
+
+    for col in range(n_cols):
+        true_positive = 0
+        false_positive = 0
+        false_negative = 0
+        true_negative = 0
+        column_corruption_coords = corrupted_coords[corrupted_coords[:, 1] == col]
+        stats_per_column["stats"].append(
+            {
+                "theoretical_corruption_rate": len(column_corruption_coords) / n_rows,
+                "num_enties": n_rows,
+                "column_name": gold_standard.columns[col],
+            }
+        )
+        for row in range(n_rows):
+            coord = np.array([row, col])
+            is_corrupted = np.any(np.all(column_corruption_coords == coord, axis=1))
+            gold_val = gold_standard.iloc[row, col]
+            gen_val = generated_dataset.iloc[row, col]
+            if is_corrupted and gold_val == gen_val:
+                true_positive += 1
+            elif not is_corrupted and gold_val != gen_val:
+                false_positive += 1
+            elif is_corrupted and gold_val != gen_val:
+                false_negative += 1
+            elif not is_corrupted and gold_val == gen_val:
+                true_negative += 1
+        stats_per_column["stats"][col].update(
+            calculate_stats(
+                true_positive=true_positive,
+                false_positive=false_positive,
+                false_negative=false_negative,
+                true_negative=true_negative,
+            )
+        )
+    return stats_per_column
 
 
 if __name__ == "__main__":
@@ -138,13 +218,15 @@ if __name__ == "__main__":
     dataset = pd.read_csv("datasets/public_dataset/wine.data")
     corrupted_datasets, corrupted_coords = corrupt_dataset(
         gold_standard=dataset,
-        row_corruption_type=[],
-        cell_corruption_type=[CellCorruptionTypes.NULL],
+        row_corruption_types=[
+            RowCorruptionTypes.DELETE_ROWS,
+            RowCorruptionTypes.SWAP_ROWS,
+            RowCorruptionTypes.SHUFFLE_COLUMNS,
+        ],
+        cell_corruption_types=[CellCorruptionTypes.NULL],
         severity=0.13,
         output_size=2,
     )
-    print(type(corrupted_coords[0][0]))
-    print(corrupted_coords[0][0] in corrupted_coords[0])
 
-    stats = evaluate_datsets(dataset, corrupted_datasets[0], corrupted_coords[0])
-    print(stats)
+    stats = evaluate_dataset_macro(dataset, corrupted_datasets[0], corrupted_coords[0])
+    pprint(stats)

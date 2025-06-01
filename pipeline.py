@@ -47,7 +47,6 @@ class Pipeline:
         datasets: list[pd.DataFrame],
         model_name=Models.GeminiModels.GEMINI_2_0_FLASH,
     ):
-        print(datasets)
         merged_df = merge_dataset(model_name, datasets)
         return merged_df
 
@@ -71,8 +70,12 @@ if __name__ == "__main__":
         output_size=5,
     )
 
-    print("First corrupted dataset:")
-    print(corrupted_datasets[0])
+    # Print each corrupted dataset with a blank line in between
+    print("Corrupted datasets:")
+    for i, df in enumerate(corrupted_datasets):
+        print(f"Dataset {i+1}:")
+        print(df)
+        print()  # Blank line for separation
 
     # Example: merge the corrupted datasets using LLM
     merged_df = pipeline.merge_with_llm(corrupted_datasets)

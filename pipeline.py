@@ -35,8 +35,8 @@ class Pipeline:
     ):
         corrupted_datasets, corrupted_coords = corrupt_dataset(
             gold_standard=self.dataset,
-            row_corruption_type=row_corruption_type,
-            cell_corruption_type=cell_corruption_type,
+            row_corruption_types=row_corruption_type,
+            cell_corruption_types=cell_corruption_type,
             severity=severity,
             output_size=output_size,
         )

@@ -35,7 +35,7 @@ def delete_rows(dataset: pd.DataFrame, rows_to_delete: np.ndarray) -> pd.DataFra
 
     if rows_to_delete.size == 0:
         return dataset
-    
+
     if rows_to_delete.ndim != 1:
         raise ValueError("rows_to_delete must be a 1D array of row indices.")
 
@@ -57,8 +57,13 @@ def shuffle_columns(dataset: pd.DataFrame, rows_to_shuffle: np.ndarray) -> pd.Da
         raise ValueError("rows_to_shuffle must be a 1D array of row indices.")
 
     for row in rows_to_shuffle:
-        shuffeled_values = np.random.permutation(dataset.values[row])
-        dataset.iloc[row] = shuffeled_values
+        # Generate a derangement (no index stays in place)
+        while True:
+            row_values = dataset.values[row]
+            perm = np.random.permutation(row_values)
+            if not np.any(perm == row_values):
+                dataset.iloc[row] = perm
+                break
     return dataset
 
 
@@ -225,7 +230,7 @@ def reverse_rows(dataset: pd.DataFrame, rows_to_reverse: np.ndarray) -> pd.DataF
         return dataset
     if rows_to_reverse.ndim != 1:
         raise ValueError("rows_to_reverse must be a 1D array of row indices.")
-    
+
     for row in rows_to_reverse:
         reversed_rows = dataset.iloc[row].values[0][::-1]
         dataset.iloc[row] = reversed_rows
@@ -290,7 +295,7 @@ def truncate(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFram
     """
     Truncate string or numeric values in the specified cells.
     """
-    if cell_coordinates.size == 0:  
+    if cell_coordinates.size == 0:
         return dataset
     if cell_coordinates.ndim != 2:
         raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")

@@ -63,7 +63,7 @@ class Pipeline:
 
 # Example usage:
 if __name__ == "__main__":
-    gold_standard = pd.read_csv("datasets/selfwritte_dataset/dataset.csv")
+    gold_standard = pd.read_csv("datasets/parker_datasets/eudract_gold_standard.csv")
     pipeline = Pipeline(gold_standard)
 
     row_corruption_types = [RowCorruptionTypes.SHUFFLE_COLUMNS]
@@ -81,18 +81,18 @@ if __name__ == "__main__":
     )
 
     # Print each corrupted dataset with a blank line in between
-    print("Corrupted datasets:")
-    for i, df in enumerate(corrupted_datasets):
-        print(f"Dataset {i+1}:")
-        print(df)
-        print()  # Blank line for separation
+    # print("Corrupted datasets:")
+    # for i, df in enumerate(corrupted_datasets):
+    #     print(f"Dataset {i+1}:")
+    #     print(df)
+    #     print()  # Blank line for separation
 
     # Example: merge the corrupted datasets using LLM
-    merged_df = pipeline.merge_with_llm(corrupted_datasets)
-    print("\n")
-    print("Merged dataset:")
-    print(merged_df)
-    print()
+    merged_df = pipeline.merge_with_llm(corrupted_datasets, model_name=Models.OllamaModels.DEEPSEEK_R1_LATEST)
+    # print("\n")
+    # print("Merged dataset:")
+    # print(merged_df)
+    # print()
     stats = pipeline.evaluate_micro(merged_df, corrupted_coords)
     print("Micro evaluation stats:")
     pprint(stats)

@@ -25,7 +25,12 @@ def merge_dataset(model_name, datasets: list[pd.DataFrame]) -> pd.DataFrame:
     )
 
     # Get the merged dataset from the LLM
-    merged_csv = model.generate(prompt)
+    message = ""
+    merged_csv = model.generate(prompt, stream=True)
+    for chunk in merged_csv:
+        print(chunk, end="", flush=True)
+        message += chunk
+
     # Try to parse the LLM output as a DataFrame
     try:
         from io import StringIO

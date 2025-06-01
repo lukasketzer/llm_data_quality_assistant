@@ -16,12 +16,12 @@ class CellCorruptionTypes(Enum):
     OUTLIER = "outlier"
     NULL = "null"
     INCORRECT_DATATYPE = "incorrect_datatype"
-    INCONSISTENT_FORMAT = "inconsistent_format"  # TODO:
+    INCONSISTENT_FORMAT = "inconsistent_format"  # TODO: Implement
     SWAP_CELLS = "swap_cells"
     CASE_ERROR = "case_error"
     TRUNCATE = "truncate"
     ROUNDING_ERROR = "rounding_error"
-    ENCODING_ERROR = "encoding_error"  # TODO:
+    ENCODING_ERROR = "encoding_error"  # TODO: Implement
     TYPO = "typo"
 
 
@@ -113,8 +113,14 @@ def calculate_cell_corruption(
     cells_per_type: int = (
         amount // len(cell_corruption_type) if len(cell_corruption_type) > 0 else 0
     )
+    extra: int = amount % len(cell_corruption_type)
 
     for c in cell_corruption_type:
+        cells_per_type_this_run = cells_per_type
+        if extra > 0:
+            cells_per_type_this_run += 1
+            extra -= 1
+
         if c in datatype_restrictions:
             # Filter possible cell records based on datatype restrictions
             viable_columns = [
@@ -133,12 +139,12 @@ def calculate_cell_corruption(
             possible_cells_for_corruption = possible_cell_records
 
         # choose the random indices
-        if possible_cells_for_corruption.shape[0] == 0 or cells_per_type == 0:
+        if possible_cells_for_corruption.shape[0] == 0 or cells_per_type_this_run == 0:
             cell_coordinates = np.empty((0, 2), dtype=int)
         else:
             chosen_indices = np.random.choice(
                 possible_cells_for_corruption.shape[0],
-                cells_per_type,
+                cells_per_type_this_run,
                 replace=False,
             )
             cell_coordinates = possible_cells_for_corruption[chosen_indices]

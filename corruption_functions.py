@@ -206,7 +206,7 @@ def incorrect_datatype(
     return dataset
 
 
-# TODO:
+# TODO: Implement
 def inconsistent_format(
     dataset: pd.DataFrame, cell_coordinates: np.ndarray
 ) -> pd.DataFrame:
@@ -303,7 +303,7 @@ def rounding_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.Da
     return dataset
 
 
-# TODO:
+# TODO: Implement
 def encoding_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     return dataset
 

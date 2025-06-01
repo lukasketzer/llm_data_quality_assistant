@@ -94,7 +94,7 @@ def calculate_stats(
 def evaluate_datset_micro(
     gold_standard: pd.DataFrame,
     generated_dataset: pd.DataFrame,
-    corrupted_coords: np.ndarray,
+    corrupted_coords: list[np.ndarray],
 ) -> dict:
     """
     Evaluate the generated dataset against a gold standard dataset.
@@ -109,12 +109,13 @@ def evaluate_datset_micro(
     if gold_standard.shape != generated_dataset.shape:
         raise ValueError("Datasets must have the same shape for evaluation.")
     n_rows, n_cols = gold_standard.shape
+    corrupted_coords = np.array([coord for coords in corrupted_coords for coord in coords])
+    corrupted_coords = np.unique(corrupted_coords, axis=0)
 
     stats = {
         "num_rows": n_rows,
         "num_columns": n_cols,
-        "column_names": list(dataset.columns),
-        "theoretical_corruption_rate": len(corrupted_coords) / (n_rows * n_cols),
+        "column_names": list(gold_standard.columns),
     }
 
     true_positive = 0
@@ -153,7 +154,7 @@ def evaluate_datset_micro(
 def evaluate_dataset_macro(
     gold_standard: pd.DataFrame,
     generated_dataset: pd.DataFrame,
-    corrupted_coords: np.ndarray,
+    corrupted_coords: list[np.ndarray],
 ) -> dict:
     """
     Evaluate the generated dataset against a gold standard dataset using macro metrics.
@@ -168,6 +169,8 @@ def evaluate_dataset_macro(
     if gold_standard.shape != generated_dataset.shape:
         raise ValueError("Datasets must have the same shape for evaluation.")
     n_rows, n_cols = gold_standard.shape
+    corrupted_coords = np.array([coord for coords in corrupted_coords for coord in coords])
+    corrupted_coords = np.unique(corrupted_coords, axis=0)
 
     stats_per_column = {
         "num_rows": n_rows,
@@ -184,7 +187,6 @@ def evaluate_dataset_macro(
         column_corruption_coords = corrupted_coords[corrupted_coords[:, 1] == col]
         stats_per_column["stats"].append(
             {
-                "theoretical_corruption_rate": len(column_corruption_coords) / n_rows,
                 "num_enties": n_rows,
                 "column_name": gold_standard.columns[col],
             }
@@ -228,5 +230,5 @@ if __name__ == "__main__":
         output_size=2,
     )
 
-    stats = evaluate_dataset_macro(dataset, corrupted_datasets[0], corrupted_coords[0])
+    stats = evaluate_dataset_macro(dataset, corrupted_datasets[0], corrupted_coords)
     pprint(stats)

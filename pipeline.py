@@ -12,10 +12,12 @@ call merge_dataset() in llm_integration.py to merge multiple datasets using an L
 """
 
 
+from pprint import pprint
 import pandas as pd
 from corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
 from llm_integration import merge_dataset
 from enums import Models
+from evaluation import evaluate_datset_micro, evaluate_dataset_macro
 
 
 def run_llm():
@@ -50,6 +52,14 @@ class Pipeline:
         merged_df = merge_dataset(model_name, datasets)
         return merged_df
 
+    def evaluate_micro(self, generated_dataset, corrupted_coords):
+        """Evaluate a generated dataset using micro metrics."""
+        return evaluate_datset_micro(self.dataset, generated_dataset, corrupted_coords)
+
+    def evaluate_macro(self, generated_dataset, corrupted_coords):
+        """Evaluate a generated dataset using macro metrics."""
+        return evaluate_dataset_macro(self.dataset, generated_dataset, corrupted_coords)
+
 
 # Example usage:
 if __name__ == "__main__":
@@ -82,3 +92,17 @@ if __name__ == "__main__":
     print("\n")
     print("Merged dataset:")
     print(merged_df)
+    print()
+    stats = pipeline.evaluate_micro(merged_df, corrupted_coords)
+    print("Micro evaluation stats:")
+    pprint(stats)
+    # # Evaluate each corrupted dataset
+    # for i, (df, coords) in enumerate(zip(corrupted_datasets, corrupted_coords)):
+    #     print(f"Evaluation for Dataset {i+1}:")
+    #     micro_stats = pipeline.evaluate_micro(df, coords)
+    #     macro_stats = pipeline.evaluate_macro(df, coords)
+    #     print("Micro stats:")
+    #     pprint(micro_stats)
+    #     print()
+    #     #print("Macro stats:")
+    #     #pprint(macro_stats)

@@ -109,7 +109,6 @@ def calculate_cell_corruption(
     possible_cell_records = delete_coords(possible_cell_records, excluded_coords)
     cell_coordinates_map: dict[CellCorruptionTypes, np.ndarray] = {}
 
-    # TODO: handle case where ther isnt a divider
     cells_per_type: int = (
         amount // len(cell_corruption_type) if len(cell_corruption_type) > 0 else 0
     )

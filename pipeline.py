@@ -61,7 +61,7 @@ if __name__ == "__main__":
     gold_standard = pd.read_csv("datasets/selfwritte_dataset/dataset.csv")
     pipeline = Pipeline(gold_standard)
 
-    row_corruption_types = [RowCorruptionTypes.DELETE_ROWS]
+    row_corruption_types = [RowCorruptionTypes.SHUFFLE_COLUMNS]
     cell_corruption_types = [
         CellCorruptionTypes.INCORRECT_DATATYPE,
         CellCorruptionTypes.INCONSISTENT_FORMAT,

@@ -10,7 +10,7 @@ def swap_rows(dataset: pd.DataFrame, rows_to_swap: np.ndarray) -> pd.DataFrame:
     if rows_to_swap.size == 0:
         return dataset
 
-    if rows_to_swap.shape[1] != 1:
+    if rows_to_swap.ndim != 1:
         raise ValueError("rows_to_delete must be a 1D array of row indices.")
 
     n_rows = dataset.shape[0]
@@ -35,8 +35,8 @@ def delete_rows(dataset: pd.DataFrame, rows_to_delete: np.ndarray) -> pd.DataFra
 
     if rows_to_delete.size == 0:
         return dataset
-
-    if rows_to_delete.shape[1] != 1:
+    
+    if rows_to_delete.ndim != 1:
         raise ValueError("rows_to_delete must be a 1D array of row indices.")
 
     # Pick one row index from the provided list
@@ -53,12 +53,11 @@ def shuffle_columns(dataset: pd.DataFrame, rows_to_shuffle: np.ndarray) -> pd.Da
     if rows_to_shuffle.size == 0:
         return dataset
 
-    if rows_to_shuffle.shape[1] != 1:
+    if rows_to_shuffle.ndim != 1:
         raise ValueError("rows_to_shuffle must be a 1D array of row indices.")
 
     for row in rows_to_shuffle:
-
-        shuffeled_values = np.random.permutation(dataset.values[row][0])
+        shuffeled_values = np.random.permutation(dataset.values[row])
         dataset.iloc[row] = shuffeled_values
     return dataset
 
@@ -67,7 +66,7 @@ def shuffle_columns(dataset: pd.DataFrame, rows_to_shuffle: np.ndarray) -> pd.Da
 def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     if cell_coordinates.size == 0:
         return dataset
-    if cell_coordinates.shape[1] != 2:
+    if cell_coordinates.ndim != 2:
         raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
 
     for row, col in cell_coordinates:
@@ -87,7 +86,7 @@ def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame
 def null(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     if cell_coordinates.size == 0:
         return dataset
-    if cell_coordinates.shape[1] != 2:
+    if cell_coordinates.ndim != 2:
         raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
 
     for row, col in cell_coordinates:
@@ -102,7 +101,7 @@ def typo(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     """
     if cell_coordinates.size == 0:
         return dataset
-    if cell_coordinates.shape[1] != 2:
+    if cell_coordinates.ndim != 2:
         raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
 
     for row, col in cell_coordinates:
@@ -179,6 +178,10 @@ def incorrect_datatype(
     Change the datatype of the specified cells to an incorrect type.
     For example, replace a number with a string, or a string with a number.
     """
+    if cell_coordinates.size == 0:
+        return dataset
+    if cell_coordinates.ndim != 2:
+        raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
     # Handle numpy integer and floating types if available
     numpy_integer = getattr(np, "integer", ())
     numpy_floating = getattr(np, "floating", ())
@@ -220,6 +223,9 @@ def reverse_rows(dataset: pd.DataFrame, rows_to_reverse: np.ndarray) -> pd.DataF
     """
     if rows_to_reverse.size == 0:
         return dataset
+    if rows_to_reverse.ndim != 1:
+        raise ValueError("rows_to_reverse must be a 1D array of row indices.")
+    
     for row in rows_to_reverse:
         reversed_rows = dataset.iloc[row].values[0][::-1]
         dataset.iloc[row] = reversed_rows
@@ -233,7 +239,7 @@ def swap_cells(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFr
     """
     if cell_coordinates.size < 2:
         return dataset
-    if cell_coordinates.shape[1] != 2:
+    if cell_coordinates.ndim != 2:
         raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
 
     values = [dataset.iat[row, col] for row, col in cell_coordinates]
@@ -253,6 +259,11 @@ def case_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFr
     """
     Randomly change the case of string values in the specified cells.
     """
+    if cell_coordinates.size == 0:
+        return dataset
+    if cell_coordinates.ndim != 2:
+        raise ValueError("cell_coordinates must be a 2D arraywith shape (n, 2).")
+    # Handle numpy integer and floating types if available
     for row, col in cell_coordinates:
         value = dataset.iat[row, col]
         if isinstance(value, str):
@@ -279,6 +290,10 @@ def truncate(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFram
     """
     Truncate string or numeric values in the specified cells.
     """
+    if cell_coordinates.size == 0:  
+        return dataset
+    if cell_coordinates.ndim != 2:
+        raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
     for row, col in cell_coordinates:
         value = dataset.iat[row, col]
         if isinstance(value, str) and len(value) > 1:
@@ -295,6 +310,10 @@ def rounding_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.Da
     """
     Introduce rounding errors to numeric values in the specified cells.
     """
+    if cell_coordinates.size == 0:
+        return dataset
+    if cell_coordinates.ndim != 2:
+        raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
     for row, col in cell_coordinates:
         value = dataset.iat[row, col]
         if isinstance(value, np.floating) or isinstance(value, np.integer):

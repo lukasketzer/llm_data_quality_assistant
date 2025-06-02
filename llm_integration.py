@@ -3,7 +3,7 @@ from llm_models import get_model
 from enums import Models
 
 
-def merge_dataset(model_name, datasets: list[pd.DataFrame]) -> pd.DataFrame:
+def merge_datasets_with_llm(model_name, datasets: list[pd.DataFrame]) -> pd.DataFrame:
     """
     Merges multiple datasets about the same thing using an LLM to resolve errors and output the most likely true values.
     """
@@ -37,6 +37,24 @@ def merge_dataset(model_name, datasets: list[pd.DataFrame]) -> pd.DataFrame:
         merged_df = pd.read_csv(StringIO(merged_csv))
     except Exception:
         merged_df = pd.DataFrame()  # fallback if parsing fails
+    return merged_df
+
+def merge_dataset_in_chunks_with_llm(model_name, datasets: list[pd.DataFrame], chunk_size: int = 50) -> pd.DataFrame:
+    """
+    Splits the datasets into row-wise chunks, merges each chunk using merge_whole_dataset,
+    and concatenates the results into a single DataFrame. Removes duplicate rows at the end.
+    """
+    if not datasets:
+        return pd.DataFrame()
+    num_rows = min(len(df) for df in datasets)
+    merged_chunks = []
+    for start in range(0, num_rows, chunk_size):
+        end = min(start + chunk_size, num_rows)
+        chunk_dfs = [df.iloc[start:end] for df in datasets]
+        merged_chunk = merge_datasets_with_llm(model_name, chunk_dfs)
+        merged_chunks.append(merged_chunk)
+    merged_df = pd.concat(merged_chunks, ignore_index=True)
+    merged_df = merged_df.drop_duplicates(ignore_index=True)
     return merged_df
 
 

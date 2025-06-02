@@ -15,7 +15,7 @@ call merge_dataset() in llm_integration.py to merge multiple datasets using an L
 from pprint import pprint
 import pandas as pd
 from corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
-from llm_integration import merge_dataset
+from llm_integration import merge_datasets_with_llm
 from enums import Models
 from evaluation import evaluate_datset_micro, evaluate_dataset_macro
 
@@ -49,7 +49,7 @@ class Pipeline:
         datasets: list[pd.DataFrame],
         model_name=Models.GeminiModels.GEMINI_2_0_FLASH,
     ):
-        merged_df = merge_dataset(model_name, datasets)
+        merged_df = merge_datasets_with_llm(model_name, datasets)
         return merged_df
 
     def evaluate_micro(self, generated_dataset, corrupted_coords):

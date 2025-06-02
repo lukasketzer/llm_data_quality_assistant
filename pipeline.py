@@ -17,7 +17,7 @@ import pandas as pd
 from corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
 from llm_integration import merge_dataset
 from enums import Models
-from evaluation import evaluate_datset_micro, evaluate_dataset_macro
+from evaluation import evaluate_dataset_micro, evaluate_dataset_macro
 
 
 def run_llm():
@@ -47,14 +47,16 @@ class Pipeline:
     def merge_with_llm(
         self,
         datasets: list[pd.DataFrame],
-        model_name=Models.GeminiModels.GEMINI_2_0_FLASH,
+        model_name: (
+            Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
+        ) = Models.GeminiModels.GEMINI_2_0_FLASH,
     ):
         merged_df = merge_dataset(model_name, datasets)
         return merged_df
 
     def evaluate_micro(self, generated_dataset, corrupted_coords):
         """Evaluate a generated dataset using micro metrics."""
-        return evaluate_datset_micro(self.dataset, generated_dataset, corrupted_coords)
+        return evaluate_dataset_micro(self.dataset, generated_dataset, corrupted_coords)
 
     def evaluate_macro(self, generated_dataset, corrupted_coords):
         """Evaluate a generated dataset using macro metrics."""
@@ -63,22 +65,23 @@ class Pipeline:
 
 # Example usage:
 if __name__ == "__main__":
-    gold_standard = pd.read_csv("datasets/parker_datasets/eudract_gold_standard.csv")
+    gold_standard = pd.read_csv("datasets/public_dataset/wine.data")
     pipeline = Pipeline(gold_standard)
 
     row_corruption_types = [RowCorruptionTypes.SHUFFLE_COLUMNS]
     cell_corruption_types = [
         CellCorruptionTypes.INCORRECT_DATATYPE,
         CellCorruptionTypes.INCONSISTENT_FORMAT,
-        CellCorruptionTypes.OUTLIER
+        CellCorruptionTypes.OUTLIER,
     ]
-
+    print("Corruptig datasets....")
     corrupted_datasets, corrupted_coords = pipeline.generate_corrupted_datasets(
         row_corruption_type=row_corruption_types,
         cell_corruption_type=cell_corruption_types,
         severity=0.1,
         output_size=5,
     )
+    print("Corruptig done.")
 
     # Print each corrupted dataset with a blank line in between
     # print("Corrupted datasets:")
@@ -88,7 +91,11 @@ if __name__ == "__main__":
     #     print()  # Blank line for separation
 
     # Example: merge the corrupted datasets using LLM
-    merged_df = pipeline.merge_with_llm(corrupted_datasets, model_name=Models.OllamaModels.DEEPSEEK_R1_LATEST)
+    print("Start merging...")
+    merged_df = pipeline.merge_with_llm(
+        corrupted_datasets, model_name=Models.OllamaModels.DEEPSEEK_R1_LATEST
+    )
+    print("Merging done.")
     # print("\n")
     # print("Merged dataset:")
     # print(merged_df)

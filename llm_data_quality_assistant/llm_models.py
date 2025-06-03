@@ -2,7 +2,7 @@ from typing import Iterator
 import ollama
 from google import genai
 from abc import ABC, abstractmethod
-from enums import Models
+from .enums import Models
 import os
 
 

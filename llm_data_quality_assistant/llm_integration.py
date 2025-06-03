@@ -1,7 +1,7 @@
 import pandas as pd
-from llm_models import get_model
-from enums import Models
-from helper_functions.csv_helper import extract_csv_from_prompt
+from .llm_models import get_model
+from .enums import Models
+from .helper_functions.csv_helper import extract_csv_from_prompt
 
 
 def merge_datasets_group_by_rows(

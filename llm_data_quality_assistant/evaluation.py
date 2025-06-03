@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
+from .corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
 from pprint import pprint
 
 

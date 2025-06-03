@@ -14,10 +14,10 @@ call merge_dataset() in llm_integration.py to merge multiple datasets using an L
 
 from pprint import pprint
 import pandas as pd
-from corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
-from llm_integration import merge_dataset_in_chunks_with_llm
-from enums import Models
-from evaluation import evaluate_dataset_micro, evaluate_dataset_macro
+from .corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
+from .llm_integration import merge_dataset_in_chunks_with_llm
+from .enums import Models
+from .evaluation import evaluate_dataset_micro, evaluate_dataset_macro
 
 
 class Pipeline:

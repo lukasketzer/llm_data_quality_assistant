@@ -1,0 +1,1 @@
+# Bachelors Practical Course: LLM-Based Data Quality Assitant

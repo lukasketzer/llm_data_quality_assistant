@@ -1,0 +1,1000 @@
+tid,attribute,correct_val
+93463,scheduled_arrival,8123
+93463,actual_arrival,8109
+93463,actual_departure,8036
+93463,composed_key,2011-12-05 - UA-414-LAX-SFO
+93463,scheduled_departure,8040
+93553,scheduled_arrival,8123
+93553,actual_arrival,8109
+93553,actual_departure,8036
+93553,composed_key,2011-12-05 - UA-414-LAX-SFO
+93553,scheduled_departure,8040
+93554,scheduled_arrival,8123
+93554,actual_arrival,8109
+93554,actual_departure,8036
+93554,composed_key,2011-12-05 - UA-414-LAX-SFO
+93554,scheduled_departure,8040
+93828,scheduled_arrival,8123
+93828,actual_arrival,8109
+93828,actual_departure,8036
+93828,composed_key,2011-12-05 - UA-414-LAX-SFO
+93828,scheduled_departure,8040
+93915,scheduled_arrival,8123
+93915,actual_arrival,8109
+93915,actual_departure,8036
+93915,composed_key,2011-12-05 - UA-414-LAX-SFO
+93915,scheduled_departure,8040
+94068,scheduled_arrival,8123
+94068,actual_arrival,8109
+94068,actual_departure,8036
+94068,composed_key,2011-12-05 - UA-414-LAX-SFO
+94068,scheduled_departure,8040
+94085,scheduled_arrival,8123
+94085,actual_arrival,8109
+94085,actual_departure,8036
+94085,composed_key,2011-12-05 - UA-414-LAX-SFO
+94085,scheduled_departure,8040
+94086,scheduled_arrival,8123
+94086,actual_arrival,8109
+94086,actual_departure,8036
+94086,composed_key,2011-12-05 - UA-414-LAX-SFO
+94086,scheduled_departure,8040
+94087,scheduled_arrival,8123
+94087,actual_arrival,8109
+94087,actual_departure,8036
+94087,composed_key,2011-12-05 - UA-414-LAX-SFO
+94087,scheduled_departure,8040
+94088,scheduled_arrival,8123
+94088,actual_arrival,8109
+94088,actual_departure,8036
+94088,composed_key,2011-12-05 - UA-414-LAX-SFO
+94088,scheduled_departure,8040
+94089,scheduled_arrival,8123
+94089,actual_arrival,8109
+94089,actual_departure,8036
+94089,composed_key,2011-12-05 - UA-414-LAX-SFO
+94089,scheduled_departure,8040
+94090,scheduled_arrival,8123
+94090,actual_arrival,8109
+94090,actual_departure,8036
+94090,composed_key,2011-12-05 - UA-414-LAX-SFO
+94090,scheduled_departure,8040
+94091,scheduled_arrival,8123
+94091,actual_arrival,8109
+94091,actual_departure,8036
+94091,composed_key,2011-12-05 - UA-414-LAX-SFO
+94091,scheduled_departure,8040
+94092,scheduled_arrival,8123
+94092,actual_arrival,8109
+94092,actual_departure,8036
+94092,composed_key,2011-12-05 - UA-414-LAX-SFO
+94092,scheduled_departure,8040
+94093,scheduled_arrival,8123
+94093,actual_arrival,8109
+94093,actual_departure,8036
+94093,composed_key,2011-12-05 - UA-414-LAX-SFO
+94093,scheduled_departure,8040
+94094,scheduled_arrival,8123
+94094,actual_arrival,8109
+94094,actual_departure,8036
+94094,composed_key,2011-12-05 - UA-414-LAX-SFO
+94094,scheduled_departure,8040
+94095,scheduled_arrival,8123
+94095,actual_arrival,8109
+94095,actual_departure,8036
+94095,composed_key,2011-12-05 - UA-414-LAX-SFO
+94095,scheduled_departure,8040
+94096,scheduled_arrival,8123
+94096,actual_arrival,8109
+94096,actual_departure,8036
+94096,composed_key,2011-12-05 - UA-414-LAX-SFO
+94096,scheduled_departure,8040
+94097,scheduled_arrival,8123
+94097,actual_arrival,8109
+94097,actual_departure,8036
+94097,composed_key,2011-12-05 - UA-414-LAX-SFO
+94097,scheduled_departure,8040
+94098,scheduled_arrival,8123
+94098,actual_arrival,8109
+94098,actual_departure,8036
+94098,composed_key,2011-12-05 - UA-414-LAX-SFO
+94098,scheduled_departure,8040
+94099,scheduled_arrival,8123
+94099,actual_arrival,8109
+94099,actual_departure,8036
+94099,composed_key,2011-12-05 - UA-414-LAX-SFO
+94099,scheduled_departure,8040
+94100,scheduled_arrival,8123
+94100,actual_arrival,8109
+94100,actual_departure,8036
+94100,composed_key,2011-12-05 - UA-414-LAX-SFO
+94100,scheduled_departure,8040
+94101,scheduled_arrival,8123
+94101,actual_arrival,8109
+94101,actual_departure,8036
+94101,composed_key,2011-12-05 - UA-414-LAX-SFO
+94101,scheduled_departure,8040
+94102,scheduled_arrival,8123
+94102,actual_arrival,8109
+94102,actual_departure,8036
+94102,composed_key,2011-12-05 - UA-414-LAX-SFO
+94102,scheduled_departure,8040
+159951,scheduled_arrival,38565
+159951,actual_arrival,38556
+159951,actual_departure,38163
+159951,composed_key,2011-12-26 - AA-59-JFK-SFO
+159951,scheduled_departure,38170
+159952,scheduled_arrival,38565
+159952,actual_arrival,38556
+159952,actual_departure,38163
+159952,composed_key,2011-12-26 - AA-59-JFK-SFO
+159952,scheduled_departure,38170
+159953,scheduled_arrival,38565
+159953,actual_arrival,38556
+159953,actual_departure,38163
+159953,composed_key,2011-12-26 - AA-59-JFK-SFO
+159953,scheduled_departure,38170
+159954,scheduled_arrival,38565
+159954,actual_arrival,38556
+159954,actual_departure,38163
+159954,composed_key,2011-12-26 - AA-59-JFK-SFO
+159954,scheduled_departure,38170
+159955,scheduled_arrival,38565
+159955,actual_arrival,38556
+159955,actual_departure,38163
+159955,composed_key,2011-12-26 - AA-59-JFK-SFO
+159955,scheduled_departure,38170
+159956,scheduled_arrival,38565
+159956,actual_arrival,38556
+159956,actual_departure,38163
+159956,composed_key,2011-12-26 - AA-59-JFK-SFO
+159956,scheduled_departure,38170
+160073,scheduled_arrival,38565
+160073,actual_arrival,38556
+160073,actual_departure,38163
+160073,composed_key,2011-12-26 - AA-59-JFK-SFO
+160073,scheduled_departure,38170
+160126,scheduled_arrival,38565
+160126,actual_arrival,38556
+160126,actual_departure,38163
+160126,composed_key,2011-12-26 - AA-59-JFK-SFO
+160126,scheduled_departure,38170
+160194,scheduled_arrival,38565
+160194,actual_arrival,38556
+160194,actual_departure,38163
+160194,composed_key,2011-12-26 - AA-59-JFK-SFO
+160194,scheduled_departure,38170
+160195,scheduled_arrival,38565
+160195,actual_arrival,38556
+160195,actual_departure,38163
+160195,composed_key,2011-12-26 - AA-59-JFK-SFO
+160195,scheduled_departure,38170
+160380,scheduled_arrival,38565
+160380,actual_arrival,38556
+160380,actual_departure,38163
+160380,composed_key,2011-12-26 - AA-59-JFK-SFO
+160380,scheduled_departure,38170
+160416,scheduled_arrival,38565
+160416,actual_arrival,38556
+160416,actual_departure,38163
+160416,composed_key,2011-12-26 - AA-59-JFK-SFO
+160416,scheduled_departure,38170
+160417,scheduled_arrival,38565
+160417,actual_arrival,38556
+160417,actual_departure,38163
+160417,composed_key,2011-12-26 - AA-59-JFK-SFO
+160417,scheduled_departure,38170
+160418,scheduled_arrival,38565
+160418,actual_arrival,38556
+160418,actual_departure,38163
+160418,composed_key,2011-12-26 - AA-59-JFK-SFO
+160418,scheduled_departure,38170
+160419,scheduled_arrival,38565
+160419,actual_arrival,38556
+160419,actual_departure,38163
+160419,composed_key,2011-12-26 - AA-59-JFK-SFO
+160419,scheduled_departure,38170
+160420,scheduled_arrival,38565
+160420,actual_arrival,38556
+160420,actual_departure,38163
+160420,composed_key,2011-12-26 - AA-59-JFK-SFO
+160420,scheduled_departure,38170
+160421,scheduled_arrival,38565
+160421,actual_arrival,38556
+160421,actual_departure,38163
+160421,composed_key,2011-12-26 - AA-59-JFK-SFO
+160421,scheduled_departure,38170
+160422,scheduled_arrival,38565
+160422,actual_arrival,38556
+160422,actual_departure,38163
+160422,composed_key,2011-12-26 - AA-59-JFK-SFO
+160422,scheduled_departure,38170
+160423,scheduled_arrival,38565
+160423,actual_arrival,38556
+160423,actual_departure,38163
+160423,composed_key,2011-12-26 - AA-59-JFK-SFO
+160423,scheduled_departure,38170
+160424,scheduled_arrival,38565
+160424,actual_arrival,38556
+160424,actual_departure,38163
+160424,composed_key,2011-12-26 - AA-59-JFK-SFO
+160424,scheduled_departure,38170
+160434,scheduled_arrival,38565
+160434,actual_arrival,38556
+160434,actual_departure,38163
+160434,composed_key,2011-12-26 - AA-59-JFK-SFO
+160434,scheduled_departure,38170
+160435,scheduled_arrival,38565
+160435,actual_arrival,38556
+160435,actual_departure,38163
+160435,composed_key,2011-12-26 - AA-59-JFK-SFO
+160435,scheduled_departure,38170
+160436,scheduled_arrival,38565
+160436,actual_arrival,38556
+160436,actual_departure,38163
+160436,composed_key,2011-12-26 - AA-59-JFK-SFO
+160436,scheduled_departure,38170
+160437,scheduled_arrival,38565
+160437,actual_arrival,38556
+160437,actual_departure,38163
+160437,composed_key,2011-12-26 - AA-59-JFK-SFO
+160437,scheduled_departure,38170
+160501,scheduled_arrival,38565
+160501,actual_arrival,38556
+160501,actual_departure,38163
+160501,composed_key,2011-12-26 - AA-59-JFK-SFO
+160501,scheduled_departure,38170
+528062,scheduled_arrival,3261
+528062,actual_arrival,3261
+528062,actual_departure,4515
+528062,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528062,scheduled_departure,4515
+528063,scheduled_arrival,3261
+528063,actual_arrival,3261
+528063,actual_departure,4515
+528063,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528063,scheduled_departure,4515
+528064,scheduled_arrival,3261
+528064,actual_arrival,3261
+528064,actual_departure,4515
+528064,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528064,scheduled_departure,4515
+528104,scheduled_arrival,3261
+528104,actual_arrival,3261
+528104,actual_departure,4515
+528104,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528104,scheduled_departure,4515
+528229,scheduled_arrival,3261
+528229,actual_arrival,3261
+528229,actual_departure,4515
+528229,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528229,scheduled_departure,4515
+528230,scheduled_arrival,3261
+528230,actual_arrival,3261
+528230,actual_departure,4515
+528230,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528230,scheduled_departure,4515
+528231,scheduled_arrival,3261
+528231,actual_arrival,3261
+528231,actual_departure,4515
+528231,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528231,scheduled_departure,4515
+528292,scheduled_arrival,3261
+528292,actual_arrival,3261
+528292,actual_departure,4515
+528292,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528292,scheduled_departure,4515
+528293,scheduled_arrival,3261
+528293,actual_arrival,3261
+528293,actual_departure,4515
+528293,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528293,scheduled_departure,4515
+528294,scheduled_arrival,3261
+528294,actual_arrival,3261
+528294,actual_departure,4515
+528294,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528294,scheduled_departure,4515
+528295,scheduled_arrival,3261
+528295,actual_arrival,3261
+528295,actual_departure,4515
+528295,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528295,scheduled_departure,4515
+528296,scheduled_arrival,3261
+528296,actual_arrival,3261
+528296,actual_departure,4515
+528296,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528296,scheduled_departure,4515
+528297,scheduled_arrival,3261
+528297,actual_arrival,3261
+528297,actual_departure,4515
+528297,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528297,scheduled_departure,4515
+528537,scheduled_arrival,3261
+528537,actual_arrival,3261
+528537,actual_departure,4515
+528537,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528537,scheduled_departure,4515
+528673,scheduled_arrival,3261
+528673,actual_arrival,3261
+528673,actual_departure,4515
+528673,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528673,scheduled_departure,4515
+528674,scheduled_arrival,3261
+528674,actual_arrival,3261
+528674,actual_departure,4515
+528674,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528674,scheduled_departure,4515
+528675,scheduled_arrival,3261
+528675,actual_arrival,3261
+528675,actual_departure,4515
+528675,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528675,scheduled_departure,4515
+528676,scheduled_arrival,3261
+528676,actual_arrival,3261
+528676,actual_departure,4515
+528676,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528676,scheduled_departure,4515
+528677,scheduled_arrival,3261
+528677,actual_arrival,3261
+528677,actual_departure,4515
+528677,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528677,scheduled_departure,4515
+528678,scheduled_arrival,3261
+528678,actual_arrival,3261
+528678,actual_departure,4515
+528678,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528678,scheduled_departure,4515
+528679,scheduled_arrival,3261
+528679,actual_arrival,3261
+528679,actual_departure,4515
+528679,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528679,scheduled_departure,4515
+528680,scheduled_arrival,3261
+528680,actual_arrival,3261
+528680,actual_departure,4515
+528680,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528680,scheduled_departure,4515
+528681,scheduled_arrival,3261
+528681,actual_arrival,3261
+528681,actual_departure,4515
+528681,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528681,scheduled_departure,4515
+528682,scheduled_arrival,3261
+528682,actual_arrival,3261
+528682,actual_departure,4515
+528682,composed_key,2011-12-02 - CO-1694-LAX-IAH
+528682,scheduled_departure,4515
+248868,scheduled_arrival,24672
+248868,actual_arrival,24695
+248868,actual_departure,24546
+248868,composed_key,2011-12-16 - CO-1586-IAH-MCO
+248868,scheduled_departure,24540
+248873,scheduled_arrival,24672
+248873,actual_arrival,24695
+248873,actual_departure,24546
+248873,composed_key,2011-12-16 - CO-1586-IAH-MCO
+248873,scheduled_departure,24540
+249003,scheduled_arrival,24672
+249003,actual_arrival,24695
+249003,actual_departure,24546
+249003,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249003,scheduled_departure,24540
+249004,scheduled_arrival,24672
+249004,actual_arrival,24695
+249004,actual_departure,24546
+249004,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249004,scheduled_departure,24540
+249005,scheduled_arrival,24672
+249005,actual_arrival,24695
+249005,actual_departure,24546
+249005,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249005,scheduled_departure,24540
+249047,scheduled_arrival,24672
+249047,actual_arrival,24695
+249047,actual_departure,24546
+249047,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249047,scheduled_departure,24540
+249048,scheduled_arrival,24672
+249048,actual_arrival,24695
+249048,actual_departure,24546
+249048,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249048,scheduled_departure,24540
+249328,scheduled_arrival,24672
+249328,actual_arrival,24695
+249328,actual_departure,24546
+249328,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249328,scheduled_departure,24540
+249329,scheduled_arrival,24672
+249329,actual_arrival,24695
+249329,actual_departure,24546
+249329,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249329,scheduled_departure,24540
+249330,scheduled_arrival,24672
+249330,actual_arrival,24695
+249330,actual_departure,24546
+249330,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249330,scheduled_departure,24540
+249331,scheduled_arrival,24672
+249331,actual_arrival,24695
+249331,actual_departure,24546
+249331,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249331,scheduled_departure,24540
+249332,scheduled_arrival,24672
+249332,actual_arrival,24695
+249332,actual_departure,24546
+249332,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249332,scheduled_departure,24540
+249333,scheduled_arrival,24672
+249333,actual_arrival,24695
+249333,actual_departure,24546
+249333,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249333,scheduled_departure,24540
+249334,scheduled_arrival,24672
+249334,actual_arrival,24695
+249334,actual_departure,24546
+249334,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249334,scheduled_departure,24540
+249335,scheduled_arrival,24672
+249335,actual_arrival,24695
+249335,actual_departure,24546
+249335,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249335,scheduled_departure,24540
+249341,scheduled_arrival,24672
+249341,actual_arrival,24695
+249341,actual_departure,24546
+249341,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249341,scheduled_departure,24540
+249342,scheduled_arrival,24672
+249342,actual_arrival,24695
+249342,actual_departure,24546
+249342,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249342,scheduled_departure,24540
+249343,scheduled_arrival,24672
+249343,actual_arrival,24695
+249343,actual_departure,24546
+249343,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249343,scheduled_departure,24540
+249344,scheduled_arrival,24672
+249344,actual_arrival,24695
+249344,actual_departure,24546
+249344,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249344,scheduled_departure,24540
+249345,scheduled_arrival,24672
+249345,actual_arrival,24695
+249345,actual_departure,24546
+249345,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249345,scheduled_departure,24540
+249346,scheduled_arrival,24672
+249346,actual_arrival,24695
+249346,actual_departure,24546
+249346,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249346,scheduled_departure,24540
+249347,scheduled_arrival,24672
+249347,actual_arrival,24695
+249347,actual_departure,24546
+249347,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249347,scheduled_departure,24540
+249406,scheduled_arrival,24672
+249406,actual_arrival,24695
+249406,actual_departure,24546
+249406,composed_key,2011-12-16 - CO-1586-IAH-MCO
+249406,scheduled_departure,24540
+32147,scheduled_arrival,42959
+32147,actual_arrival,43072
+32147,actual_departure,42872
+32147,composed_key,2011-12-29 - AA-400-DFW-JFK
+32147,scheduled_departure,42760
+32148,scheduled_arrival,42959
+32148,actual_arrival,43072
+32148,actual_departure,42872
+32148,composed_key,2011-12-29 - AA-400-DFW-JFK
+32148,scheduled_departure,42760
+32149,scheduled_arrival,42959
+32149,actual_arrival,43072
+32149,actual_departure,42872
+32149,composed_key,2011-12-29 - AA-400-DFW-JFK
+32149,scheduled_departure,42760
+32150,scheduled_arrival,42959
+32150,actual_arrival,43072
+32150,actual_departure,42872
+32150,composed_key,2011-12-29 - AA-400-DFW-JFK
+32150,scheduled_departure,42760
+32151,scheduled_arrival,42959
+32151,actual_arrival,43072
+32151,actual_departure,42872
+32151,composed_key,2011-12-29 - AA-400-DFW-JFK
+32151,scheduled_departure,42760
+32163,scheduled_arrival,42959
+32163,actual_arrival,43072
+32163,actual_departure,42872
+32163,composed_key,2011-12-29 - AA-400-DFW-JFK
+32163,scheduled_departure,42760
+32164,scheduled_arrival,42959
+32164,actual_arrival,43072
+32164,actual_departure,42872
+32164,composed_key,2011-12-29 - AA-400-DFW-JFK
+32164,scheduled_departure,42760
+32304,scheduled_arrival,42959
+32304,actual_arrival,43072
+32304,actual_departure,42872
+32304,composed_key,2011-12-29 - AA-400-DFW-JFK
+32304,scheduled_departure,42760
+32312,scheduled_arrival,42959
+32312,actual_arrival,43072
+32312,actual_departure,42872
+32312,composed_key,2011-12-29 - AA-400-DFW-JFK
+32312,scheduled_departure,42760
+32313,scheduled_arrival,42959
+32313,actual_arrival,43072
+32313,actual_departure,42872
+32313,composed_key,2011-12-29 - AA-400-DFW-JFK
+32313,scheduled_departure,42760
+32442,scheduled_arrival,42959
+32442,actual_arrival,43072
+32442,actual_departure,42872
+32442,composed_key,2011-12-29 - AA-400-DFW-JFK
+32442,scheduled_departure,42760
+32602,scheduled_arrival,42959
+32602,actual_arrival,43072
+32602,actual_departure,42872
+32602,composed_key,2011-12-29 - AA-400-DFW-JFK
+32602,scheduled_departure,42760
+32603,scheduled_arrival,42959
+32603,actual_arrival,43072
+32603,actual_departure,42872
+32603,composed_key,2011-12-29 - AA-400-DFW-JFK
+32603,scheduled_departure,42760
+32604,scheduled_arrival,42959
+32604,actual_arrival,43072
+32604,actual_departure,42872
+32604,composed_key,2011-12-29 - AA-400-DFW-JFK
+32604,scheduled_departure,42760
+32605,scheduled_arrival,42959
+32605,actual_arrival,43072
+32605,actual_departure,42872
+32605,composed_key,2011-12-29 - AA-400-DFW-JFK
+32605,scheduled_departure,42760
+32606,scheduled_arrival,42959
+32606,actual_arrival,43072
+32606,actual_departure,42872
+32606,composed_key,2011-12-29 - AA-400-DFW-JFK
+32606,scheduled_departure,42760
+32607,scheduled_arrival,42959
+32607,actual_arrival,43072
+32607,actual_departure,42872
+32607,composed_key,2011-12-29 - AA-400-DFW-JFK
+32607,scheduled_departure,42760
+32608,scheduled_arrival,42959
+32608,actual_arrival,43072
+32608,actual_departure,42872
+32608,composed_key,2011-12-29 - AA-400-DFW-JFK
+32608,scheduled_departure,42760
+32609,scheduled_arrival,42959
+32609,actual_arrival,43072
+32609,actual_departure,42872
+32609,composed_key,2011-12-29 - AA-400-DFW-JFK
+32609,scheduled_departure,42760
+32610,scheduled_arrival,42959
+32610,actual_arrival,43072
+32610,actual_departure,42872
+32610,composed_key,2011-12-29 - AA-400-DFW-JFK
+32610,scheduled_departure,42760
+32611,scheduled_arrival,42959
+32611,actual_arrival,43072
+32611,actual_departure,42872
+32611,composed_key,2011-12-29 - AA-400-DFW-JFK
+32611,scheduled_departure,42760
+32612,scheduled_arrival,42959
+32612,actual_arrival,43072
+32612,actual_departure,42872
+32612,composed_key,2011-12-29 - AA-400-DFW-JFK
+32612,scheduled_departure,42760
+32613,scheduled_arrival,42959
+32613,actual_arrival,43072
+32613,actual_departure,42872
+32613,composed_key,2011-12-29 - AA-400-DFW-JFK
+32613,scheduled_departure,42760
+32614,scheduled_arrival,42959
+32614,actual_arrival,43072
+32614,actual_departure,42872
+32614,composed_key,2011-12-29 - AA-400-DFW-JFK
+32614,scheduled_departure,42760
+32615,scheduled_arrival,42959
+32615,actual_arrival,43072
+32615,actual_departure,42872
+32615,composed_key,2011-12-29 - AA-400-DFW-JFK
+32615,scheduled_departure,42760
+32616,scheduled_arrival,42959
+32616,actual_arrival,43072
+32616,actual_departure,42872
+32616,composed_key,2011-12-29 - AA-400-DFW-JFK
+32616,scheduled_departure,42760
+32907,scheduled_arrival,42959
+32907,actual_arrival,43072
+32907,actual_departure,42872
+32907,composed_key,2011-12-29 - AA-400-DFW-JFK
+32907,scheduled_departure,42760
+59009,scheduled_arrival,10975
+59009,actual_arrival,10974
+59009,actual_departure,10896
+59009,composed_key,2011-12-07 - UA-3925-IAD-ORF
+59009,scheduled_departure,10902
+59010,scheduled_arrival,10975
+59010,actual_arrival,10974
+59010,actual_departure,10896
+59010,composed_key,2011-12-07 - UA-3925-IAD-ORF
+59010,scheduled_departure,10902
+59011,scheduled_arrival,10975
+59011,actual_arrival,10974
+59011,actual_departure,10896
+59011,composed_key,2011-12-07 - UA-3925-IAD-ORF
+59011,scheduled_departure,10902
+59337,scheduled_arrival,10975
+59337,actual_arrival,10974
+59337,actual_departure,10896
+59337,composed_key,2011-12-07 - UA-3925-IAD-ORF
+59337,scheduled_departure,10902
+84800,scheduled_arrival,10975
+84800,actual_arrival,10974
+84800,actual_departure,10896
+84800,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84800,scheduled_departure,10902
+84801,scheduled_arrival,10975
+84801,actual_arrival,10974
+84801,actual_departure,10896
+84801,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84801,scheduled_departure,10902
+84802,scheduled_arrival,10975
+84802,actual_arrival,10974
+84802,actual_departure,10896
+84802,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84802,scheduled_departure,10902
+84803,scheduled_arrival,10975
+84803,actual_arrival,10974
+84803,actual_departure,10896
+84803,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84803,scheduled_departure,10902
+84804,scheduled_arrival,10975
+84804,actual_arrival,10974
+84804,actual_departure,10896
+84804,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84804,scheduled_departure,10902
+84847,scheduled_arrival,10975
+84847,actual_arrival,10974
+84847,actual_departure,10896
+84847,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84847,scheduled_departure,10902
+84848,scheduled_arrival,10975
+84848,actual_arrival,10974
+84848,actual_departure,10896
+84848,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84848,scheduled_departure,10902
+84849,scheduled_arrival,10975
+84849,actual_arrival,10974
+84849,actual_departure,10896
+84849,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84849,scheduled_departure,10902
+84850,scheduled_arrival,10975
+84850,actual_arrival,10974
+84850,actual_departure,10896
+84850,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84850,scheduled_departure,10902
+84851,scheduled_arrival,10975
+84851,actual_arrival,10974
+84851,actual_departure,10896
+84851,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84851,scheduled_departure,10902
+84852,scheduled_arrival,10975
+84852,actual_arrival,10974
+84852,actual_departure,10896
+84852,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84852,scheduled_departure,10902
+84853,scheduled_arrival,10975
+84853,actual_arrival,10974
+84853,actual_departure,10896
+84853,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84853,scheduled_departure,10902
+84854,scheduled_arrival,10975
+84854,actual_arrival,10974
+84854,actual_departure,10896
+84854,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84854,scheduled_departure,10902
+84855,scheduled_arrival,10975
+84855,actual_arrival,10974
+84855,actual_departure,10896
+84855,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84855,scheduled_departure,10902
+84856,scheduled_arrival,10975
+84856,actual_arrival,10974
+84856,actual_departure,10896
+84856,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84856,scheduled_departure,10902
+84857,scheduled_arrival,10975
+84857,actual_arrival,10974
+84857,actual_departure,10896
+84857,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84857,scheduled_departure,10902
+84858,scheduled_arrival,10975
+84858,actual_arrival,10974
+84858,actual_departure,10896
+84858,composed_key,2011-12-07 - UA-3925-IAD-ORF
+84858,scheduled_departure,10902
+312946,scheduled_arrival,10975
+312946,actual_arrival,10974
+312946,actual_departure,10896
+312946,composed_key,2011-12-07 - UA-3925-IAD-ORF
+312946,scheduled_departure,10902
+313027,scheduled_arrival,10975
+313027,actual_arrival,10974
+313027,actual_departure,10896
+313027,composed_key,2011-12-07 - UA-3925-IAD-ORF
+313027,scheduled_departure,10902
+313028,scheduled_arrival,10975
+313028,actual_arrival,10974
+313028,actual_departure,10896
+313028,composed_key,2011-12-07 - UA-3925-IAD-ORF
+313028,scheduled_departure,10902
+313076,scheduled_arrival,10975
+313076,actual_arrival,10974
+313076,actual_departure,10896
+313076,composed_key,2011-12-07 - UA-3925-IAD-ORF
+313076,scheduled_departure,10902
+722406,scheduled_arrival,10975
+722406,actual_arrival,10974
+722406,actual_departure,10896
+722406,composed_key,2011-12-07 - UA-3925-IAD-ORF
+722406,scheduled_departure,10902
+728510,scheduled_arrival,21223
+728510,actual_arrival,21177
+728510,actual_departure,21030
+728510,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728510,scheduled_departure,21035
+728601,scheduled_arrival,21223
+728601,actual_arrival,21177
+728601,actual_departure,21030
+728601,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728601,scheduled_departure,21035
+728602,scheduled_arrival,21223
+728602,actual_arrival,21177
+728602,actual_departure,21030
+728602,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728602,scheduled_departure,21035
+728603,scheduled_arrival,21223
+728603,actual_arrival,21177
+728603,actual_departure,21030
+728603,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728603,scheduled_departure,21035
+728811,scheduled_arrival,21223
+728811,actual_arrival,21177
+728811,actual_departure,21030
+728811,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728811,scheduled_departure,21035
+728854,scheduled_arrival,21223
+728854,actual_arrival,21177
+728854,actual_departure,21030
+728854,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728854,scheduled_departure,21035
+728855,scheduled_arrival,21223
+728855,actual_arrival,21177
+728855,actual_departure,21030
+728855,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728855,scheduled_departure,21035
+728856,scheduled_arrival,21223
+728856,actual_arrival,21177
+728856,actual_departure,21030
+728856,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728856,scheduled_departure,21035
+728857,scheduled_arrival,21223
+728857,actual_arrival,21177
+728857,actual_departure,21030
+728857,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728857,scheduled_departure,21035
+728858,scheduled_arrival,21223
+728858,actual_arrival,21177
+728858,actual_departure,21030
+728858,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728858,scheduled_departure,21035
+728859,scheduled_arrival,21223
+728859,actual_arrival,21177
+728859,actual_departure,21030
+728859,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728859,scheduled_departure,21035
+728860,scheduled_arrival,21223
+728860,actual_arrival,21177
+728860,actual_departure,21030
+728860,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728860,scheduled_departure,21035
+728861,scheduled_arrival,21223
+728861,actual_arrival,21177
+728861,actual_departure,21030
+728861,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728861,scheduled_departure,21035
+728877,scheduled_arrival,21223
+728877,actual_arrival,21177
+728877,actual_departure,21030
+728877,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728877,scheduled_departure,21035
+728878,scheduled_arrival,21223
+728878,actual_arrival,21177
+728878,actual_departure,21030
+728878,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728878,scheduled_departure,21035
+728879,scheduled_arrival,21223
+728879,actual_arrival,21177
+728879,actual_departure,21030
+728879,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728879,scheduled_departure,21035
+728880,scheduled_arrival,21223
+728880,actual_arrival,21177
+728880,actual_departure,21030
+728880,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728880,scheduled_departure,21035
+728881,scheduled_arrival,21223
+728881,actual_arrival,21177
+728881,actual_departure,21030
+728881,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728881,scheduled_departure,21035
+728882,scheduled_arrival,21223
+728882,actual_arrival,21177
+728882,actual_departure,21030
+728882,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728882,scheduled_departure,21035
+728883,scheduled_arrival,21223
+728883,actual_arrival,21177
+728883,actual_departure,21030
+728883,composed_key,2011-12-14 - UA-6273-YYC-SFO
+728883,scheduled_departure,21035
+200741,scheduled_arrival,48454
+200741,actual_arrival,48448
+200741,actual_departure,48250
+200741,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200741,scheduled_departure,48239
+200742,scheduled_arrival,48454
+200742,actual_arrival,48448
+200742,actual_departure,48250
+200742,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200742,scheduled_departure,48239
+200743,scheduled_arrival,48454
+200743,actual_arrival,48448
+200743,actual_departure,48250
+200743,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200743,scheduled_departure,48239
+200744,scheduled_arrival,48454
+200744,actual_arrival,48448
+200744,actual_departure,48250
+200744,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200744,scheduled_departure,48239
+200745,scheduled_arrival,48454
+200745,actual_arrival,48448
+200745,actual_departure,48250
+200745,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200745,scheduled_departure,48239
+200746,scheduled_arrival,48454
+200746,actual_arrival,48448
+200746,actual_departure,48250
+200746,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200746,scheduled_departure,48239
+200747,scheduled_arrival,48454
+200747,actual_arrival,48448
+200747,actual_departure,48250
+200747,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200747,scheduled_departure,48239
+200877,scheduled_arrival,48454
+200877,actual_arrival,48448
+200877,actual_departure,48250
+200877,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200877,scheduled_departure,48239
+200878,scheduled_arrival,48454
+200878,actual_arrival,48448
+200878,actual_departure,48250
+200878,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200878,scheduled_departure,48239
+200879,scheduled_arrival,48454
+200879,actual_arrival,48448
+200879,actual_departure,48250
+200879,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200879,scheduled_departure,48239
+200880,scheduled_arrival,48454
+200880,actual_arrival,48448
+200880,actual_departure,48250
+200880,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200880,scheduled_departure,48239
+200881,scheduled_arrival,48454
+200881,actual_arrival,48448
+200881,actual_departure,48250
+200881,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200881,scheduled_departure,48239
+200882,scheduled_arrival,48454
+200882,actual_arrival,48448
+200882,actual_departure,48250
+200882,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200882,scheduled_departure,48239
+200883,scheduled_arrival,48454
+200883,actual_arrival,48448
+200883,actual_departure,48250
+200883,composed_key,2012-01-02 - AA-1165-JFK-MIA
+200883,scheduled_departure,48239
+201017,scheduled_arrival,48454
+201017,actual_arrival,48448
+201017,actual_departure,48250
+201017,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201017,scheduled_departure,48239
+201018,scheduled_arrival,48454
+201018,actual_arrival,48448
+201018,actual_departure,48250
+201018,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201018,scheduled_departure,48239
+201062,scheduled_arrival,48454
+201062,actual_arrival,48448
+201062,actual_departure,48250
+201062,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201062,scheduled_departure,48239
+201063,scheduled_arrival,48454
+201063,actual_arrival,48448
+201063,actual_departure,48250
+201063,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201063,scheduled_departure,48239
+201064,scheduled_arrival,48454
+201064,actual_arrival,48448
+201064,actual_departure,48250
+201064,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201064,scheduled_departure,48239
+201185,scheduled_arrival,48454
+201185,actual_arrival,48448
+201185,actual_departure,48250
+201185,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201185,scheduled_departure,48239
+201186,scheduled_arrival,48454
+201186,actual_arrival,48448
+201186,actual_departure,48250
+201186,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201186,scheduled_departure,48239
+201187,scheduled_arrival,48454
+201187,actual_arrival,48448
+201187,actual_departure,48250
+201187,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201187,scheduled_departure,48239
+201188,scheduled_arrival,48454
+201188,actual_arrival,48448
+201188,actual_departure,48250
+201188,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201188,scheduled_departure,48239
+201189,scheduled_arrival,48454
+201189,actual_arrival,48448
+201189,actual_departure,48250
+201189,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201189,scheduled_departure,48239
+201364,scheduled_arrival,48454
+201364,actual_arrival,48448
+201364,actual_departure,48250
+201364,composed_key,2012-01-02 - AA-1165-JFK-MIA
+201364,scheduled_departure,48239
+58127,scheduled_arrival,49855
+58127,actual_arrival,49840
+58127,actual_departure,49782
+58127,composed_key,2012-01-03 - UA-3925-IAD-ORF
+58127,scheduled_departure,49782
+58128,scheduled_arrival,49855
+58128,actual_arrival,49840
+58128,actual_departure,49782
+58128,composed_key,2012-01-03 - UA-3925-IAD-ORF
+58128,scheduled_departure,49782
+58712,scheduled_arrival,49855
+58712,actual_arrival,49840
+58712,actual_departure,49782
+58712,composed_key,2012-01-03 - UA-3925-IAD-ORF
+58712,scheduled_departure,49782
+58713,scheduled_arrival,49855
+58713,actual_arrival,49840
+58713,actual_departure,49782
+58713,composed_key,2012-01-03 - UA-3925-IAD-ORF
+58713,scheduled_departure,49782
+58714,scheduled_arrival,49855
+58714,actual_arrival,49840
+58714,actual_departure,49782
+58714,composed_key,2012-01-03 - UA-3925-IAD-ORF
+58714,scheduled_departure,49782
+59048,scheduled_arrival,49855
+59048,actual_arrival,49840
+59048,actual_departure,49782
+59048,composed_key,2012-01-03 - UA-3925-IAD-ORF

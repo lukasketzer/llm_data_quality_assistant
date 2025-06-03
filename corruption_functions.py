@@ -26,7 +26,6 @@ def swap_rows(dataset: pd.DataFrame, rows_to_swap: np.ndarray) -> pd.DataFrame:
         if not np.any(perm == rows_to_swap):
             dataset.iloc[rows_to_swap] = dataset.iloc[perm].values
             break
-
     return dataset
 
 
@@ -58,12 +57,10 @@ def shuffle_columns(dataset: pd.DataFrame, rows_to_shuffle: np.ndarray) -> pd.Da
 
     for row in rows_to_shuffle:
         # Generate a derangement (no index stays in place)
-        while True:
-            row_values = dataset.values[row]
-            perm = np.random.permutation(row_values)
-            if not np.any(perm == row_values):
-                dataset.iloc[row] = perm
-                break
+        row_values = dataset.values[row]
+        perm = np.random.permutation(row_values)
+        dataset.iloc[row] = perm
+
     return dataset
 
 

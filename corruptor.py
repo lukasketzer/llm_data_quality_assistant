@@ -208,18 +208,17 @@ def calculate_corruption(
 
     cell_coords = np.array(
         [
-            (row, col)
+            [row, col]
             for coords in cell_corruption_config.values()
             for (row, col) in coords
         ],
         dtype=int,
     )
 
-    total_coordinates = (
-        np.vstack([total_coordinates, cell_coords])
-        if len(total_coordinates) != 0
-        else cell_coords
-    )
+    if cell_coords.shape[0] > 0 and total_coordinates.shape[0] > 0:
+        total_coordinates = np.vstack([total_coordinates, cell_coords])
+    elif cell_coords.shape[0] > 0 and total_coordinates.shape[0] == 0:
+        total_coordinates = cell_coords
 
     assert np.unique(total_coordinates, axis=0).shape[0] == total_coordinates.shape[0]
 

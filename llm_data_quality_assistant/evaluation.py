@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
-from .corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
+from llm_data_quality_assistant.corruptor import (
+    corrupt_dataset,
+    RowCorruptionTypes,
+    CellCorruptionTypes,
+)
 from pprint import pprint
 
 

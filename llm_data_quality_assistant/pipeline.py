@@ -15,10 +15,12 @@ call merge_dataset() in llm_integration.py to merge multiple datasets using an L
 from pprint import pprint
 import pandas as pd
 from .corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
-from .llm_integration import merge_dataset_in_chunks_with_llm, merge_single_corrupted_dataset
+from .llm_integration import (
+    merge_dataset_in_chunks_with_llm,
+    merge_single_corrupted_dataset,
+)
 from .enums import Models
 from .evaluation import evaluate_dataset_micro, evaluate_dataset_macro
-
 
 
 class Pipeline:
@@ -47,12 +49,14 @@ class Pipeline:
         model_name: (
             Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
+        verbose: bool = False,
+        chunk_size: int = 50,
     ):
         merged_df = merge_dataset_in_chunks_with_llm(
-            model_name, datasets, chunk_size=50
+            model_name, datasets, chunk_size=chunk_size
         )
         return merged_df
-    
+
     def clean_single_dataset(
         self,
         dataset: pd.DataFrame,
@@ -60,9 +64,7 @@ class Pipeline:
             Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
     ):
-        merged_df = merge_single_corrupted_dataset(
-            model_name, dataset
-        )
+        merged_df = merge_single_corrupted_dataset(model_name, dataset)
         return merged_df
 
     def evaluate_micro(self, generated_dataset, corrupted_coords):
@@ -72,4 +74,3 @@ class Pipeline:
     def evaluate_macro(self, generated_dataset, corrupted_coords):
         """Evaluate a generated dataset using macro metrics."""
         return evaluate_dataset_macro(self.dataset, generated_dataset, corrupted_coords)
-

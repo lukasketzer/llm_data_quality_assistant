@@ -2,7 +2,7 @@ from typing import Iterator
 import ollama
 from google import genai
 from abc import ABC, abstractmethod
-from .enums import Models
+from llm_data_quality_assistant.enums import Models
 import os
 
 
@@ -144,4 +144,3 @@ def get_model(model) -> AbstractLLMModel:
         return GeminiModel(model)
     else:
         raise ValueError(f"Unknown model type: {model}")
-

@@ -3,10 +3,12 @@ import sys
 from faker import Faker
 from ollama import generate
 import pandas as pd
-from .llm_models import OllamaModel
+from llm_data_quality_assistant.llm_models import OllamaModel
 from enums import Models
 
-from .helper_functions.csv_helper import extract_csv_from_prompt
+from llm_data_quality_assistant.helper_functions.csv_helper import (
+    extract_csv_from_prompt,
+)
 
 """
 Dataset generator for generating a dataset using LLMs.

@@ -2,7 +2,7 @@ import numpy as np
 from enum import Enum
 import pandas as pd
 import math
-from .corruption_functions import *
+from llm_data_quality_assistant.corruption_functions import *
 
 
 class RowCorruptionTypes(Enum):

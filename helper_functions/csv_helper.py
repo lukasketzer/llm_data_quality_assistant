@@ -5,7 +5,9 @@ import re
 
 
 def csv_str_to_dataframe(response_text: str) -> pd.DataFrame:
-    return pd.read_csv(io.StringIO(response_text), sep=",")
+    return pd.read_csv(
+        io.StringIO(response_text), sep=",", header=None, engine="python"
+    )
 
 
 def remove_think_tag(response_text: str):

@@ -151,6 +151,42 @@ def merge_dataset_in_chunks_with_llm(
     merged_df = merged_df.drop_duplicates(ignore_index=True)
     return merged_df
 
+def merge_single_corrupted_dataset(
+    model_name, dataset: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Merges a single corrupted dataset using an LLM to resolve errors and output the most likely true values.
+    """
+    if dataset is None:
+        return pd.DataFrame()
+    
+    model = get_model(model_name)
+
+    # Combine all datasets into CSV strings for the prompt
+    csv = dataset.to_csv(index=False)
+    
+    prompt = (
+        "You are a CSV data merging assistant. "
+        "You will a dataset about the same topic, but it may contain errors or inconsistencies. "
+        "Your task is to clean it, choosing the most likely true value for each cell. "
+        "IMPORTANT: Output ONLY the merged dataset as a valid CSV string, with the same columns as the input. "
+        "DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the CSV data. "
+        "If you include anything other than the CSV, the production process will fail. "
+        "Every line has to have the same number of fields!!!"
+        "Here is the dataset to clean:\n\n" + csv
+    )
+
+    # Get the merged dataset from the LLM
+    message = ""
+    merged_csv = model.generate(prompt, stream=True)
+    for chunk in merged_csv:
+        print(chunk, end="", flush=True)
+        message += chunk
+
+    # Try to parse the LLM output as a DataFrame
+    merged_df = extract_csv_from_prompt(message)
+
+    return merged_df
 
 if __name__ == "__main__":
     pass

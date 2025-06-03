@@ -145,12 +145,3 @@ def get_model(model) -> AbstractLLMModel:
     else:
         raise ValueError(f"Unknown model type: {model}")
 
-
-if __name__ == "__main__":
-    # List available Gemini models
-    gemini_model = GeminiModel(
-        Models.GeminiModels.GEMINI_2_0_FLASH
-    )  # Use your available Gemini model name
-    prompt = "Tell me a fun fact about space."
-    response = gemini_model.generate(prompt)
-    print(response)

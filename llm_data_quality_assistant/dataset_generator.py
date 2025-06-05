@@ -1,4 +1,5 @@
 import os
+import json
 import sys
 from faker import Faker
 from ollama import generate
@@ -6,9 +7,6 @@ import pandas as pd
 from llm_data_quality_assistant.llm_models import OllamaModel
 from enums import Models
 
-from llm_data_quality_assistant.helper_functions.csv_helper import (
-    extract_csv_from_prompt,
-)
 
 """
 Dataset generator for generating a dataset using LLMs.
@@ -36,11 +34,14 @@ def llm_dataset(
     Your output will be used for further processing. So DO NOT OUTPUT ANYTHING OTHER THAN THE CSV. Otherwise bad things will happen to the production line, and you dont want this to happen.
     """
     model = OllamaModel(model_name=model_name)
-    message = model.generate(prompt, stream=False)
-    if type(message) == str:
-        return extract_csv_from_prompt(message)
-    else:
-        return pd.DataFrame()
+    output = model.generate_stream(prompt)
+    message = ""
+    for chunk in output:
+        print(chunk, end="", flush=True)
+        message += chunk
+
+    data = json.loads(message)
+    return pd.DataFrame(data, columns=column_headers)
 
 
 """

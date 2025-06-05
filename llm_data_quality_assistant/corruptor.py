@@ -322,7 +322,8 @@ def corrupt_dataset(
                 severity=severity,
             )
         )
-        dataset = dataset.astype(object)
+        # TODO: find solution for type problems
+        # dataset = dataset.astype(object)
 
         corrupted_coords.append(total_coordinates)
 
@@ -337,40 +338,3 @@ def corrupt_dataset(
 
         corrupted_datasets.append(dataset)
     return corrupted_datasets, corrupted_coords
-
-
-def analyze_dataset(
-    gold_standard: pd.DataFrame,
-    corrupted_dataset: pd.DataFrame,
-) -> float:
-    """
-    Analyze a dataset for a given corruption type and severity.
-    """
-
-    # print(gold_standard)
-    # print(corrupted_dataset)
-
-    n_total: int = gold_standard.shape[0] * gold_standard.shape[1]
-    n_corrupted: int = (
-        (gold_standard != corrupted_dataset).sum().sum()
-    )  # Count the number of corrupted cells
-    return n_corrupted / n_total
-
-
-if __name__ == "__main__":
-    # dataset = pd.read_csv("datasets/selfwritte_dataset/dataset.csv")
-    dataset = pd.read_csv("datasets/public_dataset/wine.data")
-
-    # Test 1: Only cell corruption (NULL)
-    corrupted_datasets, corrupted_coords = corrupt_dataset(
-        gold_standard=dataset,
-        row_corruption_types=[RowCorruptionTypes.DELETE_ROWS],
-        cell_corruption_types=[CellCorruptionTypes.NULL, CellCorruptionTypes.OUTLIER],
-        severity=0.15,
-        output_size=1,
-    )
-    for i, corrupted_dataset in enumerate(corrupted_datasets):
-        print(f"Test 1 - Corrupted Dataset {i + 1}")
-        print(
-            f"Analysis: {analyze_dataset(dataset, corrupted_dataset) * 100:.2f}% of the dataset is corrupted."
-        )

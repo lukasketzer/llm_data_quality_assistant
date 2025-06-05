@@ -1,17 +1,61 @@
 import pandas as pd
 from llm_data_quality_assistant.llm_models import get_model
-from llm_data_quality_assistant.helper_functions.csv_helper import (
-    extract_csv_from_prompt,
-)
+from pydantic import create_model
+import json
+
+dtype_map = {
+    "int64": int,
+    "float64": float,
+    "object": str,
+    "bool": bool,
+}
+
+
+def generate_pydantic_structure(dataset: pd.DataFrame):
+    datatypes = {}
+    for col_name, d in dataset.dtypes.items():
+        datatypes[col_name] = dtype_map[str(d)]
+
+    return create_model("StructuedOutput", **datatypes)
+
+
+def merge_datasets(
+    model_name, prompt, datasets: list[pd.DataFrame], verbose=False
+) -> pd.DataFrame:
+    struct = generate_pydantic_structure(datasets[0])
+    model = get_model(model_name)
+
+    message = ""
+    if verbose:
+        output = model.generate_stream(
+            prompt=prompt,
+            config={
+                "response_mime_type": "application/json",
+                "response_schema": list[struct],
+            },
+        )
+        for chunk in output:
+            print(chunk, end="", flush=True)
+            message += chunk
+
+    else:
+        message = model.generate(
+            prompt=prompt,
+            config={
+                "response_mime_type": "application/json",
+                "response_schema": list[struct],
+            },
+        )
+    data = json.loads(message)
+    return pd.DataFrame(data)
 
 
 def merge_datasets_group_by_rows(
-    model_name, datasets: list[pd.DataFrame]
+    model_name, datasets: list[pd.DataFrame], verbose=False
 ) -> pd.DataFrame:
     """
     Merges multiple datasets about the same thing using an LLM to resolve errors and output the most likely true values.
     """
-    model = get_model(model_name)
     n_rows, n_cols = datasets[0].shape
     cols = datasets[0].columns.tolist()
 
@@ -23,85 +67,87 @@ def merge_datasets_group_by_rows(
         for dataset in datasets:
             line += dataset.iloc[[row]].to_csv(index=False, header=False)
         csvs += line.strip() + "\n"
+
     prompt = f"""
-    You are a CSV Merger tool designed to intelligently combine multiple rows of data from different versions of a dataset into a single, cohesive row.
-    Your task is to analyze the provided rows and merge them by logically selecting the most appropriate values for each cell based on given entries.
-    Your role is like that of a data analyst with strong reasoning skills.
-    You need to ensure that for every attribute, you assess the values critically and decide which one to keep, especially when there are conflicts.
-    You're adept at recognizing patterns and choosing defaults when necessary, aiming for accuracy and completeness in the output.
-    The audience for your output includes software developers and data scientists who need to process and consolidate CSV files.
-    They rely on you for accurate merging of datasets to facilitate easier data analysis and reporting.
-    Your task is to take input rows formatted as CSV text and produce a single, merged CSV output.
-    Each row you receive may have missing or varying values, which you will evaluate to return a valid merged CSV row with the best values selected logically.
+        You are a Dataset Merger tool designed to intelligently consolidate multiple variations of the same data row into a single, accurate, and complete version.
+        You act like a data analyst with strong reasoning and pattern-recognition skills.
 
-    IMPORTANT: Output ONLY the merged dataset as a valid CSV string, with the same columns as the input.
-    DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the CSV data.
-    If you include anything other than the CSV, the production process will fail.
+        ## OBJECTIVE:
+        Given a set of grouped rows (variations of the same record),
+        your task is to produce **one merged row per group**,
+        where each cell contains the most appropriate and logically selected value across all inputs.
+        Not following the rules will result in a lot of errors that might cause the production process to fail and loos a lot of money.
 
-   EXAMPLE INPUT:
+        ## FORMAT:
+        - The input is a header followed by several rows, grouped per record.
+        - The output must be **valid JSON**, formatted as a list of dictionaries—**one dictionary per row group**.
+        - Each dictionary represents a single, fully-merged row with column names as keys.
 
-    Row 1:  
-    id,name,email,age,city  
-    1,John Doe,john@example.com,30,New York  
-    1,John,john.doe@example.com,,New York  
-    1,John Doe,,30,  
-    1,,john.d@example.com,30,New York  
+        ## RULES FOR MERGING:
+        - For each column, choose the most complete, accurate, and contextually appropriate value.
+        - Prefer full names/emails over partial ones.
+        - Choose non-null values where possible.
+        - Resolve conflicts logically (e.g., “New York” > “NY” > "").
+        - Do not drop or duplicate any row groups—**output must have the same number of rows as input groups**.
 
-    Row 2:  
-    id,name,email,age,city  
-    2,Jane Smith,jane.smith@example.com,28,Los Angeles  
-    2,Jane Smith,,28,LA  
-    2,Jane S.,jane@example.com,,Los Angeles  
-    2,Jane,,28,Los Angeles  
+        ## AUDIENCE:
+        Your output is consumed by software developers and data scientists who will use the resulting JSON for further automation, analysis, or reporting.
+        Accuracy and consistency are critical.
 
-    EXAMPLE OUTPUT:
+        ## INPUT EXAMPLE:
+        Row 1:  
+        id,name,email,age,city  
+        1,John Doe,john@example.com,30,New York  
+        1,John,john.doe@example.com,,New York  
+        1,John Doe,,30,  
+        1,,john.d@example.com,30,New York  
 
-    1,John Doe,john.doe@example.com,30,New York  
-    2,Jane Smith,jane.smith@example.com,28,Los Angeles
+        Row 2:  
+        id,name,email,age,city  
+        2,Jane Smith,jane.smith@example.com,28,Los Angeles  
+        2,Jane Smith,,28,LA  
+        2,Jane S.,jane@example.com,,Los Angeles  
+        2,Jane,,28,Los Angeles  
 
+        ## OUTPUT EXAMPLE (JSON):
+        [
+        {{
+            "id": "1",
+            "name": "John Doe",
+            "email": "john@example.com",
+            "age": "30",
+            "city": "New York"
+        }},
+        {{
+            "id": "2",
+            "name": "Jane Smith",
+            "email": "jane.smith@example.com",
+            "age": "28",
+            "city": "Los Angeles"
+        }}
+        ]
 
-    Here are the datasets to merge grouped by rows:
-    {cols}
-    {csvs.strip()}
-    """
-    # prompt = (
-    #     "You are a CSV data merging assistant. "
-    #     "You will be given multiple datasets about the same topic, but they may contain errors or inconsistencies. "
-    #     "Your job is to go through the datasets row by row and compare the rows of each version of the dataset. "
-    #     "Use logial reasoning to determine the most likely true value for each cell, and create one clean row out of the multiple corrupted versions."
-    #     "Repeat this for each row in the datasets. "
-    #     f"For each row, you will be given {len(datasets)} versions of the dataset, each with {n_cols} columns: {', '.join(cols)}. "
-    #     "Your task is to merge them into a single dataset, choosing the most likely true value for each cell. "
-    #     "IMPORTANT: Output ONLY the merged dataset as a valid CSV string, with the same columns as the input. "
-    #     "DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the CSV data. "
-    #     "If you include anything other than the CSV, the production process will fail. "
-    #     "Here are the datasets to merge grouped by rows:\n\n" + csvs.strip()
-    # )
-    # Get the merged dataset from the LLM
-    message = ""
-    merged_csv = model.generate(prompt, stream=True)
-    for chunk in merged_csv:
-        print(chunk, end="", flush=True)
-        message += chunk
+        ## INPUT DATA:
+        {cols}
+        {csvs.strip()}
+        """
 
-        # Try to parse the LLM output as a DataFrame
-        # try:
-    merged_df = extract_csv_from_prompt(message)
-    # except Exception:
-    #     merged_df = pd.DataFrame()  # fallback if parsing fails
-    print("merged dataset:")
-    print(merged_df)
-    print(merged_df.shape)
+    merged_df = merge_datasets(
+        model_name=model_name,
+        prompt=prompt,
+        datasets=datasets,
+        verbose=verbose,
+    )
+
     return merged_df
 
 
 def merge_datasets_group_by_dataset(
-    model_name, datasets: list[pd.DataFrame]
+    model_name, datasets: list[pd.DataFrame], verbose=False
 ) -> pd.DataFrame:
     """
     Merges multiple datasets about the same thing using an LLM to resolve errors and output the most likely true values.
     """
-    model = get_model(model_name)
 
     # Combine all datasets into CSV strings for the prompt
     csvs = []
@@ -118,18 +164,13 @@ def merge_datasets_group_by_dataset(
     )
 
     # Get the merged dataset from the LLM
-    message = ""
-    merged_csv = model.generate(prompt, stream=True)
-    for chunk in merged_csv:
-        print(chunk, end="", flush=True)
-        message += chunk
-
-    # Try to parse the LLM output as a DataFrame
-    try:
-        merged_df = extract_csv_from_prompt(message)
-    except Exception:
-        merged_df = pd.DataFrame()  # fallback if parsing fails
-    return merged_df
+    merrged_df = merge_datasets(
+        model_name=model_name,
+        prompt=prompt,
+        datasets=datasets,
+        verbose=verbose,
+    )
+    return merrged_df
 
 
 def merge_dataset_in_chunks_with_llm(
@@ -153,14 +194,14 @@ def merge_dataset_in_chunks_with_llm(
     return merged_df
 
 
-def merge_single_corrupted_dataset(model_name, dataset: pd.DataFrame) -> pd.DataFrame:
+def merge_single_corrupted_dataset(
+    model_name, dataset: pd.DataFrame, verbose=False
+) -> pd.DataFrame:
     """
     Merges a single corrupted dataset using an LLM to resolve errors and output the most likely true values.
     """
     if dataset is None:
         return pd.DataFrame()
-
-    model = get_model(model_name)
 
     # Combine all datasets into CSV strings for the prompt
     csv = dataset.to_csv(index=False)
@@ -176,18 +217,12 @@ def merge_single_corrupted_dataset(model_name, dataset: pd.DataFrame) -> pd.Data
         "Here is the dataset to clean:\n\n" + csv
     )
 
-    # Get the merged dataset from the LLM
-    message = ""
-    merged_csv = model.generate(prompt, stream=True)
-    for chunk in merged_csv:
-        print(chunk, end="", flush=True)
-        message += chunk
-
     # Try to parse the LLM output as a DataFrame
-    merged_df = extract_csv_from_prompt(message)
+    merged_df = merge_datasets(
+        model_name=model_name,
+        prompt=prompt,
+        datasets=[dataset],
+        verbose=verbose,
+    )
 
     return merged_df
-
-
-if __name__ == "__main__":
-    pass

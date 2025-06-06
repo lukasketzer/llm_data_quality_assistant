@@ -205,8 +205,10 @@ def merge_single_corrupted_dataset(
     prompt = (
         "You are a data cleaning assistant. "
         "You will be given a dataset about the same topic, but it may contain errors or inconsistencies. "
-        "Your task is to clean it, choosing the most likely true value for each cell. "
-        "DON'T DELETE ANY ROWS OR COLUMNS, just clean the existing data."
+        "Your task is to clean it, choosing the most likely true value for each cell."
+        "At first look at the different column names and find an identifier."
+        "Rows that have the same identifier should have the exact same values."
+        "If you want to merge rows with the same identifier, don't delete one of them, just give both rows the same values. Do not delete any rows. Merging rows means that you should output the same row twice, with the same values in all columns."
         "IMPORTANT: Output ONLY the cleaned dataset as a valid JSON array of objects, with the same columns as the input. "
         "DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the JSON data. "
         "If you include anything other than the JSON, the production process will fail. "

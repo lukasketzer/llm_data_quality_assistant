@@ -24,8 +24,8 @@ from .evaluation import evaluate_dataset_micro, evaluate_dataset_macro
 
 
 class Pipeline:
-    def __init__(self, dataset: pd.DataFrame):
-        self.dataset = dataset
+    def __init__(self, gold_standard: pd.DataFrame):
+        self.dataset = gold_standard
 
     def generate_corrupted_datasets(
         self,

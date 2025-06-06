@@ -64,7 +64,7 @@ class Pipeline:
             Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
     ):
-        merged_df = merge_single_corrupted_dataset(model_name, dataset)
+        merged_df = merge_single_corrupted_dataset(model_name, dataset, True)
         return merged_df
 
     def evaluate_micro(self, generated_dataset, corrupted_coords):

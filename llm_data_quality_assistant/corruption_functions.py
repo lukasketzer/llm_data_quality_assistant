@@ -326,17 +326,3 @@ def rounding_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.Da
 # TODO: Implement
 def encoding_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     return dataset
-
-
-if __name__ == "__main__":
-    # Example usage
-    name: float = 1234.0
-    dataset = pd.DataFrame(
-        {"A": ["apple", "banana", "cherry"], "B": [1, 2, 3], "C": [4.5, 5.5, 6.5]}
-    )
-    dataset = dataset.astype(object)
-    print(dataset)
-    rounding_error(
-        dataset, np.array([[0, 1], [1, 1], [2, 1]])
-    )  # Should change the case of the string
-    print(dataset)

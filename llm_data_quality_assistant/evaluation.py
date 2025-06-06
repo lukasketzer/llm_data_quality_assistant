@@ -1,11 +1,5 @@
 import numpy as np
 import pandas as pd
-from llm_data_quality_assistant.corruptor import (
-    corrupt_dataset,
-    RowCorruptionTypes,
-    CellCorruptionTypes,
-)
-from pprint import pprint
 
 
 def precision(true_positive: int, false_positive: int) -> float:
@@ -223,22 +217,3 @@ def evaluate_dataset_macro(
             )
         )
     return stats_per_column
-
-
-if __name__ == "__main__":
-    # dataset = pd.read_csv("datasets/selfwritte_dataset/dataset.csv")
-    dataset = pd.read_csv("datasets/public_dataset/wine.data")
-    corrupted_datasets, corrupted_coords = corrupt_dataset(
-        gold_standard=dataset,
-        row_corruption_types=[
-            RowCorruptionTypes.DELETE_ROWS,
-            RowCorruptionTypes.SWAP_ROWS,
-            RowCorruptionTypes.SHUFFLE_COLUMNS,
-        ],
-        cell_corruption_types=[CellCorruptionTypes.NULL],
-        severity=0.13,
-        output_size=1,
-    )
-
-    stats = evaluate_dataset_micro(dataset, corrupted_datasets[0], corrupted_coords)
-    pprint(stats)

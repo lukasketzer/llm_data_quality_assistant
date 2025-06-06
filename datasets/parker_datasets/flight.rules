@@ -1,0 +1,11 @@
+-- Attributes
+@scheduled_departure:datetime_in_minutes
+@scheduled_arrival:datetime_in_minutes
+@actual_departure:datetime_in_minutes
+@actual_arrival:datetime_in_minutes
+
+-- Sigma rules
+scheduled_departure >= scheduled_arrival
+actual_departure >= actual_arrival
+actual_departure >= scheduled_departure
+actual_departure <= scheduled_departure

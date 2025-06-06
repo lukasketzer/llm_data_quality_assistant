@@ -9,6 +9,9 @@ if __name__ == "__main__":
         index="tid", columns="attribute", values="correct_val"
     )
 
+    # Drop the 'tid' column if present
+    gold_standard_alerene = gold_standard_alerene.reset_index(drop=True)
+
     # Ensure consistent column order (matching your sample output)
     desired_columns = [
         "code",
@@ -38,7 +41,7 @@ if __name__ == "__main__":
         columns=desired_columns
     ).fillna(0)
 
-    gold_standard_alerene.to_csv("gold_standard_alergene_pivoted.csv")
+    gold_standard_alerene.to_csv("gold_standard_alergene_pivoted.csv", index=False)
 
     alergen_raw = pd.read_csv(
         "datasets/parker_datasets/allergen.csv",

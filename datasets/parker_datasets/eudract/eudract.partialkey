@@ -1,0 +1,11 @@
+eudract_number ->
+    single_blind,
+    double_blind,
+    open,
+    controlled,
+    placebo,
+    active_comparator,
+    randomised,
+    crossover,
+    parallel_group,
+    arms

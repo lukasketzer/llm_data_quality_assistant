@@ -1,0 +1,5 @@
+date_collected, flight_number ->
+    scheduled_departure,
+    actual_departure,
+    scheduled_arrival,
+    actual_arrival

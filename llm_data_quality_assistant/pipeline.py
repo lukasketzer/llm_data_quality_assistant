@@ -23,6 +23,7 @@ from .enums import Models
 from .evaluation import evaluate_dataset_micro, evaluate_dataset_macro
 
 
+# TODO: Architekutr überdenken
 class Pipeline:
     def __init__(self, gold_standard: pd.DataFrame):
         self.dataset = gold_standard
@@ -49,22 +50,30 @@ class Pipeline:
         model_name: (
             Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
-        verbose: bool = False,
         chunk_size: int = 50,
+        group_by_rows: bool = False,
+        verbose: bool = False,
     ):
         merged_df = merge_dataset_in_chunks_with_llm(
-            model_name, datasets, chunk_size=chunk_size
+            model_name,
+            datasets,
+            chunk_size=chunk_size,
+            group_by_rows=group_by_rows,
+            verbose=verbose,
         )
         return merged_df
 
+    # TODO: hält sich nicht an die architektur
+    # mit "merge_with_llm" zuammenführen eventuell
     def clean_single_dataset(
         self,
         dataset: pd.DataFrame,
+        verbose: bool = False,
         model_name: (
             Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
     ):
-        merged_df = merge_single_corrupted_dataset(model_name, dataset, True)
+        merged_df = merge_single_corrupted_dataset(model_name, dataset, verbose=verbose)
         return merged_df
 
     def evaluate_micro(self, generated_dataset, corrupted_coords):

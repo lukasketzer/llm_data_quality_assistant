@@ -15,8 +15,7 @@ def generate_pydantic_structure(dataset: pd.DataFrame):
     datatypes = {}
     for col_name, d in dataset.dtypes.items():
         datatypes[col_name] = dtype_map[str(d)]
-
-    return create_model("StructuedOutput", **datatypes)
+    return create_model("StructuredOutput", **datatypes)
 
 
 def merge_datasets(
@@ -51,7 +50,7 @@ def merge_datasets(
 
 
 def merge_datasets_group_by_rows(
-    model_name, datasets: list[pd.DataFrame], verbose=False
+    model_name, datasets: list[pd.DataFrame], additional_prompt: str = "", verbose=False
 ) -> pd.DataFrame:
     """
     Merges multiple datasets about the same thing using an LLM to resolve errors and output the most likely true values.
@@ -76,7 +75,7 @@ def merge_datasets_group_by_rows(
         Given a set of grouped rows (variations of the same record),
         your task is to produce **one merged row per group**,
         where each cell contains the most appropriate and logically selected value across all inputs.
-        Not following the rules will result in a lot of errors that might cause the production process to fail and loos a lot of money.
+        Not following the rules will result in a lot of errors that might cause the production process to fail and lose a lot of money.
 
         ## FORMAT:
         - The input is a header followed by several rows, grouped per record.
@@ -93,6 +92,9 @@ def merge_datasets_group_by_rows(
         ## AUDIENCE:
         Your output is consumed by software developers and data scientists who will use the resulting JSON for further automation, analysis, or reporting.
         Accuracy and consistency are critical.
+
+        {"Here is some additional information to help you merge the datasets:" if additional_prompt != "" else ""}
+        {additional_prompt.strip()}
 
         ## INPUT EXAMPLE:
         Row 1:  
@@ -143,7 +145,7 @@ def merge_datasets_group_by_rows(
 
 
 def merge_datasets_group_by_dataset(
-    model_name, datasets: list[pd.DataFrame], verbose=False
+    model_name, datasets: list[pd.DataFrame], additional_prompt: str = "", verbose=False
 ) -> pd.DataFrame:
     """
     Merges multiple datasets about the same thing using an LLM to resolve errors and output the most likely true values.
@@ -153,28 +155,40 @@ def merge_datasets_group_by_dataset(
     csvs = []
     for i, df in enumerate(datasets):
         csvs.append(f"Dataset {i+1}:\n" + df.to_csv(index=False))
-    prompt = (
-        "You are a CSV data merging assistant. "
-        "You will be given multiple datasets about the same topic, but they may contain errors or inconsistencies. "
-        "Your task is to merge them into a single dataset, choosing the most likely true value for each cell. "
-        "IMPORTANT: Output ONLY the merged dataset as a valid JSON array of objects, with the same columns as the input. "
-        "DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the JSON data. "
-        "If you include anything other than the JSON, the production process will fail. "
-        "Here are the datasets to merge (as CSV):\n\n" + "\n".join(csvs)
-    )
+    prompt = f"""
+    You are a CSV data merging assistant. 
+    You will be given multiple datasets about the same topic, but they may contain errors or inconsistencies. 
+    Your task is to merge them into a single dataset, choosing the most likely true value for each cell. 
+    IMPORTANT: Output ONLY the merged dataset as a valid JSON array of objects, with the same columns as the input. 
+    DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the JSON data. 
+    If you include anything other than the JSON, the production process will fail. 
+
+    {"Here is some additional information to help you merge the datasets:" if additional_prompt != "" else ""}
+    {additional_prompt.strip()}
+
+    Here are the datasets to merge (as CSV):
+
+    {additional_prompt}
+    {chr(10).join(csvs)}
+    """
 
     # Get the merged dataset from the LLM
-    merrged_df = merge_datasets(
+    merged_df = merge_datasets(
         model_name=model_name,
         prompt=prompt,
         datasets=datasets,
         verbose=verbose,
     )
-    return merrged_df
+    return merged_df
 
 
 def merge_dataset_in_chunks_with_llm(
-    model_name, datasets: list[pd.DataFrame], chunk_size: int = 50
+    model_name,
+    datasets: list[pd.DataFrame],
+    chunk_size: int = 50,
+    additional_prompt: str = "",
+    group_by_rows: bool = False,
+    verbose: bool = False,
 ) -> pd.DataFrame:
     """
     Splits the datasets into row-wise chunks, merges each chunk using merge_whole_dataset,
@@ -187,7 +201,21 @@ def merge_dataset_in_chunks_with_llm(
     for start in range(0, num_rows, chunk_size):
         end = min(start + chunk_size, num_rows)
         chunk_dfs = [df.iloc[start:end] for df in datasets]
-        merged_chunk = merge_datasets_group_by_rows(model_name, chunk_dfs)
+        merged_chunk = (
+            merge_datasets_group_by_rows(
+                model_name,
+                chunk_dfs,
+                additional_prompt=additional_prompt,
+                verbose=verbose,
+            )
+            if group_by_rows
+            else merge_datasets_group_by_dataset(
+                model_name,
+                chunk_dfs,
+                additional_prompt=additional_prompt,
+                verbose=verbose,
+            )
+        )
         merged_chunks.append(merged_chunk)
     merged_df = pd.concat(merged_chunks, ignore_index=True)
     merged_df = merged_df.drop_duplicates(ignore_index=True)
@@ -195,25 +223,31 @@ def merge_dataset_in_chunks_with_llm(
 
 
 def merge_single_corrupted_dataset(
-    model_name, dataset: pd.DataFrame, verbose=False
+    model_name, dataset: pd.DataFrame, additional_prompt: str = "", verbose=False
 ) -> pd.DataFrame:
     if dataset is None:
         return pd.DataFrame()
 
     csv = dataset.to_csv(index=False)
 
-    prompt = (
-        "You are a data cleaning assistant. "
-        "You will be given a dataset about the same topic, but it may contain errors or inconsistencies. "
-        "Your task is to clean it, choosing the most likely true value for each cell."
-        "At first look at the different column names and find an identifier."
-        "Rows that have the same identifier should have the exact same values."
-        "If you want to merge rows with the same identifier, don't delete one of them, just give both rows the same values. Do not delete any rows. Merging rows means that you should output the same row twice, with the same values in all columns."
-        "IMPORTANT: Output ONLY the cleaned dataset as a valid JSON array of objects, with the same columns as the input. "
-        "DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the JSON data. "
-        "If you include anything other than the JSON, the production process will fail. "
-        "Here is the dataset to clean (as CSV):\n\n" + csv
-    )
+    prompt = f"""
+    You are a data cleaning assistant. 
+    You will be given a dataset about the same topic, but it may contain errors or inconsistencies. 
+    Your task is to clean it, choosing the most likely true value for each cell.
+    At first look at the different column names and find an identifier.
+    Rows that have the same identifier should have the exact same values.
+    If you want to merge rows with the same identifier, don't delete one of them, just give both rows the same values. Do not delete any rows. Merging rows means that you should output the same row twice, with the same values in all columns.
+    IMPORTANT: Output ONLY the cleaned dataset as a valid JSON array of objects, with the same columns as the input. 
+    DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the JSON data. 
+    If you include anything other than the JSON, the production process will fail. 
+
+    {"Here is some additional information to help you merge the datasets:" if additional_prompt != "" else ""}
+    {additional_prompt.strip()}
+
+    Here is the dataset to clean (as CSV):
+
+    {csv}
+    """
 
     merged_df = merge_datasets(
         model_name=model_name,

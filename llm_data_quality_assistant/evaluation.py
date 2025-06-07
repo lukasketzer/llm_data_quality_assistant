@@ -67,12 +67,12 @@ def calculate_stats(
     false_negative: int,
     true_negative: int,
 ) -> dict:
-    prec = precision(true_positive, false_positive)
-    rec = recall(true_positive, false_negative)
-    f1 = f1_score(true_positive, false_positive, false_negative)
-    acc = accuracy(true_positive, true_negative, false_positive, false_negative)
-    fpr = false_positive_rate(false_positive, true_negative)
-    fnr = false_negative_rate(false_negative, true_positive)
+    prec = precision(true_positive=true_positive, false_positive=false_positive)
+    rec = recall(true_positive=true_positive, false_negative=false_negative)
+    f1 = f1_score(true_positive=true_positive, false_positive=false_positive, false_negative=false_negative)
+    acc = accuracy(true_positive=true_positive, true_negative=true_negative, false_positive=false_positive, false_negative=false_negative)
+    fpr = false_positive_rate(false_positive=false_positive, true_negative=true_negative)
+    fnr = false_negative_rate(false_negative=false_negative, true_positive=true_positive)
     stats = {
         "true_positive": true_positive,
         "false_positive": false_positive,

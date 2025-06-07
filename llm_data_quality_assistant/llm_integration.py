@@ -237,11 +237,12 @@ def merge_single_corrupted_dataset(
     At first look at the different column names and find an identifier.
     Rows that have the same identifier should have the exact same values.
     If you want to merge rows with the same identifier, don't delete one of them, just give both rows the same values. Do not delete any rows. Merging rows means that you should output the same row twice, with the same values in all columns.
+    After merging rows, you have to ensure that the values make sense. Think for yourself whether the values make sense or have to be changed. If you find a value that does not make sense, change it to a value that makes sense.
     IMPORTANT: Output ONLY the cleaned dataset as a valid JSON array of objects, with the same columns as the input. 
     DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the JSON data. 
     If you include anything other than the JSON, the production process will fail. 
 
-    {"Here is some additional information to help you merge the datasets:" if additional_prompt != "" else ""}
+    {"Here is some additional information to help you merge the datasets. Use these information to ensure that all the values in the dataset are valid and make sense. The values in the dataset have to adhere to the additional information" if additional_prompt != "" else ""}
     {additional_prompt.strip()}
 
     Here is the dataset to clean (as CSV):

@@ -52,6 +52,7 @@ class Pipeline:
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
         chunk_size: int = 50,
         group_by_rows: bool = False,
+        additional_prompt: str = "",
         verbose: bool = False,
     ):
         merged_df = merge_dataset_in_chunks_with_llm(
@@ -59,6 +60,7 @@ class Pipeline:
             datasets,
             chunk_size=chunk_size,
             group_by_rows=group_by_rows,
+            additional_prompt=additional_prompt,
             verbose=verbose,
         )
         return merged_df
@@ -68,12 +70,13 @@ class Pipeline:
     def clean_single_dataset(
         self,
         dataset: pd.DataFrame,
+        additional_prompt: str = "",
         verbose: bool = False,
         model_name: (
             Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
     ):
-        merged_df = merge_single_corrupted_dataset(model_name, dataset, verbose=verbose)
+        merged_df = merge_single_corrupted_dataset(model_name, dataset, additional_prompt=additional_prompt, verbose=verbose)
         return merged_df
 
     def evaluate_micro(self, generated_dataset, corrupted_coords):

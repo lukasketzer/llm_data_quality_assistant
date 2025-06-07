@@ -44,7 +44,7 @@ sesame notin {0,1,2}
 soy notin {0,1,2}
 sulfite notin {0,1,2}
 
---Sigma interactions
+--NOT ALLOWED THAT
 nuts < almondnuts
 nuts < brazil_nuts
 nuts < macadamia_nuts
@@ -52,3 +52,12 @@ nuts < hazelnut
 nuts < pistachio
 nuts < walnut
 nuts < cashew
+
+IT ALLWAYS MUST BE TRUE THAT:
+nuts >= almondnuts
+nuts >= brazil_nuts
+nuts >= macadamia_nuts
+nuts >= hazelnut
+nuts >= pistachio
+nuts >= walnut
+nuts >= cashew

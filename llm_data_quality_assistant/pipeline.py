@@ -65,18 +65,21 @@ class Pipeline:
         )
         return merged_df
 
-    # TODO: hält sich nicht an die architektur
-    # mit "merge_with_llm" zuammenführen eventuell
+    # TODO: mit "merge_with_llm" zuammenführen eventuell
     def clean_single_dataset(
         self,
-        dataset: pd.DataFrame,
         additional_prompt: str = "",
         verbose: bool = False,
         model_name: (
             Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
     ):
-        merged_df = merge_single_corrupted_dataset(model_name, dataset, additional_prompt=additional_prompt, verbose=verbose)
+        merged_df = merge_single_corrupted_dataset(
+            model_name,
+            self.dataset,
+            additional_prompt=additional_prompt,
+            verbose=verbose,
+        )
         return merged_df
 
     def evaluate_micro(self, generated_dataset, corrupted_coords):

@@ -233,7 +233,7 @@ def merge_single_corrupted_dataset(
     prompt = f"""
     You are a data cleaning assistant. 
     You will be given a dataset about the same topic, but it may contain errors or inconsistencies. 
-    Your task is to clean it, choosing the most likely true value for each cell.
+    Your task is to clean it, choosing the most likely correct value for each cell.
     At first look at the different column names and find an identifier.
     Rows that have the same identifier should have the exact same values.
     If you want to merge rows with the same identifier, don't delete one of them, just give both rows the same values. Do not delete any rows. Merging rows means that you should output the same row twice, with the same values in all columns.

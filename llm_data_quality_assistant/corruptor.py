@@ -86,12 +86,15 @@ def calculate_row_corruption(
     return row_indices_map
 
 
+# TODO: Cell types
 def calculate_cell_corruption(
-    dataset_dimensions: tuple[int, int],
+    dataset: pd.DataFrame,
     cell_corruption_type: list[CellCorruptionTypes],
     severity: float,
     excluded_coords: np.ndarray = np.empty((0, 2), dtype=int),
 ) -> dict[CellCorruptionTypes, np.ndarray]:
+
+    dataset_dimensions: tuple[int, int] = dataset.shape
 
     if len(cell_corruption_type) == 0:
         return {}
@@ -161,7 +164,7 @@ def calculate_cell_corruption(
 
 
 def calculate_corruption(
-    dataset_dimensions: tuple[int, int],
+    dataset: pd.DataFrame,
     row_corruption_type: list[RowCorruptionTypes],
     cell_corruption_type: list[CellCorruptionTypes],
     severity: float,
@@ -173,6 +176,8 @@ def calculate_corruption(
     """
     Calculate the noise to be added to the dataset based on the severity.
     """
+
+    dataset_dimensions: tuple[int, int] = dataset.shape
 
     percentage_rows = (
         len(row_corruption_type)
@@ -200,7 +205,7 @@ def calculate_corruption(
     total_coordinates = row_coords
 
     cell_corruption_config = calculate_cell_corruption(
-        dataset_dimensions=dataset_dimensions,
+        dataset=dataset,
         cell_corruption_type=cell_corruption_type,
         severity=severity * percentage_cells,
         excluded_coords=row_coords,
@@ -316,14 +321,14 @@ def corrupt_dataset(
         dataset = gold_standard.copy()
         row_corruption_config, cell_corruption_config, total_coordinates = (
             calculate_corruption(
-                dataset_dimensions=dataset.shape,
+                dataset=dataset,
                 row_corruption_type=row_corruption_types,
                 cell_corruption_type=cell_corruption_types,
                 severity=severity,
             )
         )
-        # TODO: find solution for type problems
-        # dataset = dataset.astype(object)
+        dataset_dtypes = dataset.dtypes
+        dataset = dataset.astype(object)
 
         corrupted_coords.append(total_coordinates)
 
@@ -335,6 +340,7 @@ def corrupt_dataset(
             cell_corruption_config=cell_corruption_config,
             dataset=dataset,
         )
+        dataset.astype(dataset_dtypes, copy=False, errors="ignore")
 
         corrupted_datasets.append(dataset)
     return corrupted_datasets, corrupted_coords

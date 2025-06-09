@@ -26,7 +26,7 @@ def merge_baseline(primary_key: str, dataset: pd.DataFrame) -> pd.DataFrame:
 
 
 def merge_multiple_datasets_baseline(
-    model_name: str, primary_key: str, datasets: list[pd.DataFrame], verbose: bool = False
+    primary_key: str, datasets: list[pd.DataFrame]
 ) -> pd.DataFrame:
     """
     Baseline merging function for a list of datasets. Concatenates the datasets and merges them by the primary key.

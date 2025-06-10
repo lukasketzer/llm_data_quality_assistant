@@ -1,5 +1,8 @@
 import numpy as np
-from llm_data_quality_assistant.enums.CorruptionTypes import RowCorruptionTypes, CellCorruptionTypes
+from llm_data_quality_assistant.enums.CorruptionTypes import (
+    RowCorruptionTypes,
+    CellCorruptionTypes,
+)
 import pandas as pd
 import math
 from llm_data_quality_assistant.corruption_functions import *
@@ -277,16 +280,17 @@ def apply_cell_corruptions(
 
 
 def corrupt_dataset(
-    gold_standard: pd.DataFrame,
+    dataset: pd.DataFrame,
     row_corruption_types: list[RowCorruptionTypes],
     cell_corruption_types: list[CellCorruptionTypes],
+    columns_to_exclude: list[str] = [],
     severity: float = 0.1,  # Severity of corruption (0.0 to 1.0)
     output_size: int = 5,
 ) -> tuple[list[pd.DataFrame], list[np.ndarray]]:
     """
     Apply a corruption type to the dataset with a given severity.
     """
-    dtypes = set(gold_standard.dtypes.values)
+    dtypes = set(dataset.dtypes.values)
 
     for c in cell_corruption_types + row_corruption_types:
         if c in datatype_restrictions:
@@ -297,30 +301,31 @@ def corrupt_dataset(
 
     corrupted_datasets = []
     corrupted_coords = []
+    # TODO: columns to exclude
     for _ in range(output_size):
-        dataset = gold_standard.copy()
+        dataset_copy = dataset.copy()
         row_corruption_config, cell_corruption_config, total_coordinates = (
             calculate_corruption(
-                dataset=dataset,
+                dataset=dataset_copy,
                 row_corruption_type=row_corruption_types,
                 cell_corruption_type=cell_corruption_types,
                 severity=severity,
             )
         )
-        dataset_dtypes = dataset.dtypes
-        dataset = dataset.astype(object)
+        dataset_dtypes = dataset_copy.dtypes
+        dataset_copy = dataset_copy.astype(object)
 
         corrupted_coords.append(total_coordinates)
 
-        dataset = apply_row_corruptions(
+        dataset_copy = apply_row_corruptions(
             row_corruption_config=row_corruption_config,
-            dataset=dataset,
+            dataset=dataset_copy,
         )
-        dataset = apply_cell_corruptions(
+        dataset_copy = apply_cell_corruptions(
             cell_corruption_config=cell_corruption_config,
-            dataset=dataset,
+            dataset=dataset_copy,
         )
-        dataset.astype(dataset_dtypes, copy=False, errors="ignore")
+        dataset_copy.astype(dataset_dtypes, copy=False, errors="ignore")
 
-        corrupted_datasets.append(dataset)
+        corrupted_datasets.append(dataset_copy)
     return corrupted_datasets, corrupted_coords

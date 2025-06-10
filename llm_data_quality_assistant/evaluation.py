@@ -69,10 +69,23 @@ def calculate_stats(
 ) -> dict:
     prec = precision(true_positive=true_positive, false_positive=false_positive)
     rec = recall(true_positive=true_positive, false_negative=false_negative)
-    f1 = f1_score(true_positive=true_positive, false_positive=false_positive, false_negative=false_negative)
-    acc = accuracy(true_positive=true_positive, true_negative=true_negative, false_positive=false_positive, false_negative=false_negative)
-    fpr = false_positive_rate(false_positive=false_positive, true_negative=true_negative)
-    fnr = false_negative_rate(false_negative=false_negative, true_positive=true_positive)
+    f1 = f1_score(
+        true_positive=true_positive,
+        false_positive=false_positive,
+        false_negative=false_negative,
+    )
+    acc = accuracy(
+        true_positive=true_positive,
+        true_negative=true_negative,
+        false_positive=false_positive,
+        false_negative=false_negative,
+    )
+    fpr = false_positive_rate(
+        false_positive=false_positive, true_negative=true_negative
+    )
+    fnr = false_negative_rate(
+        false_negative=false_negative, true_positive=true_positive
+    )
     stats = {
         "true_positive": true_positive,
         "false_positive": false_positive,
@@ -89,10 +102,11 @@ def calculate_stats(
     return stats
 
 
+# TODO: Check and test again
 def evaluate_dataset_micro(
     gold_standard: pd.DataFrame,
     generated_dataset: pd.DataFrame,
-    corrupted_coords: list[np.ndarray],
+    corrupted_coords: np.ndarray,
 ) -> dict:
     """
     Evaluate the generated dataset against a gold standard dataset.
@@ -106,12 +120,11 @@ def evaluate_dataset_micro(
     """
     if gold_standard.shape != generated_dataset.shape:
         raise ValueError("Datasets must have the same shape for evaluation.")
-    n_rows, n_cols = gold_standard.shape
-    corrupted_coords_flattened = np.array(
-        [coord for coords in corrupted_coords for coord in coords]
-    )
-    corrupted_coords_flattened = np.unique(corrupted_coords_flattened, axis=0)
 
+    if corrupted_coords.ndim != 2:
+        raise ValueError("Corrupted coordinates must be a 2D array with shape (n, 2).")
+
+    n_rows, n_cols = gold_standard.shape
     stats = {
         "num_rows": n_rows,
         "num_columns": n_cols,
@@ -126,7 +139,7 @@ def evaluate_dataset_micro(
     for row in range(n_rows):
         for col in range(n_cols):
             coord = np.array([row, col])
-            is_corrupted = np.any(np.all(corrupted_coords_flattened == coord, axis=1))
+            is_corrupted = np.any(np.all(corrupted_coords == coord, axis=1))
             gold_val = gold_standard.iloc[row, col]
             gen_val = generated_dataset.iloc[row, col]
             if is_corrupted and gold_val == gen_val:
@@ -154,7 +167,7 @@ def evaluate_dataset_micro(
 def evaluate_dataset_macro(
     gold_standard: pd.DataFrame,
     generated_dataset: pd.DataFrame,
-    corrupted_coords: list[np.ndarray],
+    corrupted_coords: np.ndarray,
 ) -> dict:
     """
     Evaluate the generated dataset against a gold standard dataset using macro metrics.
@@ -168,12 +181,11 @@ def evaluate_dataset_macro(
     """
     if gold_standard.shape != generated_dataset.shape:
         raise ValueError("Datasets must have the same shape for evaluation.")
-    n_rows, n_cols = gold_standard.shape
-    corrupted_coords_flattened = np.array(
-        [coord for coords in corrupted_coords for coord in coords]
-    )
-    corrupted_coords_flattened = np.unique(corrupted_coords_flattened, axis=0)
 
+    if corrupted_coords.ndim != 2:
+        raise ValueError("Corrupted coordinates must be a 2D array with shape (n, 2).")
+
+    n_rows, n_cols = gold_standard.shape
     stats_per_column = {
         "num_rows": n_rows,
         "num_columns": n_cols,
@@ -186,9 +198,7 @@ def evaluate_dataset_macro(
         false_positive = 0
         false_negative = 0
         true_negative = 0
-        column_corruption_coords = corrupted_coords_flattened[
-            corrupted_coords_flattened[:, 1] == col
-        ]
+        column_corruption_coords = corrupted_coords[corrupted_coords[:, 1] == col]
         stats_per_column["stats"].append(
             {
                 "num_enties": n_rows,

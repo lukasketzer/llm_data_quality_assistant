@@ -10,12 +10,12 @@ from llm_data_quality_assistant.corruption_functions import *
 
 datatype_restrictions = {
     CellCorruptionTypes.ROUNDING_ERROR: [
-        np.float64,
-        np.int64,
+        np.dtype("int64"),
+        np.dtype("float64"),
     ],
-    CellCorruptionTypes.CASE_ERROR: [np.object_],
-    CellCorruptionTypes.TRUNCATE: [np.object_],
-    CellCorruptionTypes.TYPO: [np.object_],
+    CellCorruptionTypes.CASE_ERROR: [np.dtype("O")],
+    CellCorruptionTypes.TRUNCATE: [np.dtype("O")],
+    CellCorruptionTypes.TYPO: [np.dtype("O")],
 }
 
 
@@ -35,13 +35,15 @@ def delete_coords(
 
 
 def calculate_row_corruption(
-    dataset_dimensions: tuple[int, int],
+    dataset: pd.DataFrame,
     row_corruption_type: list[RowCorruptionTypes],
     severity: float,
     excluded_coords: np.ndarray = np.empty((0, 2), dtype=int),
 ) -> dict[RowCorruptionTypes, np.ndarray]:
     if len(row_corruption_type) == 0:
         return {}
+
+    dataset_dimensions = dataset.shape
 
     amount = max(math.ceil(dataset_dimensions[0] * severity), 1)
 
@@ -170,7 +172,7 @@ def calculate_corruption(
     )
     percentage_cells = 1 - percentage_rows
     row_corruption_config = calculate_row_corruption(
-        dataset_dimensions=dataset_dimensions,
+        dataset=dataset,
         row_corruption_type=row_corruption_type,
         severity=severity * percentage_rows,
     )
@@ -290,6 +292,11 @@ def corrupt_dataset(
     """
     Apply a corruption type to the dataset with a given severity.
     """
+
+    for col in columns_to_exclude:
+        if col not in dataset.columns:
+            raise ValueError(f"Column '{col}' not found in the dataset.")
+
     dtypes = set(dataset.dtypes.values)
 
     for c in cell_corruption_types + row_corruption_types:
@@ -299,11 +306,19 @@ def corrupt_dataset(
                     f"Cell corruption type {c} is not applicable to the dataset's data types."
                 )
 
+    # Remove excluded columns from the dataset
+    original_column_order = dataset.columns
+    dataset_to_corrupt = dataset.copy()
+    if len(columns_to_exclude) > 0:
+        dataset_to_corrupt = dataset_to_corrupt.drop(
+            columns_to_exclude, axis=1, errors="ignore"
+        )
+
     corrupted_datasets = []
     corrupted_coords = []
-    # TODO: columns to exclude
+
     for _ in range(output_size):
-        dataset_copy = dataset.copy()
+        dataset_copy = dataset_to_corrupt.copy()
         row_corruption_config, cell_corruption_config, total_coordinates = (
             calculate_corruption(
                 dataset=dataset_copy,
@@ -315,8 +330,6 @@ def corrupt_dataset(
         dataset_dtypes = dataset_copy.dtypes
         dataset_copy = dataset_copy.astype(object)
 
-        corrupted_coords.append(total_coordinates)
-
         dataset_copy = apply_row_corruptions(
             row_corruption_config=row_corruption_config,
             dataset=dataset_copy,
@@ -327,5 +340,24 @@ def corrupt_dataset(
         )
         dataset_copy.astype(dataset_dtypes, copy=False, errors="ignore")
 
+        # Reinsert the excluded columns
+        for col in columns_to_exclude:
+            dataset_copy[col] = dataset[col]
+
+        # Ensure the original column order is maintained
+        dataset_copy = dataset_copy[original_column_order]
+
+        for col in columns_to_exclude:
+            col_idx = dataset_copy.columns.get_loc(col)
+            # Adjust coordinates to account for excluded columns
+            total_coordinates[:, 1] = np.where(
+                total_coordinates[:, 1] < col_idx,
+                total_coordinates[:, 1],
+                total_coordinates[:, 1] + 1,
+            )
+
+        corrupted_coords.append(total_coordinates)
+
         corrupted_datasets.append(dataset_copy)
+
     return corrupted_datasets, corrupted_coords

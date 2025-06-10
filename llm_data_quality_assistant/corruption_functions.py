@@ -58,6 +58,10 @@ def shuffle_columns(dataset: pd.DataFrame, rows_to_shuffle: np.ndarray) -> pd.Da
         # Generate a derangement (no index stays in place)
         row_values = dataset.values[row]
         perm = np.random.permutation(row_values)
+        # chekc if any permutatio is on the same position
+
+        while np.any(perm == row_values):
+            perm = np.random.permutation(row_values)
         dataset.iloc[row] = perm
 
     return dataset
@@ -228,7 +232,7 @@ def reverse_rows(dataset: pd.DataFrame, rows_to_reverse: np.ndarray) -> pd.DataF
         raise ValueError("rows_to_reverse must be a 1D array of row indices.")
 
     for row in rows_to_reverse:
-        reversed_rows = dataset.iloc[row].values[0][::-1]
+        reversed_rows = dataset.iloc[row].values[::-1]
         dataset.iloc[row] = reversed_rows
     return dataset
 
@@ -264,20 +268,15 @@ def case_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFr
         return dataset
     if cell_coordinates.ndim != 2:
         raise ValueError("cell_coordinates must be a 2D arraywith shape (n, 2).")
-    # Handle numpy integer and floating types if available
     for row, col in cell_coordinates:
         value = dataset.iat[row, col]
+
         if isinstance(value, str):
             if value == "":
                 continue
-            while True:
-                case_func = random.choice(
-                    [str.upper, str.lower, str.title, str.swapcase]
-                )
-                new_value = case_func(value)
-                if new_value != value:
-                    dataset.iat[row, col] = new_value
-                    break
+            case_func = str.swapcase
+            new_value = case_func(value)
+            dataset.iat[row, col] = new_value
 
         else:
             raise TypeError(
@@ -315,9 +314,10 @@ def rounding_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.Da
         return dataset
     if cell_coordinates.ndim != 2:
         raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
+
     for row, col in cell_coordinates:
         value = dataset.iat[row, col]
-        if isinstance(value, np.floating) or isinstance(value, np.integer):
+        if isinstance(value, float) or isinstance(value, int):
             lower = (value // 10) * 10
             dataset.iat[row, col] = random.choice([lower, lower + 10, lower + 20])
     return dataset

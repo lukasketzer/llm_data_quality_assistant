@@ -1,6 +1,5 @@
 """call corrupt_dataset(
 gold_standard: pd.DataFrame,
-row_corruption_type: list[RowCorruptionTypes],
 cell_corruption_type: list[CellCorruptionTypes],
 severity: float = 0.1,  # Severity of corruption (0.0 to 1.0)
 output_size: int = 5,
@@ -14,78 +13,80 @@ call merge_dataset() in llm_integration.py to merge multiple datasets using an L
 
 from pprint import pprint
 import pandas as pd
-from .corruptor import corrupt_dataset, RowCorruptionTypes, CellCorruptionTypes
-from .llm_integration import (
-    merge_dataset_in_chunks_with_llm,
-    merge_single_corrupted_dataset,
+import numpy as np
+from llm_data_quality_assistant.corruptor import (
+    corrupt_dataset,
 )
-from .enums import Models
-from .evaluation import evaluate_dataset_micro, evaluate_dataset_macro
+from llm_data_quality_assistant.enums.CorruptionTypes import (
+    RowCorruptionTypes,
+    CellCorruptionTypes,
+)
+
+from llm_data_quality_assistant.llm_integration import merge_datasets_by_primary_key
+from llm_data_quality_assistant.enums import Models
+from llm_data_quality_assistant.evaluation import (
+    evaluate_dataset_micro,
+    evaluate_dataset_macro,
+)
 
 
 # TODO: Architekutr überdenken
 class Pipeline:
-    def __init__(self, gold_standard: pd.DataFrame):
-        self.dataset = gold_standard
-
+    @staticmethod
     def generate_corrupted_datasets(
-        self,
-        row_corruption_type: list[RowCorruptionTypes],
-        cell_corruption_type: list[CellCorruptionTypes],
+        dataset: pd.DataFrame,
+        cell_corruption_types: list[CellCorruptionTypes],
+        row_corruption_types: list[RowCorruptionTypes],
+        columns_to_exclude: list[str] = [],
         severity: float = 0.1,
         output_size: int = 5,
-    ):
+    ) -> tuple[list[pd.DataFrame], list[np.ndarray]]:
         corrupted_datasets, corrupted_coords = corrupt_dataset(
-            gold_standard=self.dataset,
-            row_corruption_types=row_corruption_type,
-            cell_corruption_types=cell_corruption_type,
+            dataset=dataset,
+            cell_corruption_types=cell_corruption_types,
+            row_corruption_types=row_corruption_types,  # Add this argument as required
+            columns_to_exclude=columns_to_exclude,
             severity=severity,
             output_size=output_size,
         )
         return corrupted_datasets, corrupted_coords
 
+    @staticmethod
     def merge_with_llm(
-        self,
-        datasets: list[pd.DataFrame],
+        dataset: pd.DataFrame,
+        primary_key: str,
         model_name: (
             Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
-        chunk_size: int = 50,
-        group_by_rows: bool = False,
         additional_prompt: str = "",
         verbose: bool = False,
     ):
-        merged_df = merge_dataset_in_chunks_with_llm(
-            model_name,
-            datasets,
-            chunk_size=chunk_size,
-            group_by_rows=group_by_rows,
+        return merge_datasets_by_primary_key(
+            model_name=model_name,
+            primary_key=primary_key,
+            dataset=dataset,
             additional_prompt=additional_prompt,
             verbose=verbose,
         )
-        return merged_df
 
-    # TODO: mit "merge_with_llm" zuammenführen eventuell
-    def clean_single_dataset(
-        self,
-        additional_prompt: str = "",
-        verbose: bool = False,
-        model_name: (
-            Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
-        ) = Models.GeminiModels.GEMINI_2_0_FLASH,
+    @staticmethod
+    def evaluate_micro(
+        gold_standard: pd.DataFrame,
+        generated_dataset: pd.DataFrame,
+        corrupted_coords: np.ndarray,
     ):
-        merged_df = merge_single_corrupted_dataset(
-            model_name,
-            self.dataset,
-            additional_prompt=additional_prompt,
-            verbose=verbose,
-        )
-        return merged_df
-
-    def evaluate_micro(self, generated_dataset, corrupted_coords):
         """Evaluate a generated dataset using micro metrics."""
-        return evaluate_dataset_micro(self.dataset, generated_dataset, corrupted_coords)
+        return evaluate_dataset_micro(
+            gold_standard, generated_dataset, corrupted_coords
+        )
 
-    def evaluate_macro(self, generated_dataset, corrupted_coords):
+    @staticmethod
+    def evaluate_macro(
+        gold_standard: pd.DataFrame,
+        generated_dataset: pd.DataFrame,
+        corrupted_coords: np.ndarray,
+    ):
         """Evaluate a generated dataset using macro metrics."""
-        return evaluate_dataset_macro(self.dataset, generated_dataset, corrupted_coords)
+        return evaluate_dataset_macro(
+            gold_standard, generated_dataset, corrupted_coords
+        )

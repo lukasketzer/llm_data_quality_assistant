@@ -50,10 +50,12 @@ def merge_datasets(
     return pd.DataFrame(data)
 
 
-
-
 def merge_datasets_by_primary_key(
-    model_name, primary_key: str, dataset: pd.DataFrame, verbose=False
+    model_name,
+    primary_key: str,
+    dataset: pd.DataFrame,
+    verbose=False,
+    additional_prompt: str = "",
 ) -> pd.DataFrame:
     """
     Merges rows in the dataset by the given primary key using the LLM-based cleaning approach.
@@ -69,7 +71,10 @@ def merge_datasets_by_primary_key(
     merged_rows = []
     for group in grouped:
         merged_row = merge_single_corrupted_dataset(
-            model_name=model_name, dataset=group, verbose=verbose
+            model_name=model_name,
+            dataset=group,
+            additional_prompt=additional_prompt,
+            verbose=verbose,
         )
         merged_rows.append(merged_row)
 
@@ -110,8 +115,8 @@ def merge_single_corrupted_dataset(
 
     merged_df = merge_datasets(
         model_name=model_name,
+        dataset=dataset,
         prompt=prompt,
-        datasets=[dataset],
         verbose=verbose,
     )
     return merged_df

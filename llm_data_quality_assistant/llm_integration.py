@@ -20,9 +20,9 @@ def generate_pydantic_structure(dataset: pd.DataFrame):
 
 
 def merge_datasets(
-    model_name, prompt, datasets: list[pd.DataFrame], verbose=False
+    model_name, prompt, dataset: pd.DataFrame, verbose=False
 ) -> pd.DataFrame:
-    struct = generate_pydantic_structure(datasets[0])
+    struct = generate_pydantic_structure(dataset=dataset)
     model = get_model(model_name)
 
     message = ""
@@ -50,23 +50,6 @@ def merge_datasets(
     return pd.DataFrame(data)
 
 
-def merge_multiple_datasets_by_primary_key(
-    model_name, primary_key: str, datasets: list[pd.DataFrame], verbose=False
-) -> pd.DataFrame:
-    """
-    Merges a list of datasets into a single DataFrame and then merges rows by the primary key using the LLM-based cleaning approach.
-    """
-    if not datasets or len(datasets) == 0:
-        return pd.DataFrame()
-
-    merged_df = pd.concat(datasets, ignore_index=True)
-
-    return merge_datasets_by_primary_key(
-        model_name=model_name,
-        primary_key=primary_key,
-        dataset=merged_df,
-        verbose=verbose,
-    )
 
 
 def merge_datasets_by_primary_key(

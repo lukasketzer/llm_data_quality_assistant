@@ -80,6 +80,7 @@ class Pipeline:
         model_name: (
             Models.GeminiModels | Models.OllamaModels | Models.OpenAIModels
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
+        rpm: int = 0,  # Requests per minute, 0 for no limit
         additional_prompt: str = "",
         verbose: bool = False,
     ) -> pd.DataFrame:
@@ -87,6 +88,7 @@ class Pipeline:
             model_name=model_name,
             primary_key=primary_key,
             dataset=dataset,
+            rpm=rpm,
             additional_prompt=additional_prompt,
             verbose=verbose,
         )

@@ -3,6 +3,8 @@ from llm_data_quality_assistant.llm_models import get_model
 from pydantic import create_model
 import json
 from llm_data_quality_assistant.merge_baseline import merge_baseline
+import time
+
 
 dtype_map = {
     "int64": int,
@@ -55,6 +57,7 @@ def merge_datasets_by_primary_key(
     primary_key: str,
     dataset: pd.DataFrame,
     verbose=False,
+    rpm: int = 0,  # Requests per minute, 0 for no limit
     additional_prompt: str = "",
 ) -> pd.DataFrame:
     """
@@ -67,9 +70,20 @@ def merge_datasets_by_primary_key(
     if primary_key not in dataset.columns:
         raise ValueError(f"Primary key '{primary_key}' not found in dataset columns.")
 
+    min_interval = 60 / rpm if rpm > 0 else 0
+    last_request_time = None
+
     grouped = [group for _, group in dataset.groupby(primary_key)]
     merged_rows = []
     for group in grouped:
+        now = time.time()
+        if last_request_time is not None and min_interval > 0:
+            elapsed = now - last_request_time
+            to_wait = min_interval - elapsed
+            if to_wait > 0:
+                time.sleep(to_wait)
+
+        last_request_time = time.time()
         merged_row = merge_single_corrupted_dataset(
             model_name=model_name,
             dataset=group,
@@ -90,8 +104,12 @@ def merge_datasets_by_primary_key(
 
 
 # TODO: handle multiple rows at once
+# TODO: Rate Limiter "Requets per minute"
 def merge_single_corrupted_dataset(
-    model_name, dataset: pd.DataFrame, additional_prompt: str = "", verbose=False
+    model_name,
+    dataset: pd.DataFrame,
+    additional_prompt: str = "",
+    verbose=False,
 ) -> pd.DataFrame:
     if dataset is None:
         return pd.DataFrame()
@@ -104,7 +122,6 @@ def merge_single_corrupted_dataset(
     Your task is to clean it, choosing the most likely correct value for each cell.
     At first look at the different column names and find an identifier.
     Rows that have the same identifier should have the exact same values.
-    If you want to merge rows with the same identifier, don't delete one of them, just give those rows the same values. Do not delete any rows.
     After merging rows, you have to ensure that the values make sense. Think for yourself whether the values make sense or have to be changed. If you find a value that does not make sense, change it to a value that makes sense.
 
     OUTPUT FORMAT: All of the inputted rows should be merged into a single row, with the same columns as the input dataset.

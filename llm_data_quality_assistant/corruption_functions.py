@@ -248,13 +248,10 @@ def swap_cells(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFr
         raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
 
     values = [dataset.iat[row, col] for row, col in cell_coordinates]
-    while True:
-        perm = np.random.permutation(values)
+    perm = np.random.permutation(values)
 
-        if not np.any(perm == values):
-            for (row, col), value in zip(cell_coordinates, perm):
-                dataset.iat[row, col] = value
-            break
+    for (row, col), value in zip(cell_coordinates, perm):
+        dataset.iat[row, col] = value
 
     return dataset
 

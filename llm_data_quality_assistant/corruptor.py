@@ -292,6 +292,9 @@ def corrupt_dataset(
     Apply a corruption type to the dataset with a given severity.
     """
 
+    if dataset.empty:
+        return [pd.DataFrame() for _ in range(output_size)], []
+
     for col in columns_to_exclude:
         if col not in dataset.columns:
             raise ValueError(f"Column '{col}' not found in the dataset.")

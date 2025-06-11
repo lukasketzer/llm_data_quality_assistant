@@ -89,6 +89,7 @@ def merge_datasets_by_primary_key(
         return pd.DataFrame()
 
 
+# TODO: handle multiple rows at once
 def merge_single_corrupted_dataset(
     model_name, dataset: pd.DataFrame, additional_prompt: str = "", verbose=False
 ) -> pd.DataFrame:
@@ -105,7 +106,9 @@ def merge_single_corrupted_dataset(
     Rows that have the same identifier should have the exact same values.
     If you want to merge rows with the same identifier, don't delete one of them, just give those rows the same values. Do not delete any rows.
     After merging rows, you have to ensure that the values make sense. Think for yourself whether the values make sense or have to be changed. If you find a value that does not make sense, change it to a value that makes sense.
-    THE SHAPE OF THE DATASET MUST NOT CHANGE, meaning the number of rows and columns must stay the same.
+
+    OUTPUT FORMAT: All of the inputted rows should be merged into a single row, with the same columns as the input dataset.
+
     IMPORTANT: Output ONLY the cleaned dataset as a valid JSON array of objects, with the same columns as the input. 
     DO NOT include any explanations, markdown, code blocks, or extra formatting—output ONLY the JSON data. 
     If you include anything other than the JSON, the production process will fail. 
@@ -124,4 +127,10 @@ def merge_single_corrupted_dataset(
         prompt=prompt,
         verbose=verbose,
     )
-    return merged_df
+    if merged_df.shape[0] == 0:
+        raise ValueError(
+            "The merged DataFrame is empty. This might be due to the LLM not returning any data. Please check the model and prompt."
+        )
+    else:
+        # Take the first row and copy it n_row times to preserve the original shape
+        return pd.concat([merged_df.iloc[[0]]] * len(dataset), ignore_index=True)

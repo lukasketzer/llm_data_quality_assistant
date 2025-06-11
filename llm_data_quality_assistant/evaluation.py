@@ -117,7 +117,8 @@ def evaluate_dataset_micro(
     Returns:
         dict: A dictionary containing evaluation metrics.
     """
-    if gold_standard.shape != cleaned_dataset.shape != corrupted_dataset.shape:
+
+    if not (gold_standard.shape == cleaned_dataset.shape == corrupted_dataset.shape):
         raise ValueError("Datasets must have the same shape for evaluation.")
     # HACK:
     gold_standard = gold_standard.astype(str)
@@ -181,7 +182,7 @@ def evaluate_dataset_macro(
     Returns:
         dict: A dictionary containing evaluation metrics per column.
     """
-    if gold_standard.shape != cleaned_dataset.shape != corrupted_dataset.shape:
+    if not (gold_standard.shape == cleaned_dataset.shape == corrupted_dataset.shape):
         raise ValueError("Datasets must have the same shape for evaluation.")
     # HACK:
     gold_standard = gold_standard.astype(str)

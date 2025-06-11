@@ -143,3 +143,71 @@ def test_corrupted_coordinates_match_changes():
         assert any(
             (row == c[0] and col == c[1]) for c in coords
         ), f"Changed cell ({row}, {col}) not in coords list."
+
+
+def test_corrupt_dataset_empty_df():
+    df = pd.DataFrame()
+    corrupted_dfs, coords = corrupt_dataset(
+        dataset=df,
+        row_corruption_types=[],
+        cell_corruption_types=[],
+        columns_to_exclude=[],
+        severity=0.1,
+        output_size=1,
+    )
+    assert isinstance(corrupted_dfs, list)
+    assert len(corrupted_dfs) == 1
+    assert corrupted_dfs[0].empty
+    assert coords == [[]]
+
+
+def test_corrupt_dataset_nan_df():
+    df = pd.DataFrame({"a": [np.nan, np.nan], "b": [np.nan, np.nan]})
+    corrupted_dfs, coords = corrupt_dataset(
+        dataset=df,
+        row_corruption_types=[],
+        cell_corruption_types=[CellCorruptionTypes.NULL],
+        columns_to_exclude=[],
+        severity=0.5,
+        output_size=1,
+    )
+    assert isinstance(corrupted_dfs, list)
+    assert len(corrupted_dfs) == 1
+    assert set(corrupted_dfs[0].columns) == set(["a", "b"])
+    # All values should still be nan or null
+    assert corrupted_dfs[0].isnull().all().all()
+
+
+def test_corrupt_dataset_invalid_severity():
+    df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+    with pytest.raises(ValueError):
+        corrupt_dataset(
+            dataset=df,
+            row_corruption_types=[],
+            cell_corruption_types=[CellCorruptionTypes.NULL],
+            columns_to_exclude=[],
+            severity=-0.1,
+            output_size=1,
+        )
+    with pytest.raises(ValueError):
+        corrupt_dataset(
+            dataset=df,
+            row_corruption_types=[],
+            cell_corruption_types=[CellCorruptionTypes.NULL],
+            columns_to_exclude=[],
+            severity=1.5,
+            output_size=1,
+        )
+
+
+def test_corrupt_dataset_output_size_zero():
+    df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+    with pytest.raises(ValueError):
+        corrupt_dataset(
+            dataset=df,
+            row_corruption_types=[],
+            cell_corruption_types=[CellCorruptionTypes.NULL],
+            columns_to_exclude=[],
+            severity=0.1,
+            output_size=0,
+        )

@@ -31,6 +31,28 @@ from llm_data_quality_assistant.evaluation import (
 
 
 class Pipeline:
+
+    # TODO: primary key combined out of multiple parital keys
+
+    @staticmethod
+    def standardize_dataset(
+        dataset: pd.DataFrame, primary_key: list[str]
+    ) -> pd.DataFrame:
+        if len(primary_key) == 0:
+            raise ValueError("Primary key list cannot be empty.")
+
+        missing_keys = [col for col in primary_key if col not in dataset.columns]
+        if missing_keys:
+            raise KeyError(
+                f"Primary key columns {missing_keys} not found in dataset columns."
+            )
+        if dataset.empty:
+            raise ValueError("Input dataset is empty.")
+
+        return pd.concat(
+            [group for _, group in dataset.groupby(primary_key)], ignore_index=True
+        )
+
     @staticmethod
     # TODO: make it create parker-like-datasets
     def generate_corrupted_datasets(

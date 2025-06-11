@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project provides a modular framework for generating, corrupting, cleaning, and evaluating tabular datasets using Large Language Models (LLMs). It is designed for research and practical experimentation with data quality, leveraging LLMs for data cleaning and merging tasks.
+This project provides a modular, research-oriented framework for generating, corrupting, cleaning, and evaluating tabular datasets using Large Language Models (LLMs). It is designed for experimentation with data quality, leveraging LLMs for data cleaning and merging tasks.
 
 ## Features
 
@@ -11,6 +11,7 @@ This project provides a modular framework for generating, corrupting, cleaning, 
 - **LLM Integration**: Merge and clean datasets using LLMs (Ollama, Gemini, OpenAI supported).
 - **Evaluation**: Quantitatively evaluate cleaning/merging results using micro and macro metrics.
 - **Jupyter Notebooks**: Example notebooks for end-to-end experiments.
+- **Extensive Testing**: Pytest-based test suite for core modules.
 
 ## Directory Structure
 
@@ -23,6 +24,7 @@ This project provides a modular framework for generating, corrupting, cleaning, 
   - `enums/Models.py`: Model enums  
 - `datasets/` – Example datasets (gold standards, corrupted, public)
 - `analysis/` – Jupyter notebooks for experiments
+- `tests/` – Pytest-based unit tests
 - `requirements.txt` – Python dependencies
 
 ## Installation
@@ -34,7 +36,9 @@ This project provides a modular framework for generating, corrupting, cleaning, 
    pip install -r requirements.txt
    ```
 
-3. (Optional) Set up API keys for Gemini/OpenAI in your environment if using those models.
+3. (Optional) Set up API keys for Gemini/OpenAI in your environment if using those models. For example:
+   - `GOOGLE_API_KEY` for Gemini
+   - `OPENAI_API_KEY` for OpenAI (not implemented)
 
 ## Usage
 
@@ -87,9 +91,21 @@ See `analysis/flight_llm.ipynb` and `analysis/allergen_llm.ipynb` for full exper
 - `datasets/public_dataset/` – Example public datasets
 - `datasets/selfwritte_dataset/`, `datasets/simple_dataset/` – Synthetic examples
 
+## Testing
+
+Run the test suite with:
+
+```sh
+pytest tests/
+```
+
 ## Requirements
 
 See `requirements.txt` for all dependencies (`pandas`, `numpy`, `ollama`, `google-genai`, `faker`, etc).
+
+## Contributing
+
+Pull requests and issues are welcome. Please ensure new code is tested.
 
 ## License
 

@@ -71,7 +71,6 @@ def calculate_row_corruption(
     return row_indices_map
 
 
-# TODO: Cell types
 def calculate_cell_corruption(
     dataset: pd.DataFrame,
     cell_corruption_type: list[CellCorruptionTypes],
@@ -338,7 +337,6 @@ def corrupt_dataset(
             cell_corruption_config=cell_corruption_config,
             dataset=dataset_copy,
         )
-        dataset_copy.astype(dataset_dtypes, copy=False, errors="ignore")
 
         # Reinsert the excluded columns
         for col in columns_to_exclude:

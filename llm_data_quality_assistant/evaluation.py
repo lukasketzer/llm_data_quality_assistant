@@ -102,7 +102,6 @@ def calculate_stats(
     return stats
 
 
-# TODO: Check and test again
 def evaluate_dataset_micro(
     gold_standard: pd.DataFrame,
     cleaned_dataset: pd.DataFrame,
@@ -120,6 +119,10 @@ def evaluate_dataset_micro(
     """
     if gold_standard.shape != cleaned_dataset.shape != corrupted_dataset.shape:
         raise ValueError("Datasets must have the same shape for evaluation.")
+    # HACK:
+    gold_standard = gold_standard.astype(str)
+    cleaned_dataset = cleaned_dataset.astype(str)
+    corrupted_dataset = corrupted_dataset.astype(str)
 
     n_rows, n_cols = gold_standard.shape
     stats = {
@@ -180,6 +183,10 @@ def evaluate_dataset_macro(
     """
     if gold_standard.shape != cleaned_dataset.shape != corrupted_dataset.shape:
         raise ValueError("Datasets must have the same shape for evaluation.")
+    # HACK:
+    gold_standard = gold_standard.astype(str)
+    cleaned_dataset = cleaned_dataset.astype(str)
+    corrupted_dataset = corrupted_dataset.astype(str)
 
     n_rows, n_cols = gold_standard.shape
     stats_per_column = {

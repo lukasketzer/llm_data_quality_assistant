@@ -30,9 +30,9 @@ from llm_data_quality_assistant.evaluation import (
 )
 
 
-# TODO: Architekutr überdenken
 class Pipeline:
     @staticmethod
+    # TODO: make it create parker-like-datasets
     def generate_corrupted_datasets(
         dataset: pd.DataFrame,
         cell_corruption_types: list[CellCorruptionTypes],
@@ -40,8 +40,8 @@ class Pipeline:
         columns_to_exclude: list[str] = [],
         severity: float = 0.1,
         output_size: int = 5,
-    ) -> tuple[list[pd.DataFrame], list[np.ndarray]]:
-        corrupted_datasets, corrupted_coords = corrupt_dataset(
+    ) -> list[pd.DataFrame]:
+        corrupted_datasets, _ = corrupt_dataset(
             dataset=dataset,
             cell_corruption_types=cell_corruption_types,
             row_corruption_types=row_corruption_types,  # Add this argument as required
@@ -49,7 +49,7 @@ class Pipeline:
             severity=severity,
             output_size=output_size,
         )
-        return corrupted_datasets, corrupted_coords
+        return corrupted_datasets
 
     @staticmethod
     def merge_with_llm(
@@ -60,7 +60,7 @@ class Pipeline:
         ) = Models.GeminiModels.GEMINI_2_0_FLASH,
         additional_prompt: str = "",
         verbose: bool = False,
-    ):
+    ) -> pd.DataFrame:
         return merge_datasets_by_primary_key(
             model_name=model_name,
             primary_key=primary_key,
@@ -74,7 +74,7 @@ class Pipeline:
         gold_standard: pd.DataFrame,
         cleaned_dataset: pd.DataFrame,
         corrupted_dataset: pd.DataFrame,
-    ):
+    ) -> dict:
         """Evaluate a generated dataset using micro metrics."""
         return evaluate_dataset_micro(
             gold_standard=gold_standard,
@@ -87,7 +87,7 @@ class Pipeline:
         gold_standard: pd.DataFrame,
         cleaned_dataset: pd.DataFrame,
         corrupted_dataset: pd.DataFrame,
-    ):
+    ) -> dict:
         """Evaluate a generated dataset using macro metrics."""
         return evaluate_dataset_macro(
             gold_standard=gold_standard,

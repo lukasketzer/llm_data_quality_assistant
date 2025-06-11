@@ -79,7 +79,12 @@ def merge_datasets_by_primary_key(
         merged_rows.append(merged_row)
 
     if merged_rows:
-        return pd.concat(merged_rows, ignore_index=True)
+        merged_df = pd.concat(merged_rows, ignore_index=True)
+        # Ensure output DataFrame has same columns and dtypes as input
+        merged_df = merged_df.reindex(columns=dataset.columns)
+        for col in dataset.columns:
+            merged_df[col] = merged_df[col].astype(dataset[col].dtype)
+        return merged_df
     else:
         return pd.DataFrame()
 

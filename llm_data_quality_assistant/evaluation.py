@@ -105,8 +105,8 @@ def calculate_stats(
 # TODO: Check and test again
 def evaluate_dataset_micro(
     gold_standard: pd.DataFrame,
-    generated_dataset: pd.DataFrame,
-    corrupted_coords: np.ndarray,
+    cleaned_dataset: pd.DataFrame,
+    corrupted_dataset: pd.DataFrame,
 ) -> dict:
     """
     Evaluate the generated dataset against a gold standard dataset.
@@ -118,11 +118,8 @@ def evaluate_dataset_micro(
     Returns:
         dict: A dictionary containing evaluation metrics.
     """
-    if gold_standard.shape != generated_dataset.shape:
+    if gold_standard.shape != cleaned_dataset.shape != corrupted_dataset.shape:
         raise ValueError("Datasets must have the same shape for evaluation.")
-
-    if corrupted_coords.ndim != 2:
-        raise ValueError("Corrupted coordinates must be a 2D array with shape (n, 2).")
 
     n_rows, n_cols = gold_standard.shape
     stats = {
@@ -138,17 +135,18 @@ def evaluate_dataset_micro(
 
     for row in range(n_rows):
         for col in range(n_cols):
-            coord = np.array([row, col])
-            is_corrupted = np.any(np.all(corrupted_coords == coord, axis=1))
+            is_corrupted = (
+                gold_standard.iloc[row, col] != corrupted_dataset.iloc[row, col]
+            )
             gold_val = gold_standard.iloc[row, col]
-            gen_val = generated_dataset.iloc[row, col]
-            if is_corrupted and gold_val == gen_val:
+            clean_val = cleaned_dataset.iloc[row, col]
+            if is_corrupted and gold_val == clean_val:
                 true_positive += 1
-            elif not is_corrupted and gold_val != gen_val:
+            elif not is_corrupted and gold_val != clean_val:
                 false_positive += 1
-            elif is_corrupted and gold_val != gen_val:
+            elif is_corrupted and gold_val != clean_val:
                 false_negative += 1
-            elif not is_corrupted and gold_val == gen_val:
+            elif not is_corrupted and gold_val == clean_val:
                 true_negative += 1
 
     # Calculate metrics
@@ -166,24 +164,22 @@ def evaluate_dataset_micro(
 
 def evaluate_dataset_macro(
     gold_standard: pd.DataFrame,
-    generated_dataset: pd.DataFrame,
-    corrupted_coords: np.ndarray,
+    cleaned_dataset: pd.DataFrame,
+    corrupted_dataset: pd.DataFrame,
 ) -> dict:
     """
-    Evaluate the generated dataset against a gold standard dataset using macro metrics.
+    Evaluate the generated dataset against a gold standard dataset using macro metrics (per column).
 
     Args:
         gold_standard (pd.DataFrame): The ground truth dataset.
-        generated_dataset (pd.DataFrame): The dataset to evaluate.
+        cleaned_dataset (pd.DataFrame): The cleaned dataset to evaluate.
+        corrupted_dataset (pd.DataFrame): The corrupted dataset (before cleaning).
 
     Returns:
-        dict: A dictionary containing evaluation metrics.
+        dict: A dictionary containing evaluation metrics per column.
     """
-    if gold_standard.shape != generated_dataset.shape:
+    if gold_standard.shape != cleaned_dataset.shape != corrupted_dataset.shape:
         raise ValueError("Datasets must have the same shape for evaluation.")
-
-    if corrupted_coords.ndim != 2:
-        raise ValueError("Corrupted coordinates must be a 2D array with shape (n, 2).")
 
     n_rows, n_cols = gold_standard.shape
     stats_per_column = {
@@ -198,27 +194,25 @@ def evaluate_dataset_macro(
         false_positive = 0
         false_negative = 0
         true_negative = 0
-        column_corruption_coords = corrupted_coords[corrupted_coords[:, 1] == col]
-        stats_per_column["stats"].append(
-            {
-                "num_enties": n_rows,
-                "column_name": gold_standard.columns[col],
-            }
-        )
         for row in range(n_rows):
-            coord = np.array([row, col])
-            is_corrupted = np.any(np.all(column_corruption_coords == coord, axis=1))
+            is_corrupted = (
+                gold_standard.iloc[row, col] != corrupted_dataset.iloc[row, col]
+            )
             gold_val = gold_standard.iloc[row, col]
-            gen_val = generated_dataset.iloc[row, col]
-            if is_corrupted and gold_val == gen_val:
+            clean_val = cleaned_dataset.iloc[row, col]
+            if is_corrupted and gold_val == clean_val:
                 true_positive += 1
-            elif not is_corrupted and gold_val != gen_val:
+            elif not is_corrupted and gold_val != clean_val:
                 false_positive += 1
-            elif is_corrupted and gold_val != gen_val:
+            elif is_corrupted and gold_val != clean_val:
                 false_negative += 1
-            elif not is_corrupted and gold_val == gen_val:
+            elif not is_corrupted and gold_val == clean_val:
                 true_negative += 1
-        stats_per_column["stats"][col].update(
+        col_stats = {
+            "num_entries": n_rows,
+            "column_name": gold_standard.columns[col],
+        }
+        col_stats.update(
             calculate_stats(
                 true_positive=true_positive,
                 false_positive=false_positive,
@@ -226,4 +220,5 @@ def evaluate_dataset_macro(
                 true_negative=true_negative,
             )
         )
+        stats_per_column["stats"].append(col_stats)
     return stats_per_column

@@ -72,21 +72,25 @@ class Pipeline:
     @staticmethod
     def evaluate_micro(
         gold_standard: pd.DataFrame,
-        generated_dataset: pd.DataFrame,
-        corrupted_coords: np.ndarray,
+        cleaned_dataset: pd.DataFrame,
+        corrupted_dataset: pd.DataFrame,
     ):
         """Evaluate a generated dataset using micro metrics."""
         return evaluate_dataset_micro(
-            gold_standard, generated_dataset, corrupted_coords
+            gold_standard=gold_standard,
+            cleaned_dataset=cleaned_dataset,
+            corrupted_dataset=corrupted_dataset,
         )
 
     @staticmethod
     def evaluate_macro(
         gold_standard: pd.DataFrame,
-        generated_dataset: pd.DataFrame,
-        corrupted_coords: np.ndarray,
+        cleaned_dataset: pd.DataFrame,
+        corrupted_dataset: pd.DataFrame,
     ):
         """Evaluate a generated dataset using macro metrics."""
         return evaluate_dataset_macro(
-            gold_standard, generated_dataset, corrupted_coords
+            gold_standard=gold_standard,
+            cleaned_dataset=cleaned_dataset,
+            corrupted_dataset=corrupted_dataset,
         )

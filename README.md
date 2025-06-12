@@ -17,12 +17,14 @@ This project provides a modular, research-oriented framework for generating, cor
 
 - `llm_data_quality_assistant/` – Core package  
   - `corruptor.py`, `corruption_functions.py`: Corruption logic and types  
-  - `dataset_generator.py`: Synthetic dataset generation  
-  - `llm_integration.py`, `llm_models.py`: LLM-based merging/cleaning  
   - `evaluation.py`: Metrics and evaluation  
+  - `llm_integration.py`, `llm_models.py`: LLM-based merging/cleaning  
+  - `merge_baseline.py`: Baseline merging logic  
   - `pipeline.py`: High-level workflow API  
-  - `enums/Models.py`: Model enums  
+  - `enums/`: Model and corruption type enums
+- `dataset_generator/` – Synthetic dataset generation scripts
 - `datasets/` – Example datasets (gold standards, corrupted, public)
+  - `llm_dataset/`, `parker_datasets/`, `public_dataset/`, `simple_dataset/`
 - `analysis/` – Jupyter notebooks for experiments
 - `tests/` – Pytest-based unit tests
 - `requirements.txt` – Python dependencies
@@ -72,7 +74,11 @@ print(results)
 
 ### Jupyter Notebooks
 
-See `analysis/flight_llm.ipynb` and `analysis/allergen_llm.ipynb` for full experiment workflows.
+See `analysis/flight_llm.ipynb` and `analysis/allergen_llm.ipynb` for full experiment workflows. To run a notebook:
+
+```sh
+jupyter notebook analysis/flight_llm.ipynb
+```
 
 ## Supported Corruption Types
 
@@ -88,8 +94,8 @@ See `analysis/flight_llm.ipynb` and `analysis/allergen_llm.ipynb` for full exper
 ## Datasets
 
 - `datasets/parker_datasets/` – Gold standards and corrupted versions for flight, allergen, eudract
-- `datasets/public_dataset/` – Example public datasets
-- `datasets/selfwritte_dataset/`, `datasets/simple_dataset/` – Synthetic examples
+- `datasets/public_dataset/` – Example public datasets (e.g., stock data)
+- `datasets/llm_dataset/`, `datasets/simple_dataset/` – Synthetic and simple examples
 
 ## Testing
 
@@ -103,10 +109,3 @@ pytest tests/
 
 See `requirements.txt` for all dependencies (`pandas`, `numpy`, `ollama`, `google-genai`, `faker`, etc).
 
-## Contributing
-
-Pull requests and issues are welcome. Please ensure new code is tested.
-
-## License
-
-For academic use only. See LICENSE file if present.

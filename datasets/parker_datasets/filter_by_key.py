@@ -99,5 +99,8 @@ def filter_by_key(
     percent_diff = (num_diffs / total_values) * 100 if total_values else 0
     print(f"Percentage of values not the same in first {n} rows: {percent_diff:.2f}%\n")
 
+    unique_primary_keys = cleaned_corrupt_firstn[primary_key].unique()
+    print(f"Unique primary keys in cleaned_corrupt_firstn: {len(unique_primary_keys)}")
+
     print(f"Saved {len(cleaned_corrupt_firstn)} rows to {out_corrupt}")
     print(f"Saved {len(cleaned_gold_firstn)} rows to {out_gold}")

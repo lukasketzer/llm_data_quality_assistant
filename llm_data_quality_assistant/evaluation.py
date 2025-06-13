@@ -120,7 +120,7 @@ def evaluate_dataset_micro(
 
     if not (gold_standard.shape == cleaned_dataset.shape == corrupted_dataset.shape):
         raise ValueError("Datasets must have the same shape for evaluation.")
-    # HACK:
+
     gold_standard = gold_standard.astype(str)
     cleaned_dataset = cleaned_dataset.astype(str)
     corrupted_dataset = corrupted_dataset.astype(str)
@@ -184,7 +184,7 @@ def evaluate_dataset_macro(
     """
     if not (gold_standard.shape == cleaned_dataset.shape == corrupted_dataset.shape):
         raise ValueError("Datasets must have the same shape for evaluation.")
-    # HACK:
+
     gold_standard = gold_standard.astype(str)
     cleaned_dataset = cleaned_dataset.astype(str)
     corrupted_dataset = corrupted_dataset.astype(str)
@@ -208,6 +208,10 @@ def evaluate_dataset_macro(
             )
             gold_val = gold_standard.iloc[row, col]
             clean_val = cleaned_dataset.iloc[row, col]
+            if col == "code":
+                print(
+                    f"gold_values: {gold_val}, clean_value: {clean_val}, is_corrupted: {is_corrupted}"
+                )
             if is_corrupted and gold_val == clean_val:
                 true_positive += 1
             elif not is_corrupted and gold_val != clean_val:

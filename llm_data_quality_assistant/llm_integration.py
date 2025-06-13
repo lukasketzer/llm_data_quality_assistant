@@ -14,17 +14,17 @@ dtype_map = {
 }
 
 
-def generate_pydantic_structure(dataset: pd.DataFrame):
+def __generate_pydantic_structure(dataset: pd.DataFrame):
     datatypes = {}
     for col_name, d in dataset.dtypes.items():
         datatypes[col_name] = dtype_map[str(d)]
     return create_model("StructuredOutput", **datatypes)
 
 
-def merge_datasets(
+def __merge_datasets(
     model_name, prompt, dataset: pd.DataFrame, verbose=False
 ) -> pd.DataFrame:
-    struct = generate_pydantic_structure(dataset=dataset)
+    struct = __generate_pydantic_structure(dataset=dataset)
     model = get_model(model_name)
 
     message = ""
@@ -70,6 +70,10 @@ def merge_datasets_by_primary_key(
     if primary_key not in dataset.columns:
         raise ValueError(f"Primary key '{primary_key}' not found in dataset columns.")
 
+    # Add a temporary index to restore the original order later
+    dataset = dataset.copy()
+    dataset["_tmp_row_order"] = range(len(dataset))
+
     min_interval = 60 / rpm if rpm > 0 else 0
     last_request_time = None
 
@@ -84,28 +88,49 @@ def merge_datasets_by_primary_key(
                 time.sleep(to_wait)
 
         last_request_time = time.time()
-        merged_row = merge_single_corrupted_dataset(
+
+        row_order = group["_tmp_row_order"].values
+        group.drop(columns=["_tmp_row_order"], inplace=True)
+
+        merged_row = __merge_single_corrupted_dataset(
             model_name=model_name,
             dataset=group,
             additional_prompt=additional_prompt,
             verbose=verbose,
         )
+        merged_row["_tmp_row_order"] = row_order
         merged_rows.append(merged_row)
 
     if merged_rows:
+        # TODO: maybe a better way to merge DataFrames?
         merged_df = pd.concat(merged_rows, ignore_index=True)
-        # Ensure output DataFrame has same columns and dtypes as input
         merged_df = merged_df.reindex(columns=dataset.columns)
+
         for col in dataset.columns:
             merged_df[col] = merged_df[col].astype(dataset[col].dtype)
+
+        # Restore original order using the temporary index
+        merged_df = (
+            merged_df.sort_values("_tmp_row_order")
+            .drop(columns=["_tmp_row_order"])
+            .reset_index(drop=True)
+        )
+
+        assert (
+            merged_df.shape[0] == dataset.shape[0]
+        ), f"Expected {dataset.shape[0]} rows, but got {merged_df.shape[0]} rows after merging."
+
+        assert list(dataset[primary_key].values) == list(
+            merged_df[primary_key].values
+        ), "Primary key values do not match or are not in the same order"
+
         return merged_df
     else:
         return pd.DataFrame()
 
 
 # TODO: handle multiple rows at once
-# TODO: Rate Limiter "Requets per minute"
-def merge_single_corrupted_dataset(
+def __merge_single_corrupted_dataset(
     model_name,
     dataset: pd.DataFrame,
     additional_prompt: str = "",
@@ -138,7 +163,7 @@ def merge_single_corrupted_dataset(
     {csv}
     """
 
-    merged_df = merge_datasets(
+    merged_df = __merge_datasets(
         model_name=model_name,
         dataset=dataset,
         prompt=prompt,

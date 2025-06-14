@@ -4,6 +4,7 @@ from pydantic import create_model
 import json
 from llm_data_quality_assistant.merge_baseline import merge_baseline
 import time
+from tqdm import tqdm
 
 
 dtype_map = {
@@ -56,7 +57,8 @@ def merge_datasets_by_primary_key(
     model_name,
     primary_key: str,
     dataset: pd.DataFrame,
-    verbose=False,
+    verbose: bool = False,
+    status_bar: bool = False,
     rpm: int = 0,  # Requests per minute, 0 for no limit
     additional_prompt: str = "",
 ) -> pd.DataFrame:
@@ -79,7 +81,8 @@ def merge_datasets_by_primary_key(
 
     grouped = [group for _, group in dataset.groupby(primary_key)]
     merged_rows = []
-    for group in grouped:
+
+    for group in tqdm(grouped, desc="Merging groups with LLM", disable=not status_bar):
         now = time.time()
         if last_request_time is not None and min_interval > 0:
             elapsed = now - last_request_time

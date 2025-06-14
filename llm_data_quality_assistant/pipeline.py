@@ -83,6 +83,7 @@ class Pipeline:
         rpm: int = 0,  # Requests per minute, 0 for no limit
         additional_prompt: str = "",
         verbose: bool = False,
+        status_bar: bool = False,
     ) -> pd.DataFrame:
         return merge_datasets_by_primary_key(
             model_name=model_name,
@@ -91,6 +92,7 @@ class Pipeline:
             rpm=rpm,
             additional_prompt=additional_prompt,
             verbose=verbose,
+            status_bar=status_bar,
         )
 
     @staticmethod

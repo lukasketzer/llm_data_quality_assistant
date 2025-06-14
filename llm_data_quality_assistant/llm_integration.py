@@ -5,6 +5,8 @@ import json
 from llm_data_quality_assistant.merge_baseline import merge_baseline
 import time
 from tqdm import tqdm
+from typing import List
+from pydantic import RootModel
 
 
 dtype_map = {
@@ -15,7 +17,7 @@ dtype_map = {
 }
 
 
-def __generate_pydantic_structure(dataset: pd.DataFrame):
+def __generate_pydantic_structure(dataset: pd.DataFrame, list: bool = False):
     datatypes = {}
     for col_name, d in dataset.dtypes.items():
         datatypes[col_name] = dtype_map[str(d)]
@@ -28,15 +30,14 @@ def __merge_datasets(
     struct = __generate_pydantic_structure(dataset=dataset)
     model = get_model(model_name)
 
+    class ListStruct(RootModel[list[struct]]):
+        pass
+
+    struct = ListStruct
+
     message = ""
     if verbose:
-        output = model.generate_stream(
-            prompt=prompt,
-            config={
-                "response_mime_type": "application/json",
-                "response_schema": list[struct],
-            },
-        )
+        output = model.generate_stream(prompt=prompt, format=struct)
         for chunk in output:
             print(chunk, end="", flush=True)
             message += chunk
@@ -44,10 +45,7 @@ def __merge_datasets(
     else:
         message = model.generate(
             prompt=prompt,
-            config={
-                "response_mime_type": "application/json",
-                "response_schema": list[struct],
-            },
+            format=struct,
         )
     data = json.loads(message)
     return pd.DataFrame(data)

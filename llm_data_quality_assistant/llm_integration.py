@@ -17,7 +17,7 @@ dtype_map = {
 }
 
 
-def __generate_pydantic_structure(dataset: pd.DataFrame, list: bool = False):
+def __generate_pydantic_structure(dataset: pd.DataFrame):
     datatypes = {}
     for col_name, d in dataset.dtypes.items():
         datatypes[col_name] = dtype_map[str(d)]

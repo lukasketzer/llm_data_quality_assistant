@@ -1,0 +1,19 @@
+-- Attribute contracts
+@dicom_uid:string
+@rows:integer
+@columns:integer
+@series_desc:string
+@modality:string
+
+--Domain rules
+rows in [256, 512, 1024, 2048]
+columns in [256, 512, 1024, 2048]
+modality in {CT, XR, US, MR}
+
+--Sigma interactions
+rows == columns
+modality == 'US' & rows == 1024 & columns == 1024
+modality == 'CT' & rows == 512 & columns == 512
+modality == 'XR' & rows == 2048 & columns == 2048
+modality == 'MR' & rows == 256 & columns == 256
+

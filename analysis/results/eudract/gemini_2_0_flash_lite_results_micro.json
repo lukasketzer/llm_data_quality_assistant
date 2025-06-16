@@ -1,0 +1,25 @@
+{
+    "accuracy": 0.9443912472958116,
+    "column_names": [
+        "eudract_number",
+        "arms",
+        "controlled",
+        "crossover",
+        "double_blind",
+        "open",
+        "parallel_group",
+        "randomised",
+        "single_blind"
+    ],
+    "f1_score": 0.6592785745328118,
+    "false_negative": 1445,
+    "false_negative_rate": 0.48784604996623904,
+    "false_positive": 123,
+    "false_positive_rate": 0.0048741826827818505,
+    "num_columns": 9,
+    "num_rows": 3133,
+    "precision": 0.925,
+    "recall": 0.512153950033761,
+    "true_negative": 25112,
+    "true_positive": 1517
+}

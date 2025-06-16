@@ -1,0 +1,83 @@
+{
+    "column_names": [
+        "composed_key",
+        "actual_arrival",
+        "actual_departure",
+        "scheduled_arrival",
+        "scheduled_departure"
+    ],
+    "num_columns": 5,
+    "num_rows": 24606,
+    "stats": [
+        {
+            "accuracy": 1.0,
+            "column_name": "composed_key",
+            "f1_score": 0.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "num_entries": 24606,
+            "precision": 0.0,
+            "recall": 0.0,
+            "true_negative": 24606,
+            "true_positive": 0
+        },
+        {
+            "accuracy": 0.7517678614971958,
+            "column_name": "actual_arrival",
+            "f1_score": 0.7420825943754751,
+            "false_negative": 3806,
+            "false_negative_rate": 0.30223139839593427,
+            "false_positive": 2302,
+            "false_positive_rate": 0.1916257387829851,
+            "num_entries": 24606,
+            "precision": 0.792406889710524,
+            "recall": 0.6977686016040657,
+            "true_negative": 9711,
+            "true_positive": 8787
+        },
+        {
+            "accuracy": 0.0927822482321385,
+            "column_name": "actual_departure",
+            "f1_score": 0.09097202427006557,
+            "false_negative": 14868,
+            "false_negative_rate": 0.9301219893650298,
+            "false_positive": 7455,
+            "false_positive_rate": 0.8647488690407146,
+            "num_entries": 24606,
+            "precision": 0.13030797946803546,
+            "recall": 0.06987801063497029,
+            "true_negative": 1166,
+            "true_positive": 1117
+        },
+        {
+            "accuracy": 0.9058359749654555,
+            "column_name": "scheduled_arrival",
+            "f1_score": 0.8894086201135983,
+            "false_negative": 1275,
+            "false_negative_rate": 0.1203738670694864,
+            "false_positive": 1042,
+            "false_positive_rate": 0.07435421721136007,
+            "num_entries": 24606,
+            "precision": 0.8994111400714355,
+            "recall": 0.8796261329305136,
+            "true_negative": 12972,
+            "true_positive": 9317
+        },
+        {
+            "accuracy": 0.9951231406973908,
+            "column_name": "scheduled_departure",
+            "f1_score": 0.9927360774818402,
+            "false_negative": 93,
+            "false_negative_rate": 0.011214277101169661,
+            "false_positive": 27,
+            "false_positive_rate": 0.0016551216820940354,
+            "num_entries": 24606,
+            "precision": 0.9967181232527045,
+            "recall": 0.9887857228988304,
+            "true_negative": 16286,
+            "true_positive": 8200
+        }
+    ]
+}

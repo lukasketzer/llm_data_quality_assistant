@@ -28,3 +28,5 @@ class GeminiModels(Enum):
     GEMINI_1_5_FLASH = "gemini-1.5-flash"
     GEMINI_PRO = "gemini-pro"
     GEMINI_ULTRA = "gemini-ultra"
+    GEMMA_3_1B = "gemma-3-1b-it"
+    GEMMA_3_12B = "gemma-3-12b-it"

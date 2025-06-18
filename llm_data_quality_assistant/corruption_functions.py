@@ -214,13 +214,6 @@ def incorrect_datatype(
     return dataset
 
 
-# TODO: Implement
-def inconsistent_format(
-    dataset: pd.DataFrame, cell_coordinates: np.ndarray
-) -> pd.DataFrame:
-    return dataset
-
-
 # Tested
 def reverse_rows(dataset: pd.DataFrame, rows_to_reverse: np.ndarray) -> pd.DataFrame:
     """
@@ -317,9 +310,4 @@ def rounding_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.Da
         if isinstance(value, float) or isinstance(value, int):
             lower = (value // 10) * 10
             dataset.iat[row, col] = random.choice([lower, lower + 10, lower + 20])
-    return dataset
-
-
-# TODO: Implement
-def encoding_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     return dataset

@@ -3,6 +3,7 @@ from llm_data_quality_assistant.llm_models import get_model
 from pydantic import create_model
 import json
 from llm_data_quality_assistant.merge_baseline import merge_baseline
+from llm_data_quality_assistant.llm_models import OpenAIModel
 import time
 from tqdm import tqdm
 from typing import List
@@ -29,11 +30,12 @@ def __merge_datasets(
 ) -> pd.DataFrame:
     struct = __generate_pydantic_structure(dataset=dataset)
     model = get_model(model_name)
+    if not isinstance(model, OpenAIModel):
 
-    class ListStruct(RootModel[list[struct]]):
-        pass
+        class ListStruct(RootModel[list[struct]]):
+            pass
 
-    struct = ListStruct
+        struct = ListStruct
 
     message = ""
     if verbose:
@@ -48,6 +50,9 @@ def __merge_datasets(
             format=struct,
         )
     data = json.loads(message)
+
+    if isinstance(model, OpenAIModel):
+        data = [data]
     return pd.DataFrame(data)
 
 
@@ -108,7 +113,12 @@ def merge_datasets_by_primary_key(
         merged_df = merged_df.reindex(columns=dataset.columns)
 
         for col in dataset.columns:
-            merged_df[col] = merged_df[col].astype(dataset[col].dtype)
+            if pd.api.types.is_integer_dtype(dataset[col].dtype):
+                # Use pandas nullable Int64 type to allow NA
+                merged_df[col] = pd.to_numeric(merged_df[col], errors="coerce")
+                merged_df[col] = merged_df[col].astype("Int64")
+            else:
+                merged_df[col] = merged_df[col].astype(dataset[col].dtype)
 
         # Restore original order using the temporary index
         merged_df = (

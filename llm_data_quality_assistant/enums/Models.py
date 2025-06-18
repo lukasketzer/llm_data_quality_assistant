@@ -16,9 +16,10 @@ class OllamaModels(Enum):
 
 
 class OpenAIModels(Enum):
-    GPT_3_5_TURBO = "gpt-3.5-turbo"
-    GPT_4 = "gpt-4"
-    GPT_4O = "gpt-4o"
+    # GPT_3_5_TURBO = "gpt-3.5-turbo"
+    # GPT_4 = "gpt-4"
+    # GPT_4O = "gpt-4o"
+    GPT_4_1_NANO = "gpt-4.1-nano-2025-04-14"  # cheapest
 
 
 class GeminiModels(Enum):

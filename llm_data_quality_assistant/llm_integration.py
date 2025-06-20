@@ -17,6 +17,13 @@ dtype_map = {
     "bool": bool,
 }
 
+# TODO: Implement
+def combine_results(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
+    """
+    Combines two DataFrames by merging them on their index.
+    If the index is not unique, it will create a MultiIndex.
+   """
+    return df1
 
 def __generate_pydantic_structure(dataset: pd.DataFrame):
     datatypes = {}

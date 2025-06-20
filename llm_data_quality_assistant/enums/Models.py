@@ -20,6 +20,7 @@ class OpenAIModels(Enum):
     # GPT_4 = "gpt-4"
     # GPT_4O = "gpt-4o"
     GPT_4_1_NANO = "gpt-4.1-nano-2025-04-14"  # cheapest
+    GPT_4_1_MINI = "gpt-4.1-mini-2025-04-14"
 
 
 class GeminiModels(Enum):

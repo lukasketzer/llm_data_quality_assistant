@@ -261,8 +261,6 @@ def apply_cell_corruptions(
                 dataset = null(dataset, coords)
             case CellCorruptionTypes.INCORRECT_DATATYPE:
                 dataset = incorrect_datatype(dataset, coords)
-            case CellCorruptionTypes.INCONSISTENT_FORMAT:
-                dataset = inconsistent_format(dataset, coords)
             case CellCorruptionTypes.SWAP_CELLS:
                 dataset = swap_cells(dataset, coords)
             case CellCorruptionTypes.CASE_ERROR:
@@ -271,8 +269,6 @@ def apply_cell_corruptions(
                 dataset = truncate(dataset, coords)
             case CellCorruptionTypes.ROUNDING_ERROR:
                 dataset = rounding_error(dataset, coords)
-            case CellCorruptionTypes.ENCODING_ERROR:
-                dataset = encoding_error(dataset, coords)
             case CellCorruptionTypes.TYPO:
                 dataset = typo(dataset, coords)
             case _:

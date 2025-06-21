@@ -8,6 +8,9 @@ import time
 from tqdm import tqdm
 from typing import List
 from pydantic import RootModel
+import pandas as pd
+import numpy as np
+
 
 
 dtype_map = {
@@ -18,12 +21,53 @@ dtype_map = {
 }
 
 # TODO: Implement
-def combine_results(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
+# I need the cleaned dataSet from parker and the cleaned dataSet from the LLM, I also need the original dataSet
+def combine_results_1(df_parker: pd.DataFrame, df_llm: pd.DataFrame, df_original: pd.DataFrame) -> pd.DataFrame:
     """
-    Combines two DataFrames by merging them on their index.
-    If the index is not unique, it will create a MultiIndex.
-   """
-    return df1
+    Combines two DataFrames by merging them on their index using a majority vote per cell.
+    If all three disagree, defaults to df_parker (assumed more accurate).
+    """
+    df_parker = df_parker.reset_index(drop=True)
+    df_llm = df_llm.reset_index(drop=True)
+    df_original = df_original.reset_index(drop=True)
+
+    if df_parker.shape != df_llm.shape or df_parker.shape != df_original.shape:
+        raise ValueError("All DataFrames must have the same shape after index reset.")
+
+    df_cleaned = pd.DataFrame(index=df_parker.index, columns=df_parker.columns)
+
+    
+    # for row in df_parker.index:
+    #     for col in df_parker.columns:
+    #         parker_val = df_parker.at[row, col]
+    #         llm_val = df_llm.at[row, col]
+    #         orig_val = df_original.at[row, col]
+    #         # Majority vote logic
+    #         if parker_val == llm_val or parker_val != orig_val:
+    #             df_cleaned.at[row, col] = llm_val
+    #         elif llm_val != orig_val:
+    #             df_cleaned.at[row, col] = llm_val
+    #         else:
+    #             # All three disagree, default to parker_val
+    #             df_cleaned.at[row, col] = llm_val
+        
+    for row in df_parker.index:
+        for col in df_parker.columns:
+            parker_val = df_parker.at[row, col]
+            llm_val = df_llm.at[row, col]
+            orig_val = df_original.at[row, col]
+            if parker_val == llm_val:
+                df_cleaned.at[row, col] = parker_val
+            elif parker_val != orig_val and llm_val != orig_val:
+                df_cleaned.at[row, col] = llm_val
+            elif parker_val != orig_val:
+                df_cleaned.at[row, col] = parker_val
+            elif llm_val != orig_val:
+                df_cleaned.at[row, col] = llm_val
+            else:
+                df_cleaned.at[row, col] = orig_val 
+
+    return df_cleaned
 
 def __generate_pydantic_structure(dataset: pd.DataFrame):
     datatypes = {}

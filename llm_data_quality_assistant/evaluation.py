@@ -138,12 +138,10 @@ def evaluate_dataset_micro(
     true_negative = 0
 
     for row in range(n_rows):
-        for col in range(n_cols):
-            is_corrupted = (
-                gold_standard.iloc[row, col] != corrupted_dataset.iloc[row, col]
-            )
-            gold_val = gold_standard.iloc[row, col]
-            clean_val = cleaned_dataset.iloc[row, col]
+        for col in cleaned_dataset.columns:
+            is_corrupted = gold_standard.at[row, col] != corrupted_dataset.at[row, col]
+            gold_val = gold_standard.at[row, col]
+            clean_val = cleaned_dataset.at[row, col]
             if is_corrupted and gold_val == clean_val:
                 true_positive += 1
             elif not is_corrupted and gold_val != clean_val:
@@ -197,21 +195,15 @@ def evaluate_dataset_macro(
         "stats": [],
     }
 
-    for col in range(n_cols):
+    for col in cleaned_dataset.columns:
         true_positive = 0
         false_positive = 0
         false_negative = 0
         true_negative = 0
         for row in range(n_rows):
-            is_corrupted = (
-                gold_standard.iloc[row, col] != corrupted_dataset.iloc[row, col]
-            )
-            gold_val = gold_standard.iloc[row, col]
-            clean_val = cleaned_dataset.iloc[row, col]
-            if col == "code":
-                print(
-                    f"gold_values: {gold_val}, clean_value: {clean_val}, is_corrupted: {is_corrupted}"
-                )
+            is_corrupted = gold_standard.at[row, col] != corrupted_dataset.at[row, col]
+            gold_val = gold_standard.at[row, col]
+            clean_val = cleaned_dataset.at[row, col]
             if is_corrupted and gold_val == clean_val:
                 true_positive += 1
             elif not is_corrupted and gold_val != clean_val:
@@ -222,7 +214,7 @@ def evaluate_dataset_macro(
                 true_negative += 1
         col_stats = {
             "num_entries": n_rows,
-            "column_name": gold_standard.columns[col],
+            "column_name": col,
         }
         col_stats.update(
             calculate_stats(

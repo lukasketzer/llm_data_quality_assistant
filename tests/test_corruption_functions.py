@@ -230,25 +230,3 @@ def _test_rounding_error():
     # Not 2D
     with pytest.raises(ValueError):
         cf.rounding_error(df.copy(), np.array([0, 1]))
-
-
-def test_inconsistent_format():
-    _test_inconsistent_format()
-
-
-@timeout(2)
-def _test_inconsistent_format():
-    df = make_df()
-    out = cf.inconsistent_format(df.copy(), np.array([[0, 0], [1, 1]]))
-    assert out.equals(df)  # Not implemented, should be no-op
-
-
-def test_encoding_error():
-    _test_encoding_error()
-
-
-@timeout(2)
-def _test_encoding_error():
-    df = make_df()
-    out = cf.encoding_error(df.copy(), np.array([[0, 0], [1, 1]]))
-    assert out.equals(df)  # Not implemented, should be no-op

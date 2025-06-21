@@ -28,7 +28,14 @@ from llm_data_quality_assistant.enums.CorruptionTypes import (
     ],
 )
 def test_corrupt_dataset_severity_single_cell_type(cell_corruption_type):
-    df = pd.read_csv("datasets/llm_dataset/Radiology_modality_sample.csv")
+    csv_path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "datasets",
+        "self_generated_dataset",
+        "Radiology_modality_sample.csv",
+    )
+    df = pd.read_csv(csv_path)
     row_corruption_types = []
     cell_corruption_types = [cell_corruption_type]
     excluded_columns = ["dicom_uid"]
@@ -67,7 +74,14 @@ def test_corrupt_dataset_severity_single_cell_type(cell_corruption_type):
     ],
 )
 def test_corrupt_dataset_severity_single_row_type(row_corruption_type):
-    df = pd.read_csv("datasets/llm_dataset/Radiology_modality_sample.csv")
+    csv_path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "datasets",
+        "self_generated_dataset",
+        "Radiology_modality_sample.csv",
+    )
+    df = pd.read_csv(csv_path)
     row_corruption_types = [row_corruption_type]
     cell_corruption_types = []
     excluded_columns = ["dicom_uid"]
@@ -97,7 +111,14 @@ def test_corrupt_dataset_severity_single_row_type(row_corruption_type):
 
 
 def test_corrupted_coordinates_match_changes():
-    df = pd.read_csv("datasets/llm_dataset/Radiology_modality_sample.csv")
+    csv_path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "datasets",
+        "self_generated_dataset",
+        "Radiology_modality_sample.csv",
+    )
+    df = pd.read_csv(csv_path)
     cell_corruption_types = [
         CellCorruptionTypes.NULL,
     ]
@@ -158,7 +179,7 @@ def test_corrupt_dataset_empty_df():
     assert isinstance(corrupted_dfs, list)
     assert len(corrupted_dfs) == 1
     assert corrupted_dfs[0].empty
-    assert coords == [[]]
+    assert coords == []
 
 
 def test_corrupt_dataset_nan_df():

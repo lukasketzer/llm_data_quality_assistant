@@ -31,27 +31,51 @@ from llm_data_quality_assistant.evaluation import (
 
 
 class Pipeline:
-
-    # TODO: primary key combined out of multiple parital keys
-
+    # TODO: multiple primary keys
     @staticmethod
-    def standardize_dataset(
-        dataset: pd.DataFrame, primary_key: list[str]
-    ) -> pd.DataFrame:
-        if len(primary_key) == 0:
-            raise ValueError("Primary key list cannot be empty.")
+    def standardize_datasets(
+        datasets: list[pd.DataFrame],
+        primary_key: str,
+    ) -> list[pd.DataFrame]:
+        datasets = [df.copy() for df in datasets]
 
-        missing_keys = [col for col in primary_key if col not in dataset.columns]
-        if missing_keys:
-            raise KeyError(
-                f"Primary key columns {missing_keys} not found in dataset columns."
+        if len(datasets):
+            return []
+
+        # Check if primary keys exist in all datasets
+        if not all(primary_key in df.columns for df in datasets):
+            raise ValueError(
+                f"Primary key '{primary_key}' must be present in all datasets."
             )
-        if dataset.empty:
-            raise ValueError("Input dataset is empty.")
 
-        return pd.concat(
-            [group for _, group in dataset.groupby(primary_key)], ignore_index=True
-        )
+        # Check shapes
+        shapes = [df.shape for df in datasets]
+        if not all(shape == shapes[0] for shape in shapes):
+            raise ValueError("All datasets must have the same shape.")
+
+        # Check columns
+        columns = [df.columns.tolist() for df in datasets]
+        if not all(col == columns[0] for col in columns):
+            raise ValueError("All datasets must have the same columns.")
+
+        # Check avialbale pirmary keys
+        primary_keys = datasets[0][primary_key].to_list().sort()
+        for dataset in datasets:
+            if not primary_keys == dataset[primary_key].to_list().sort():
+                raise ValueError(
+                    f"Primary key '{primary_key}' must have the same values in all datasets."
+                )
+
+        # Sort columns
+        columns = datasets[0].columns
+        datasets = [df[columns] for df in datasets]
+
+        # Sort primary keys
+        datasets = [
+            df.sort_values(by=primary_key).reset_index(drop=True) for df in datasets
+        ]
+
+        return datasets
 
     @staticmethod
     # TODO: make it create parker-like-datasets

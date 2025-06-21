@@ -37,30 +37,29 @@ class Pipeline:
         datasets: list[pd.DataFrame],
         primary_key: str,
     ) -> list[pd.DataFrame]:
-        datasets = [df.copy() for df in datasets]
-
-        if len(datasets):
+        output = [df.copy() for df in datasets]
+        if len(output) == 0:
             return []
 
         # Check if primary keys exist in all datasets
-        if not all(primary_key in df.columns for df in datasets):
+        if not all(primary_key in df.columns for df in output):
             raise ValueError(
                 f"Primary key '{primary_key}' must be present in all datasets."
             )
 
         # Check shapes
-        shapes = [df.shape for df in datasets]
+        shapes = [df.shape for df in output]
         if not all(shape == shapes[0] for shape in shapes):
             raise ValueError("All datasets must have the same shape.")
 
         # Check columns
-        columns = [df.columns.tolist() for df in datasets]
+        columns = [df.columns.tolist() for df in output]
         if not all(col == columns[0] for col in columns):
             raise ValueError("All datasets must have the same columns.")
 
         # Check avialbale pirmary keys
         primary_keys = datasets[0][primary_key].to_list().sort()
-        for dataset in datasets:
+        for dataset in output:
             if not primary_keys == dataset[primary_key].to_list().sort():
                 raise ValueError(
                     f"Primary key '{primary_key}' must have the same values in all datasets."
@@ -68,14 +67,14 @@ class Pipeline:
 
         # Sort columns
         columns = datasets[0].columns
-        datasets = [df[columns] for df in datasets]
+        output = [df[columns] for df in output]
 
         # Sort primary keys
-        datasets = [
-            df.sort_values(by=primary_key).reset_index(drop=True) for df in datasets
+        output = [
+            df.sort_values(by=primary_key).reset_index(drop=True) for df in output
         ]
 
-        return datasets
+        return output
 
     @staticmethod
     # TODO: make it create parker-like-datasets

@@ -89,8 +89,18 @@ jupyter notebook analysis/flight_llm.ipynb
 
 ## Supported Corruption Types
 
-- **Row-level**: swap, delete, shuffle columns, reverse
-- **Cell-level**: outlier, null, incorrect datatype, inconsistent format, swap cells, case error, truncate, rounding error, encoding error, typo
+- **Row-Level Corruptions** affect entire rows:
+  - `SWAP_ROWS`: Swaps the contents of selected rows.
+  - `DELETE_ROWS`: Replaces all values in a row with nulls.
+  - `SHUFFLE_COLUMNS`: Randomly reorders values within a row.
+  - `REVERSE_ROWS`: Reverses the order of values in a row.
+
+- **Cell-Level Corruptions** affect individual cells:
+  - `NULL`: Sets a cell to missing.
+  - `OUTLIER`: Injects an extreme or random value.
+  - `TYPO`: Introduces small string errors (swaps, deletes, replaces).
+  - `SWAP_CELLS`: Swaps values across cells in a cyclic fashion.
+  - `CASE_ERROR`, `TRUNCATE`, `ROUNDING_ERROR`, `ENCODING_ERROR`,
 
 ## Supported LLMs
 
@@ -101,8 +111,8 @@ jupyter notebook analysis/flight_llm.ipynb
 ## Datasets
 
 - `datasets/parker_datasets/` – Gold standards and corrupted versions for flight, allergen, eudract
-- `datasets/public_dataset/` – Example public datasets (e.g., stock data)
-- `datasets/llm_dataset/`, `datasets/simple_dataset/` – Synthetic and simple examples
+- `datasets/public_dataset/` – Example public datasets
+- `datasets/simple_dataset/` – Synthetic and simple examples
 
 ## Testing
 

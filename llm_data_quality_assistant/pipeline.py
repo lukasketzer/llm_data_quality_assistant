@@ -40,7 +40,7 @@ class Pipeline:
             raise ValueError("All datasets must have the same shape.")
 
         # Check columns
-        columns = [df.columns.tolist() for df in output]
+        columns = [set(df.columns.tolist()) for df in output]
         if not all(col == columns[0] for col in columns):
             raise ValueError("All datasets must have the same columns.")
 

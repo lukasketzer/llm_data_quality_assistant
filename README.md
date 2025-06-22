@@ -32,13 +32,20 @@ This project provides a modular, research-oriented framework for generating, cor
 ## Installation
 
 1. Clone the repository.
-2. Install dependencies:
+2. (Recommended) Create a virtual environment:
+
+   ```sh
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Install dependencies:
 
    ```sh
    pip install -r requirements.txt
    ```
 
-3. (Optional) Set up API keys for Gemini/OpenAI in your environment if using those models. For example:
+4. (Optional) Set up API keys for Gemini/OpenAI in your environment if using those models. For example:
    - `GOOGLE_API_KEY` for Gemini
    - `OPENAI_API_KEY` for OpenAI (not implemented)
 
@@ -107,5 +114,15 @@ pytest tests/
 
 ## Requirements
 
-See `requirements.txt` for all dependencies (`pandas`, `numpy`, `ollama`, `google-genai`, `faker`, etc).
+All dependencies are listed in `requirements.txt`. Key packages include:
+- pandas, numpy, python-dotenv, pytest, Faker, requests
+- ollama, google-genai, openai
+- jupyter, notebook, jupyterlab, ipywidgets, matplotlib, seaborn
+- pyyaml, python-dateutil, pytz, tqdm, python-json-logger
+
+To install all requirements:
+
+```sh
+pip install -r requirements.txt
+```
 

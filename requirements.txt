@@ -6,11 +6,17 @@ Faker
 requests
 ollama
 google-genai
+openai
 jupyter
 notebook
 jupyterlab
 ipywidgets
+matplotlib
 matplotlib-inline
+seaborn
 pyyaml
 python-dateutil
 pytz
+python-json-logger
+tqdm
+setuptools

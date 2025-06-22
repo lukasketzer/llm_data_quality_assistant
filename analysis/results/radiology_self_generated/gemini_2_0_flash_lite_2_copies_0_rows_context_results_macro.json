@@ -1,0 +1,83 @@
+{
+    "num_rows": 200,
+    "num_columns": 5,
+    "column_names": [
+        "dicom_uid",
+        "rows",
+        "columns",
+        "series_desc",
+        "modality"
+    ],
+    "stats": [
+        {
+            "num_entries": 200,
+            "column_name": "dicom_uid",
+            "true_positive": 0,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 200,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 200,
+            "column_name": "rows",
+            "true_positive": 20,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 180,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 200,
+            "column_name": "columns",
+            "true_positive": 22,
+            "false_positive": 0,
+            "false_negative": 6,
+            "true_negative": 172,
+            "precision": 1.0,
+            "recall": 0.7857142857142857,
+            "f1_score": 0.88,
+            "accuracy": 0.97,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.21428571428571427
+        },
+        {
+            "num_entries": 200,
+            "column_name": "series_desc",
+            "true_positive": 27,
+            "false_positive": 0,
+            "false_negative": 6,
+            "true_negative": 167,
+            "precision": 1.0,
+            "recall": 0.8181818181818182,
+            "f1_score": 0.9,
+            "accuracy": 0.97,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.18181818181818182
+        },
+        {
+            "num_entries": 200,
+            "column_name": "modality",
+            "true_positive": 32,
+            "false_positive": 0,
+            "false_negative": 4,
+            "true_negative": 164,
+            "precision": 1.0,
+            "recall": 0.8888888888888888,
+            "f1_score": 0.9411764705882353,
+            "accuracy": 0.98,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.1111111111111111
+        }
+    ]
+}

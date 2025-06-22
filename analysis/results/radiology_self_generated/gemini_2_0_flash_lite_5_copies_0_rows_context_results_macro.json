@@ -1,0 +1,83 @@
+{
+    "num_rows": 500,
+    "num_columns": 5,
+    "column_names": [
+        "dicom_uid",
+        "rows",
+        "columns",
+        "series_desc",
+        "modality"
+    ],
+    "stats": [
+        {
+            "num_entries": 500,
+            "column_name": "dicom_uid",
+            "true_positive": 0,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 500,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 500,
+            "column_name": "rows",
+            "true_positive": 53,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 447,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 500,
+            "column_name": "columns",
+            "true_positive": 44,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 456,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 500,
+            "column_name": "series_desc",
+            "true_positive": 87,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 413,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 500,
+            "column_name": "modality",
+            "true_positive": 109,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 391,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        }
+    ]
+}

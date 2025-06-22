@@ -8,10 +8,10 @@
         "series_desc",
         "modality"
     ],
-    "true_positive": 295,
+    "true_positive": 293,
     "false_positive": 0,
     "false_negative": 0,
-    "true_negative": 2205,
+    "true_negative": 2207,
     "precision": 1.0,
     "recall": 1.0,
     "f1_score": 1.0,

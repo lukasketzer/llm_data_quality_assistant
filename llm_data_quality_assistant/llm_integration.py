@@ -210,6 +210,7 @@ def __merge_single_corrupted_dataset(
     At first look at the different column names and find an identifier.
     Rows that have the same identifier should have the exact same values.
     After merging rows, you have to ensure that the values make sense. Think for yourself whether the values make sense or have to be changed. If you find a value that does not make sense, change it to a value that makes sense.
+    Look for patterns in the additional information and use them to clean the dataset. Also use our own knowledge about the topic to clean the dataset.
 
     OUTPUT FORMAT: All of the inputted rows should be merged into a single row, with the same columns as the input dataset.
 

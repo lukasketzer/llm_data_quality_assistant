@@ -12,7 +12,6 @@ import pandas as pd
 import numpy as np
 
 
-
 dtype_map = {
     "int64": int,
     "float64": float,
@@ -20,9 +19,10 @@ dtype_map = {
     "bool": bool,
 }
 
-# TODO: Implement
-# I need the cleaned dataSet from parker and the cleaned dataSet from the LLM, I also need the original dataSet
-def combine_results_1(df_parker: pd.DataFrame, df_llm: pd.DataFrame, df_original: pd.DataFrame) -> pd.DataFrame:
+
+def combine_results_1(
+    df_parker: pd.DataFrame, df_llm: pd.DataFrame, df_original: pd.DataFrame
+) -> pd.DataFrame:
     """
     Combines two DataFrames by merging them on their index using a majority vote per cell.
     If all three disagree, defaults to df_parker (assumed more accurate).
@@ -36,7 +36,6 @@ def combine_results_1(df_parker: pd.DataFrame, df_llm: pd.DataFrame, df_original
 
     df_cleaned = pd.DataFrame(index=df_parker.index, columns=df_parker.columns)
 
-    
     for row in df_parker.index:
         for col in df_parker.columns:
             parker_val = df_parker.at[row, col]
@@ -70,6 +69,7 @@ def combine_results_1(df_parker: pd.DataFrame, df_llm: pd.DataFrame, df_original
     """
 
     return df_cleaned
+
 
 def __generate_pydantic_structure(dataset: pd.DataFrame):
     datatypes = {}

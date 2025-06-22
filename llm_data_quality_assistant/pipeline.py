@@ -21,45 +21,47 @@ class Pipeline:
     # TODO: multiple primary keys
     @staticmethod
     def standardize_datasets(
-        datasets: list[pd.DataFrame],
         primary_key: str,
-    ) -> list[pd.DataFrame]:
-        output = [df.copy() for df in datasets]
-        if len(output) == 0:
-            return []
+        **datasets: pd.DataFrame,
+    ) -> dict[str, pd.DataFrame]:
+        if not datasets:
+            return {}
+
+        output = {name: df.copy() for name, df in datasets.items()}
 
         # Check if primary keys exist in all datasets
-        if not all(primary_key in df.columns for df in output):
+        if not all(primary_key in df.columns for df in output.values()):
             raise ValueError(
                 f"Primary key '{primary_key}' must be present in all datasets."
             )
 
         # Check shapes
-        shapes = [df.shape for df in output]
+        shapes = [df.shape for df in output.values()]
         if not all(shape == shapes[0] for shape in shapes):
             raise ValueError("All datasets must have the same shape.")
 
         # Check columns
-        columns = [set(df.columns.tolist()) for df in output]
+        columns = [set(df.columns.tolist()) for df in output.values()]
         if not all(col == columns[0] for col in columns):
             raise ValueError("All datasets must have the same columns.")
 
-        # Check avialbale pirmary keys
-        primary_keys = datasets[0][primary_key].to_list().sort()
-        for dataset in output:
-            if not primary_keys == dataset[primary_key].to_list().sort():
+        # Check available primary keys
+        primary_keys = sorted(next(iter(output.values()))[primary_key].tolist())
+        for name, dataset in output.items():
+            if primary_keys != sorted(dataset[primary_key].tolist()):
                 raise ValueError(
                     f"Primary key '{primary_key}' must have the same values in all datasets."
                 )
 
         # Sort columns
-        columns = datasets[0].columns
-        output = [df[columns] for df in output]
+        columns_order = next(iter(output.values())).columns
+        output = {name: df[columns_order] for name, df in output.items()}
 
         # Sort primary keys
-        output = [
-            df.sort_values(by=primary_key).reset_index(drop=True) for df in output
-        ]
+        output = {
+            name: df.sort_values(by=primary_key).reset_index(drop=True)
+            for name, df in output.items()
+        }
 
         return output
 

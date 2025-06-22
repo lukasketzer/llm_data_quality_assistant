@@ -35,22 +35,18 @@ def combine_results_1(
         raise ValueError("All DataFrames must have the same shape after index reset.")
 
     df_cleaned = pd.DataFrame(index=df_parker.index, columns=df_parker.columns)
+    # """for row in df_parker.index:
+    #     for col in df_parker.columns:
+    #         parker_val = df_parker.at[row, col]
+    #         llm_val = df_llm.at[row, col]
+    #         orig_val = df_original.at[row, col]
+    #         # Majority vote logic
+    #         if parker_val == llm_val:
+    #             df_cleaned.at[row, col] = parker_val
+    #         else:
+    #             df_cleaned.at[row, col] = orig_val
+    # """
 
-    for row in df_parker.index:
-        for col in df_parker.columns:
-            parker_val = df_parker.at[row, col]
-            llm_val = df_llm.at[row, col]
-            orig_val = df_original.at[row, col]
-            # Majority vote logic
-            if parker_val == llm_val or parker_val != orig_val:
-                df_cleaned.at[row, col] = parker_val
-            elif llm_val != orig_val:
-                df_cleaned.at[row, col] = llm_val
-            else:
-                # All three disagree, default to parker_val
-                df_cleaned.at[row, col] = orig_val
-
-    """
     for row in df_parker.index:
         for col in df_parker.columns:
             parker_val = df_parker.at[row, col]
@@ -59,14 +55,13 @@ def combine_results_1(
             if parker_val == llm_val:
                 df_cleaned.at[row, col] = parker_val
             elif parker_val != orig_val and llm_val != orig_val:
-                df_cleaned.at[row, col] = llm_val
+                df_cleaned.at[row, col] = parker_val
             elif parker_val != orig_val:
                 df_cleaned.at[row, col] = parker_val
             elif llm_val != orig_val:
                 df_cleaned.at[row, col] = llm_val
             else:
-                df_cleaned.at[row, col] = orig_val 
-    """
+                df_cleaned.at[row, col] = orig_val
 
     return df_cleaned
 

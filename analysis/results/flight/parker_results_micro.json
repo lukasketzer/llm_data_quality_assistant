@@ -8,14 +8,15 @@
         "scheduled_arrival",
         "scheduled_departure"
     ],
-    "true_positive": 0,
-    "false_positive": 87462,
-    "false_negative": 0,
-    "true_negative": 35568,
-    "precision": 0.0,
-    "recall": 0.0,
-    "f1_score": 0.0,
-    "accuracy": 0.2891002194586686,
-    "false_positive_rate": 0.7108997805413314,
-    "false_negative_rate": 0.0
+    "true_positive": 11010,
+    "false_positive": 40650,
+    "false_negative": 36453,
+    "true_negative": 34917,
+    "precision": 0.21312427409988385,
+    "recall": 0.23197016623475128,
+    "f1_score": 0.22214824006537331,
+    "accuracy": 0.3732991953182151,
+    "false_positive_rate": 0.5379332248203581,
+    "false_negative_rate": 0.7680298337652487,
+    "time_taken": 5.245208740234375e-05
 }

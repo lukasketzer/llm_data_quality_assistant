@@ -26,58 +26,59 @@
         {
             "num_entries": 24606,
             "column_name": "actual_arrival",
-            "true_positive": 0,
-            "false_positive": 13644,
-            "false_negative": 0,
-            "true_negative": 10962,
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1_score": 0.0,
-            "accuracy": 0.4455010972933431,
-            "false_positive_rate": 0.5544989027066569,
-            "false_negative_rate": 0.0
+            "true_positive": 11010,
+            "false_positive": 1702,
+            "false_negative": 1583,
+            "true_negative": 10311,
+            "precision": 0.8661107614852108,
+            "recall": 0.8742952433891845,
+            "f1_score": 0.8701837581505633,
+            "accuracy": 0.8664959765910754,
+            "false_positive_rate": 0.14167984683259802,
+            "false_negative_rate": 0.12570475661081554
         },
         {
             "num_entries": 24606,
             "column_name": "actual_departure",
             "true_positive": 0,
-            "false_positive": 24606,
-            "false_negative": 0,
+            "false_positive": 8621,
+            "false_negative": 15985,
             "true_negative": 0,
             "precision": 0.0,
             "recall": 0.0,
             "f1_score": 0.0,
             "accuracy": 0.0,
             "false_positive_rate": 1.0,
-            "false_negative_rate": 0.0
+            "false_negative_rate": 1.0
         },
         {
             "num_entries": 24606,
             "column_name": "scheduled_arrival",
             "true_positive": 0,
-            "false_positive": 24606,
-            "false_negative": 0,
+            "false_positive": 14014,
+            "false_negative": 10592,
             "true_negative": 0,
             "precision": 0.0,
             "recall": 0.0,
             "f1_score": 0.0,
             "accuracy": 0.0,
             "false_positive_rate": 1.0,
-            "false_negative_rate": 0.0
+            "false_negative_rate": 1.0
         },
         {
             "num_entries": 24606,
             "column_name": "scheduled_departure",
             "true_positive": 0,
-            "false_positive": 24606,
-            "false_negative": 0,
+            "false_positive": 16313,
+            "false_negative": 8293,
             "true_negative": 0,
             "precision": 0.0,
             "recall": 0.0,
             "f1_score": 0.0,
             "accuracy": 0.0,
             "false_positive_rate": 1.0,
-            "false_negative_rate": 0.0
+            "false_negative_rate": 1.0
         }
-    ]
+    ],
+    "time_taken": 5.245208740234375e-05
 }

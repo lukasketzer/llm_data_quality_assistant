@@ -1,0 +1,84 @@
+{
+    "num_rows": 500,
+    "num_columns": 5,
+    "column_names": [
+        "dicom_uid",
+        "rows",
+        "columns",
+        "series_desc",
+        "modality"
+    ],
+    "stats": [
+        {
+            "num_entries": 500,
+            "column_name": "dicom_uid",
+            "true_positive": 0,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 500,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 500,
+            "column_name": "rows",
+            "true_positive": 56,
+            "false_positive": 4,
+            "false_negative": 1,
+            "true_negative": 439,
+            "precision": 0.9333333333333333,
+            "recall": 0.9824561403508771,
+            "f1_score": 0.9572649572649572,
+            "accuracy": 0.99,
+            "false_positive_rate": 0.009029345372460496,
+            "false_negative_rate": 0.017543859649122806
+        },
+        {
+            "num_entries": 500,
+            "column_name": "columns",
+            "true_positive": 58,
+            "false_positive": 4,
+            "false_negative": 1,
+            "true_negative": 437,
+            "precision": 0.9354838709677419,
+            "recall": 0.9830508474576272,
+            "f1_score": 0.9586776859504132,
+            "accuracy": 0.99,
+            "false_positive_rate": 0.009070294784580499,
+            "false_negative_rate": 0.01694915254237288
+        },
+        {
+            "num_entries": 500,
+            "column_name": "series_desc",
+            "true_positive": 95,
+            "false_positive": 7,
+            "false_negative": 3,
+            "true_negative": 395,
+            "precision": 0.9313725490196079,
+            "recall": 0.9693877551020408,
+            "f1_score": 0.95,
+            "accuracy": 0.98,
+            "false_positive_rate": 0.017412935323383085,
+            "false_negative_rate": 0.030612244897959183
+        },
+        {
+            "num_entries": 500,
+            "column_name": "modality",
+            "true_positive": 79,
+            "false_positive": 4,
+            "false_negative": 1,
+            "true_negative": 416,
+            "precision": 0.9518072289156626,
+            "recall": 0.9875,
+            "f1_score": 0.9693251533742331,
+            "accuracy": 0.99,
+            "false_positive_rate": 0.009523809523809525,
+            "false_negative_rate": 0.0125
+        }
+    ],
+    "time_taken": 129.63692212104797
+}

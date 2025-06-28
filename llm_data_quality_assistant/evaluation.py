@@ -102,6 +102,36 @@ def calculate_stats(
     return stats
 
 
+def calculate_macro_stats(macro_stats: dict) -> dict:
+    """
+    Calculate macro statistics from a list of column-wise statistics.
+    """
+    stats = {
+        "num_rows": macro_stats["num_rows"],
+        "num_columns": macro_stats["num_columns"],
+        "column_names": macro_stats["column_names"],
+    }
+    prec = np.mean([col["precision"] for col in macro_stats["stats"]])
+    rec = np.mean([col["recall"] for col in macro_stats["stats"]])
+    f1 = np.mean([col["f1_score"] for col in macro_stats["stats"]])
+    acc = np.mean([col["accuracy"] for col in macro_stats["stats"]])
+    fpr = np.mean([col["false_positive_rate"] for col in macro_stats["stats"]])
+    fnr = np.mean([col["false_negative_rate"] for col in macro_stats["stats"]])
+
+    stats.update(
+        {
+            "precision": prec,
+            "recall": rec,
+            "f1_score": f1,
+            "accuracy": acc,
+            "false_positive_rate": fpr,
+            "false_negative_rate": fnr,
+        }
+    )
+
+    return stats
+
+
 def evaluate_dataset_micro(
     gold_standard: pd.DataFrame,
     cleaned_dataset: pd.DataFrame,

@@ -26,10 +26,10 @@
         {
             "num_entries": 500,
             "column_name": "rows",
-            "true_positive": 56,
+            "true_positive": 58,
             "false_positive": 0,
             "false_negative": 0,
-            "true_negative": 444,
+            "true_negative": 442,
             "precision": 1.0,
             "recall": 1.0,
             "f1_score": 1.0,
@@ -40,10 +40,10 @@
         {
             "num_entries": 500,
             "column_name": "columns",
-            "true_positive": 64,
+            "true_positive": 58,
             "false_positive": 0,
             "false_negative": 0,
-            "true_negative": 436,
+            "true_negative": 442,
             "precision": 1.0,
             "recall": 1.0,
             "f1_score": 1.0,
@@ -54,10 +54,10 @@
         {
             "num_entries": 500,
             "column_name": "series_desc",
-            "true_positive": 90,
+            "true_positive": 93,
             "false_positive": 0,
             "false_negative": 0,
-            "true_negative": 410,
+            "true_negative": 407,
             "precision": 1.0,
             "recall": 1.0,
             "f1_score": 1.0,
@@ -68,10 +68,10 @@
         {
             "num_entries": 500,
             "column_name": "modality",
-            "true_positive": 80,
+            "true_positive": 85,
             "false_positive": 0,
             "false_negative": 0,
-            "true_negative": 420,
+            "true_negative": 415,
             "precision": 1.0,
             "recall": 1.0,
             "f1_score": 1.0,
@@ -80,5 +80,5 @@
             "false_negative_rate": 0.0
         }
     ],
-    "time_taken": 190.03296327590942
+    "time_taken": 125.85300421714783
 }

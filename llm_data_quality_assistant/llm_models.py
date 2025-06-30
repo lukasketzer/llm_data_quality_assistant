@@ -85,6 +85,7 @@ class OllamaModel(AbstractLLMModel):
         return (chunk.get("response", "") for chunk in response)
 
 
+# TODO: Finish
 class OpenAIModel(AbstractLLMModel):
     def __init__(self, model_name):
         super().__init__(model_name)

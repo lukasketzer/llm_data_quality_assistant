@@ -112,6 +112,7 @@ def merge_datasets_by_primary_key(
     status_bar: bool = False,
     rpm: int = 0,  # Requests per minute, 0 for no limit
     additional_prompt: str = "",
+    strict: bool = True,
 ) -> pd.DataFrame:
     """
     Merges rows in the dataset by the given primary key using the LLM-based cleaning approach.
@@ -174,14 +175,14 @@ def merge_datasets_by_primary_key(
             .drop(columns=["_tmp_row_order"])
             .reset_index(drop=True)
         )
+        if strict:
+            assert (
+                merged_df.shape[0] == dataset.shape[0]
+            ), f"Expected {dataset.shape[0]} rows, but got {merged_df.shape[0]} rows after merging."
 
-        assert (
-            merged_df.shape[0] == dataset.shape[0]
-        ), f"Expected {dataset.shape[0]} rows, but got {merged_df.shape[0]} rows after merging."
-
-        assert list(dataset[primary_key].values) == list(
-            merged_df[primary_key].values
-        ), "Primary key values do not match or are not in the same order"
+            assert list(dataset[primary_key].values) == list(
+                merged_df[primary_key].values
+            ), "Primary key values do not match or are not in the same order"
 
         return merged_df
     else:

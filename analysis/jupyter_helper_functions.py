@@ -65,6 +65,7 @@ def merge_with_llm_timed(
     model: Any,
     rpm: int = 30,
     additional_prompt: Optional[str] = None,
+    strict: bool = True,
 ) -> tuple[pd.DataFrame, float]:
     """
     Merge a dataset with LLM and return (merged DataFrame, elapsed time in seconds).
@@ -78,6 +79,7 @@ def merge_with_llm_timed(
         additional_prompt=additional_prompt if additional_prompt is not None else "",
         verbose=False,
         status_bar=True,
+        strict=strict,
     )
     elapsed = time.time() - start_time
     return merged_df, elapsed

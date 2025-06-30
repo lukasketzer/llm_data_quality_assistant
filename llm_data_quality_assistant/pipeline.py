@@ -74,15 +74,32 @@ class Pipeline:
         columns_to_exclude: list[str] = [],
         severity: float = 0.1,
         output_size: int = 5,
+        inplace: bool = False,
     ) -> list[pd.DataFrame]:
-        corrupted_datasets, _ = corrupt_dataset(
-            dataset=dataset,
-            cell_corruption_types=cell_corruption_types,
-            row_corruption_types=row_corruption_types,  # Add this argument as required
-            columns_to_exclude=columns_to_exclude,
-            severity=severity,
-            output_size=output_size,
-        )
+
+        if inplace:
+            extended_dataset = pd.concat(
+                [dataset.copy() for _ in range(output_size)],
+                ignore_index=True,
+            )
+            corrupted_datasets, _ = corrupt_dataset(
+                dataset=extended_dataset,
+                cell_corruption_types=cell_corruption_types,
+                row_corruption_types=row_corruption_types,  # Add this argument as required
+                columns_to_exclude=columns_to_exclude,
+                severity=severity,
+                output_size=1,
+            )
+        else:
+            corrupted_datasets, _ = corrupt_dataset(
+                dataset=dataset,
+                cell_corruption_types=cell_corruption_types,
+                row_corruption_types=row_corruption_types,  # Add this argument as required
+                columns_to_exclude=columns_to_exclude,
+                severity=severity,
+                output_size=output_size,
+            )
+
         return corrupted_datasets
 
     @staticmethod
@@ -96,6 +113,7 @@ class Pipeline:
         additional_prompt: str = "",
         verbose: bool = False,
         status_bar: bool = False,
+        strict: bool = True,
     ) -> pd.DataFrame:
         return merge_datasets_by_primary_key(
             model_name=model_name,
@@ -105,6 +123,7 @@ class Pipeline:
             additional_prompt=additional_prompt,
             verbose=verbose,
             status_bar=status_bar,
+            strict=strict,
         )
 
     @staticmethod

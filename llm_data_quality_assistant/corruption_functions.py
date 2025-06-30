@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 
 
-# Tested
 def swap_rows(dataset: pd.DataFrame, rows_to_swap: np.ndarray) -> pd.DataFrame:
 
     if rows_to_swap.size == 0:
@@ -28,7 +27,6 @@ def swap_rows(dataset: pd.DataFrame, rows_to_swap: np.ndarray) -> pd.DataFrame:
     return dataset
 
 
-# Tested
 def delete_rows(dataset: pd.DataFrame, rows_to_delete: np.ndarray) -> pd.DataFrame:
 
     if rows_to_delete.size == 0:
@@ -43,7 +41,6 @@ def delete_rows(dataset: pd.DataFrame, rows_to_delete: np.ndarray) -> pd.DataFra
     return dataset
 
 
-# Tested
 def shuffle_columns(dataset: pd.DataFrame, rows_to_shuffle: np.ndarray) -> pd.DataFrame:
     """
     Shuffle the columns for the specified rows in the dataset.
@@ -67,7 +64,6 @@ def shuffle_columns(dataset: pd.DataFrame, rows_to_shuffle: np.ndarray) -> pd.Da
     return dataset
 
 
-# Tested
 def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     if cell_coordinates.size == 0:
         return dataset
@@ -87,7 +83,6 @@ def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame
     return dataset
 
 
-# Tested
 def null(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     if cell_coordinates.size == 0:
         return dataset
@@ -96,10 +91,10 @@ def null(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
 
     for row, col in cell_coordinates:
         dataset.iat[row, col] = None
+
     return dataset
 
 
-# Tested
 def typo(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     """
     Introduce a random typo (swap, delete, or replace a character) in string values at the specified cell coordinates.
@@ -214,7 +209,6 @@ def incorrect_datatype(
     return dataset
 
 
-# Tested
 def reverse_rows(dataset: pd.DataFrame, rows_to_reverse: np.ndarray) -> pd.DataFrame:
     """
     Reverse the order of the specified rows in the dataset.
@@ -230,7 +224,6 @@ def reverse_rows(dataset: pd.DataFrame, rows_to_reverse: np.ndarray) -> pd.DataF
     return dataset
 
 
-# Tested
 def swap_cells(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     """
     Swap the values of the specified cell coordinates in a cyclic manner.
@@ -249,7 +242,6 @@ def swap_cells(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFr
     return dataset
 
 
-# Tested
 def case_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     """
     Randomly change the case of string values in the specified cells.
@@ -275,7 +267,6 @@ def case_error(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFr
     return dataset
 
 
-# Tested
 def truncate(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
     """
     Truncate string or numeric values in the specified cells.

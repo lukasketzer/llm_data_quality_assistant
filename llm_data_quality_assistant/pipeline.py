@@ -66,7 +66,6 @@ class Pipeline:
         return output
 
     @staticmethod
-    # TODO: make it create parker-like-datasets
     def generate_corrupted_datasets(
         dataset: pd.DataFrame,
         cell_corruption_types: list[CellCorruptionTypes],

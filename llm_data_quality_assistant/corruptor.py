@@ -292,6 +292,12 @@ def corrupt_dataset(
     if dataset.empty:
         return [pd.DataFrame() for _ in range(output_size)], []
 
+    if severity < 0 or severity > 1:
+        raise ValueError("Severity must be between 0 and 1.")
+
+    if output_size <= 0:
+        raise ValueError("Output size must be a positive integer.")
+
     for col in columns_to_exclude:
         if col not in dataset.columns:
             raise ValueError(f"Column '{col}' not found in the dataset.")

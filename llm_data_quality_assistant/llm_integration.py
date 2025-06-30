@@ -157,7 +157,6 @@ def merge_datasets_by_primary_key(
         merged_rows.append(merged_row)
 
     if merged_rows:
-        # TODO: maybe a better way to merge DataFrames?
         merged_df = pd.concat(merged_rows, ignore_index=True)
         merged_df = merged_df.reindex(columns=dataset.columns)
 

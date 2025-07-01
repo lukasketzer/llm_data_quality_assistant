@@ -1,4 +1,4 @@
-from typing import Iterator, Any
+from typing import Iterator, Any, Generator
 from pydantic import RootModel, BaseModel
 import ollama
 from google import genai
@@ -85,7 +85,6 @@ class OllamaModel(AbstractLLMModel):
         return (chunk.get("response", "") for chunk in response)
 
 
-# TODO: Finish
 class OpenAIModel(AbstractLLMModel):
     def __init__(self, model_name):
         super().__init__(model_name)
@@ -95,21 +94,12 @@ class OpenAIModel(AbstractLLMModel):
         self.client = openai.OpenAI(api_key=self.api_key)
 
     def chat(self, messages, format=None) -> str:
-        raise NotImplementedError("chat() is not implemented yet for OpenAIModel.")
-
-    def chat_stream(self, messages, format=None) -> Iterator[str]:
-        raise NotImplementedError(
-            "chat_stream() is not implemented yet for OpenAIModel."
-        )
-
-    def generate(self, prompt, format=None) -> str:
         # Use chat completion with a single user message
 
-        input_message = {"role": "user", "content": prompt}
         if format is not None:
             response = self.client.chat.completions.create(
                 model=self.model_name.value,
-                messages=[input_message],  # type: ignore
+                messages=messages,  # type: ignore
                 functions=[
                     {"name": "return_format", "parameters": format.model_json_schema()}
                 ],
@@ -120,28 +110,40 @@ class OpenAIModel(AbstractLLMModel):
         else:
             response = self.client.chat.completions.create(
                 model=self.model_name.value,
-                messages=[input_message],  # type: ignore
+                messages=messages,  # type: ignore
             )
             return response.choices[0].message.content or "" if response.choices else ""
 
-    # TODO:
-    def generate_stream(self, prompt, format=None) -> Iterator[str]:
-
-        input_message = {"role": "user", "content": prompt}
+    def chat_stream(self, messages, format=None) -> Iterator[str]:
         if format is not None:
-            raise NotImplementedError(
-                "Stream generation with format is not possible OpenAIModel."
-            )
-        else:
             response = self.client.chat.completions.create(
                 model=self.model_name.value,
-                messages=[input_message],  # type: ignore
+                messages=messages,
                 stream=True,
             )
 
             for chunk in response:
-                delta = chunk.choices[0].delta
-                yield delta.content
+                delta: str | None = chunk.choices[0].delta.content
+                yield delta if delta is not None else ""
+
+        else:
+            response = self.client.chat.completions.create(
+                model=self.model_name.value,
+                messages=messages,
+                stream=True,
+            )
+
+            for chunk in response:
+                delta: str | None = chunk.choices[0].delta.content
+                yield delta if delta is not None else ""
+
+    def generate(self, prompt, format=None) -> str:
+        input_message = {"role": "user", "content": prompt}
+        return self.chat(messages=[input_message], format=format)
+
+    def generate_stream(self, prompt, format=None) -> Iterator[str]:
+        input_message = {"role": "user", "content": prompt}
+        return self.chat_stream(messages=[input_message], format=format)
 
 
 class GeminiModel(AbstractLLMModel):

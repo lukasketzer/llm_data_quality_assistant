@@ -2,7 +2,6 @@ import pandas as pd
 from llm_data_quality_assistant.llm_models import get_model
 from pydantic import create_model
 import json
-from llm_data_quality_assistant.merge_baseline import merge_baseline
 from llm_data_quality_assistant.llm_models import OpenAIModel
 import time
 from tqdm import tqdm

@@ -65,6 +65,7 @@ def merge_with_llm_timed(
     model: Any,
     rpm: int = 30,
     additional_prompt: Optional[str] = None,
+    stream: bool = False,
     strict: bool = True,
 ) -> tuple[pd.DataFrame, float]:
     """
@@ -77,7 +78,7 @@ def merge_with_llm_timed(
         model_name=model,
         rpm=rpm,
         additional_prompt=additional_prompt if additional_prompt is not None else "",
-        verbose=False,
+        verbose=stream,
         status_bar=True,
         strict=strict,
     )

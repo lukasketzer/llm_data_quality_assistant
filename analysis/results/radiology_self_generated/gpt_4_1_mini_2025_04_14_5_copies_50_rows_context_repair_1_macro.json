@@ -1,0 +1,69 @@
+{
+    "num_rows": 500,
+    "num_columns": 5,
+    "column_names": [
+        "dicom_uid",
+        "rows",
+        "columns",
+        "series_desc",
+        "modality"
+    ],
+    "stats": [
+        {
+            "num_entries": 500,
+            "column_name": "rows",
+            "true_positive": 495,
+            "false_positive": 0,
+            "false_negative": 5,
+            "true_negative": 0,
+            "precision": 1.0,
+            "recall": 0.99,
+            "f1_score": 0.9949748743718593,
+            "accuracy": 0.99,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.01
+        },
+        {
+            "num_entries": 500,
+            "column_name": "columns",
+            "true_positive": 500,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 500,
+            "column_name": "series_desc",
+            "true_positive": 98,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 402,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 500,
+            "column_name": "modality",
+            "true_positive": 80,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 420,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        }
+    ]
+}

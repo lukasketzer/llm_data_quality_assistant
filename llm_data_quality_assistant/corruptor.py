@@ -16,6 +16,11 @@ datatype_restrictions = {
     CellCorruptionTypes.CASE_ERROR: [np.dtype("O")],
     CellCorruptionTypes.TRUNCATE: [np.dtype("O")],
     CellCorruptionTypes.TYPO: [np.dtype("O")],
+    CellCorruptionTypes.OUTLIER: [
+        np.dtype("int64"),
+        np.dtype("float64"),
+        np.dtype("O"),
+    ],
 }
 
 

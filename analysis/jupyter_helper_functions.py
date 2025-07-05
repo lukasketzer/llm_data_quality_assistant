@@ -11,6 +11,7 @@ from pprint import pprint
 import time
 from typing import Optional, Any
 from llm_data_quality_assistant.pipeline import Pipeline
+import evaluation
 
 
 def sanitize_filename(name: str) -> str:
@@ -46,16 +47,18 @@ def get_unique_filename(path: str) -> str:
     return new_path
 
 
-def save_json(data, path: str) -> None:
+def save_json(data, path: str, overwrite: bool = False) -> None:
     """Save a Python object as a JSON file, avoiding overwrite by appending a number if needed."""
-    path = get_unique_filename(path)
+    if not overwrite:
+        path = get_unique_filename(path)
     with open(path, "w") as f:
         json.dump(data, f, indent=4)
 
 
-def save_dataframe_csv(df: pd.DataFrame, path: str) -> None:
+def save_dataframe_csv(df: pd.DataFrame, path: str, overwrite: bool = False) -> None:
     """Save a DataFrame as a CSV file, avoiding overwrite by appending a number if needed."""
-    path = get_unique_filename(path)
+    if not overwrite:
+        path = get_unique_filename(path)
     df.to_csv(path, index=False)
 
 
@@ -98,27 +101,19 @@ def standardize_and_evaluate(
     """
     Standardize datasets, evaluate, and save results.
     """
-    out = Pipeline.standardize_datasets(
+    stats_micro = evaluation.evaluate_dataset_micro(
         gold_standard=gold_standard,
         cleaned_dataset=merged_df,
-        corrupted_dataset=corrupt_dataset,
+        original_dataset=corrupt_dataset,
         primary_key=primary_key,
-    )
-    gold_standard = out["gold_standard"]
-    merged_df = out["cleaned_dataset"]
-    corrupt_dataset = out["corrupted_dataset"]
-
-    stats_micro = Pipeline.evaluate_micro(
-        gold_standard=gold_standard,
-        cleaned_dataset=merged_df,
-        corrupted_dataset=corrupt_dataset,
     )
     stats_micro["time_taken"] = time_delta
 
-    stats_macro = Pipeline.evaluate_macro(
+    stats_macro = evaluation.evaluate_dataset_macro(
         gold_standard=gold_standard,
         cleaned_dataset=merged_df,
-        corrupted_dataset=corrupt_dataset,
+        original_dataset=corrupt_dataset,
+        primary_key=primary_key,
     )
     stats_macro["time_taken"] = time_delta
 

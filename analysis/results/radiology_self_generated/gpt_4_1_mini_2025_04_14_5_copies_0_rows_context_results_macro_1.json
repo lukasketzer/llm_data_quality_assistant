@@ -1,0 +1,70 @@
+{
+    "num_rows": 500,
+    "num_columns": 5,
+    "column_names": [
+        "dicom_uid",
+        "rows",
+        "columns",
+        "series_desc",
+        "modality"
+    ],
+    "stats": [
+        {
+            "num_entries": 500,
+            "column_name": "rows",
+            "true_positive": 161,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 339,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 500,
+            "column_name": "columns",
+            "true_positive": 152,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 348,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        },
+        {
+            "num_entries": 500,
+            "column_name": "series_desc",
+            "true_positive": 225,
+            "false_positive": 3,
+            "false_negative": 22,
+            "true_negative": 250,
+            "precision": 0.9868421052631579,
+            "recall": 0.9109311740890689,
+            "f1_score": 0.9473684210526316,
+            "accuracy": 0.95,
+            "false_positive_rate": 0.011857707509881422,
+            "false_negative_rate": 0.08906882591093117
+        },
+        {
+            "num_entries": 500,
+            "column_name": "modality",
+            "true_positive": 220,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 280,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "accuracy": 1.0,
+            "false_positive_rate": 0.0,
+            "false_negative_rate": 0.0
+        }
+    ],
+    "time_taken": 204.23682761192322
+}

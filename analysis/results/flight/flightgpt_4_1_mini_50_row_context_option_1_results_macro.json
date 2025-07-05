@@ -1,0 +1,70 @@
+{
+    "num_rows": 24606,
+    "num_columns": 5,
+    "column_names": [
+        "composed_key",
+        "actual_arrival",
+        "actual_departure",
+        "scheduled_arrival",
+        "scheduled_departure"
+    ],
+    "stats": [
+        {
+            "num_entries": 24606,
+            "column_name": "actual_arrival",
+            "true_positive": 9801,
+            "false_positive": 3677,
+            "false_negative": 2792,
+            "true_negative": 8336,
+            "precision": 0.7271850422911411,
+            "recall": 0.7782895259271023,
+            "f1_score": 0.751869893751678,
+            "accuracy": 0.7370966430951801,
+            "false_positive_rate": 0.3060850745026222,
+            "false_negative_rate": 0.22171047407289765
+        },
+        {
+            "num_entries": 24606,
+            "column_name": "actual_departure",
+            "true_positive": 9008,
+            "false_positive": 6186,
+            "false_negative": 6977,
+            "true_negative": 2435,
+            "precision": 0.5928656048440174,
+            "recall": 0.5635283077885518,
+            "f1_score": 0.5778248179864653,
+            "accuracy": 0.465049174997968,
+            "false_positive_rate": 0.717550168193945,
+            "false_negative_rate": 0.4364716922114482
+        },
+        {
+            "num_entries": 24606,
+            "column_name": "scheduled_arrival",
+            "true_positive": 9286,
+            "false_positive": 1705,
+            "false_negative": 1306,
+            "true_negative": 12309,
+            "precision": 0.8448730779728869,
+            "recall": 0.8766993957703928,
+            "f1_score": 0.8604920539313349,
+            "accuracy": 0.8776314719986995,
+            "false_positive_rate": 0.12166405023547881,
+            "false_negative_rate": 0.12330060422960724
+        },
+        {
+            "num_entries": 24606,
+            "column_name": "scheduled_departure",
+            "true_positive": 8257,
+            "false_positive": 50,
+            "false_negative": 36,
+            "true_negative": 16263,
+            "precision": 0.9939809798964728,
+            "recall": 0.9956589895092246,
+            "f1_score": 0.9948192771084338,
+            "accuracy": 0.9965049174997967,
+            "false_positive_rate": 0.0030650401520259914,
+            "false_negative_rate": 0.004341010490775353
+        }
+    ],
+    "time_taken": 0
+}

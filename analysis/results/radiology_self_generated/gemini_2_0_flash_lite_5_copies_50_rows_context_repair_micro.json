@@ -1,0 +1,21 @@
+{
+    "num_rows": 500,
+    "num_columns": 5,
+    "column_names": [
+        "dicom_uid",
+        "rows",
+        "columns",
+        "series_desc",
+        "modality"
+    ],
+    "true_positive": 1177,
+    "false_positive": 4,
+    "false_negative": 1,
+    "true_negative": 818,
+    "precision": 0.9966130397967824,
+    "recall": 0.9991511035653651,
+    "f1_score": 0.9978804578211108,
+    "accuracy": 0.9975,
+    "false_positive_rate": 0.004866180048661801,
+    "false_negative_rate": 0.0008488964346349745
+}

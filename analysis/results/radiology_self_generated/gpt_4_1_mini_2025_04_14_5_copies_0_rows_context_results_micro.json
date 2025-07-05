@@ -8,15 +8,15 @@
         "series_desc",
         "modality"
     ],
-    "true_positive": 294,
-    "false_positive": 0,
-    "false_negative": 0,
-    "true_negative": 2206,
-    "precision": 1.0,
-    "recall": 1.0,
-    "f1_score": 1.0,
-    "accuracy": 1.0,
-    "false_positive_rate": 0.0,
-    "false_negative_rate": 0.0,
-    "time_taken": 125.85300421714783
+    "true_positive": 742,
+    "false_positive": 2,
+    "false_negative": 33,
+    "true_negative": 1223,
+    "precision": 0.9973118279569892,
+    "recall": 0.9574193548387097,
+    "f1_score": 0.9769585253456221,
+    "accuracy": 0.9825,
+    "false_positive_rate": 0.0016326530612244899,
+    "false_negative_rate": 0.04258064516129032,
+    "time_taken": 202.59922289848328
 }

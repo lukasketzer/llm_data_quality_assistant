@@ -25,15 +25,15 @@
         "soy",
         "sulfite"
     ],
-    "true_positive": 60,
-    "false_positive": 89,
-    "false_negative": 29,
-    "true_negative": 4354,
-    "precision": 0.40268456375838924,
-    "recall": 0.6741573033707865,
-    "f1_score": 0.5042016806722689,
-    "accuracy": 0.9739629302736099,
-    "false_positive_rate": 0.02003151024082827,
-    "false_negative_rate": 0.3258426966292135,
-    "time_taken": 244.19457387924194
+    "true_positive": 1353,
+    "false_positive": 85,
+    "false_negative": 389,
+    "true_negative": 2499,
+    "precision": 0.9408901251738526,
+    "recall": 0.7766934557979334,
+    "f1_score": 0.850943396226415,
+    "accuracy": 0.8904299583911235,
+    "false_positive_rate": 0.03289473684210526,
+    "false_negative_rate": 0.22330654420206658,
+    "time_taken": 268.92083835601807
 }

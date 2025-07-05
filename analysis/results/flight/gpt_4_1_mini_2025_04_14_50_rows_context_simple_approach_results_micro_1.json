@@ -1,0 +1,22 @@
+{
+    "num_rows": 24606,
+    "num_columns": 5,
+    "column_names": [
+        "composed_key",
+        "actual_arrival",
+        "actual_departure",
+        "scheduled_arrival",
+        "scheduled_departure"
+    ],
+    "true_positive": 29141,
+    "false_positive": 10580,
+    "false_negative": 18322,
+    "true_negative": 40381,
+    "precision": 0.7336421540243196,
+    "recall": 0.6139729894865474,
+    "f1_score": 0.6684942191227748,
+    "accuracy": 0.7063521092416484,
+    "false_positive_rate": 0.20760974078216676,
+    "false_negative_rate": 0.38602701051345256,
+    "time_taken": 1729.6895818710327
+}

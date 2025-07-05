@@ -71,9 +71,19 @@ def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame
         raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
 
     for row, col in cell_coordinates:
-        if isinstance(dataset.iat[row, col], (int, float)):
+        if row >= dataset.shape[0] or col >= dataset.shape[1]:
+            raise IndexError(f"Index out of bounds: ({row}, {col})")
+
+        if isinstance(dataset.iat[row, col], int) or isinstance(
+            dataset.iat[row, col], float
+        ):
+            beginer_values = dataset.iat[row, col]
             # Generate a random outlier value
-            outlier_value = dataset.iat[row, col] * random.uniform(10, 100)
+            original_value = dataset.iat[row, col]
+            if original_value == 0:
+                original_value = random.uniform(10, 100)
+
+            outlier_value = original_value * random.uniform(10, 100)
             dataset.iat[row, col] = outlier_value
         else:
             # Generate a random string as an outlier

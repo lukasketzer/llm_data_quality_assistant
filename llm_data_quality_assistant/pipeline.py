@@ -11,7 +11,7 @@ from llm_data_quality_assistant.enums.CorruptionTypes import (
 
 from llm_data_quality_assistant.llm_integration import merge_datasets_by_primary_key
 from llm_data_quality_assistant.enums import Models
-from llm_data_quality_assistant.evaluation import (
+from analysis.evaluation import (
     evaluate_dataset_micro,
     evaluate_dataset_macro,
 )
@@ -125,28 +125,28 @@ class Pipeline:
             strict=strict,
         )
 
-    @staticmethod
-    def evaluate_micro(
-        gold_standard: pd.DataFrame,
-        cleaned_dataset: pd.DataFrame,
-        corrupted_dataset: pd.DataFrame,
-    ) -> dict:
-        """Evaluate a generated dataset using micro metrics."""
-        return evaluate_dataset_micro(
-            gold_standard=gold_standard,
-            cleaned_dataset=cleaned_dataset,
-            corrupted_dataset=corrupted_dataset,
-        )
+    # @staticmethod
+    # def evaluate_micro(
+    #     gold_standard: pd.DataFrame,
+    #     cleaned_dataset: pd.DataFrame,
+    #     corrupted_dataset: pd.DataFrame,
+    # ) -> dict:
+    #     """Evaluate a generated dataset using micro metrics."""
+    #     return evaluate_dataset_micro(
+    #         gold_standard=gold_standard,
+    #         cleaned_dataset=cleaned_dataset,
+    #         original_dataset=corrupted_dataset,
+    #     )
 
-    @staticmethod
-    def evaluate_macro(
-        gold_standard: pd.DataFrame,
-        cleaned_dataset: pd.DataFrame,
-        corrupted_dataset: pd.DataFrame,
-    ) -> dict:
-        """Evaluate a generated dataset using macro metrics."""
-        return evaluate_dataset_macro(
-            gold_standard=gold_standard,
-            cleaned_dataset=cleaned_dataset,
-            corrupted_dataset=corrupted_dataset,
-        )
+    # @staticmethod
+    # def evaluate_macro(
+    #     gold_standard: pd.DataFrame,
+    #     cleaned_dataset: pd.DataFrame,
+    #     corrupted_dataset: pd.DataFrame,
+    # ) -> dict:
+    #     """Evaluate a generated dataset using macro metrics."""
+    #     return evaluate_dataset_macro(
+    #         gold_standard=gold_standard,
+    #         cleaned_dataset=cleaned_dataset,
+    #         original_dataset=corrupted_dataset,
+    #     )

@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import pytest
 import pandas as pd
-from llm_data_quality_assistant import evaluation
+from analysis import evaluation
 
 
 def test_precision():
@@ -62,10 +62,12 @@ def test_calculate_stats():
 
 
 def test_evaluate_dataset_micro():
-    gold = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
-    cleaned = pd.DataFrame({"a": [1, 2], "b": [3, 0]})
-    corrupted = pd.DataFrame({"a": [1, 0], "b": [0, 4]})
-    stats = evaluation.evaluate_dataset_micro(gold, cleaned, corrupted)
+    gold = pd.DataFrame({"id": [1, 2], "a": [1, 2], "b": [3, 4]})
+    cleaned = pd.DataFrame({"id": [1, 2], "a": [1, 2], "b": [3, 0]})
+    corrupted = pd.DataFrame({"id": [1, 2], "a": [1, 0], "b": [0, 4]})
+    stats = evaluation.evaluate_dataset_micro(
+        gold, cleaned, corrupted, primary_key="id"
+    )
     assert stats["true_positive"] >= 0
     assert stats["false_positive"] >= 0
     assert stats["false_negative"] >= 0
@@ -79,11 +81,14 @@ def test_evaluate_dataset_micro():
 
 
 def test_evaluate_dataset_macro():
-    gold = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
-    cleaned = pd.DataFrame({"a": [1, 2], "b": [3, 0]})
-    corrupted = pd.DataFrame({"a": [1, 0], "b": [0, 4]})
-    stats = evaluation.evaluate_dataset_macro(gold, cleaned, corrupted)
+    gold = pd.DataFrame({"id": [1, 2], "a": [1, 2], "b": [3, 4]})
+    cleaned = pd.DataFrame({"id": [1, 2], "a": [1, 2], "b": [3, 0]})
+    corrupted = pd.DataFrame({"id": [1, 2], "a": [1, 0], "b": [0, 4]})
+    stats = evaluation.evaluate_dataset_macro(
+        gold, cleaned, corrupted, primary_key="id"
+    )
     assert "stats" in stats
+    # Only non-primary-key columns are evaluated
     assert len(stats["stats"]) == 2
     for col_stats in stats["stats"]:
         assert "precision" in col_stats
@@ -95,38 +100,44 @@ def test_evaluate_dataset_macro():
 
 
 def test_evaluate_dataset_micro_shape_error():
-    gold = pd.DataFrame({"a": [1, 2]})
-    cleaned = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
-    corrupted = pd.DataFrame({"a": [1, 0], "b": [0, 4]})
+    gold = pd.DataFrame({"id": [1, 2], "a": [1, 2]})
+    cleaned = pd.DataFrame({"id": [1, 2], "a": [1, 2], "b": [3, 4]})
+    corrupted = pd.DataFrame({"id": [1, 2], "a": [1, 0], "b": [0, 4]})
     with pytest.raises(ValueError):
-        evaluation.evaluate_dataset_micro(gold, cleaned, corrupted)
+        evaluation.evaluate_dataset_micro(gold, cleaned, corrupted, primary_key="id")
 
 
 def test_evaluate_dataset_macro_shape_error():
-    gold = pd.DataFrame({"a": [1, 2]})
-    cleaned = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
-    corrupted = pd.DataFrame({"a": [1, 0], "b": [0, 4]})
+    gold = pd.DataFrame({"id": [1, 2], "a": [1, 2]})
+    cleaned = pd.DataFrame({"id": [1, 2], "a": [1, 2], "b": [3, 4]})
+    corrupted = pd.DataFrame({"id": [1, 2], "a": [1, 0], "b": [0, 4]})
     with pytest.raises(ValueError):
-        evaluation.evaluate_dataset_macro(gold, cleaned, corrupted)
+        evaluation.evaluate_dataset_macro(gold, cleaned, corrupted, primary_key="id")
 
 
 def test_evaluate_empty_dataframes():
-    gold = pd.DataFrame()
-    cleaned = pd.DataFrame()
-    corrupted = pd.DataFrame()
-    stats_micro = evaluation.evaluate_dataset_micro(gold, cleaned, corrupted)
-    stats_macro = evaluation.evaluate_dataset_macro(gold, cleaned, corrupted)
+    gold = pd.DataFrame(columns=["id", "a", "b"])
+    cleaned = pd.DataFrame(columns=["id", "a", "b"])
+    corrupted = pd.DataFrame(columns=["id", "a", "b"])
+    stats_micro = evaluation.evaluate_dataset_micro(
+        gold, cleaned, corrupted, primary_key="id"
+    )
+    stats_macro = evaluation.evaluate_dataset_macro(
+        gold, cleaned, corrupted, primary_key="id"
+    )
     assert stats_micro["num_rows"] == 0
-    assert stats_micro["num_columns"] == 0
+    assert stats_micro["num_columns"] == 3
     assert stats_macro["num_rows"] == 0
-    assert stats_macro["num_columns"] == 0
+    assert stats_macro["num_columns"] == 3
 
 
 def test_evaluate_nan_dataframes():
-    gold = pd.DataFrame({"a": [float("nan"), float("nan")]})
-    cleaned = pd.DataFrame({"a": [float("nan"), float("nan")]})
-    corrupted = pd.DataFrame({"a": [float("nan"), float("nan")]})
-    stats = evaluation.evaluate_dataset_micro(gold, cleaned, corrupted)
+    gold = pd.DataFrame({"id": [1, 2], "a": [float("nan"), float("nan")]})
+    cleaned = pd.DataFrame({"id": [1, 2], "a": [float("nan"), float("nan")]})
+    corrupted = pd.DataFrame({"id": [1, 2], "a": [float("nan"), float("nan")]})
+    stats = evaluation.evaluate_dataset_micro(
+        gold, cleaned, corrupted, primary_key="id"
+    )
     assert "precision" in stats
     assert "recall" in stats
     assert "f1_score" in stats

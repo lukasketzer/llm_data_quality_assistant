@@ -16,7 +16,7 @@ def swap_rows(dataset: pd.DataFrame, rows_to_swap: np.ndarray) -> pd.DataFrame:
         raise IndexError("Row indices out of bounds.")
 
     if rows_to_swap.size < 2:
-        return dataset  # No swap needed if less than two rows are provided
+        return dataset
 
     # Generate a derangement (no index stays in place)
     while True:
@@ -35,7 +35,6 @@ def delete_rows(dataset: pd.DataFrame, rows_to_delete: np.ndarray) -> pd.DataFra
     if rows_to_delete.ndim != 1:
         raise ValueError("rows_to_delete must be a 1D array of row indices.")
 
-    # Pick one row index from the provided list
     dataset.iloc[rows_to_delete] = None
 
     return dataset
@@ -52,10 +51,8 @@ def shuffle_columns(dataset: pd.DataFrame, rows_to_shuffle: np.ndarray) -> pd.Da
         raise ValueError("rows_to_shuffle must be a 1D array of row indices.")
 
     for row in rows_to_shuffle:
-        # Generate a derangement (no index stays in place)
         row_values = dataset.values[row]
         perm = np.random.permutation(row_values)
-        # chekc if any permutatio is on the same position
 
         while np.any(perm == row_values):
             perm = np.random.permutation(row_values)
@@ -65,6 +62,9 @@ def shuffle_columns(dataset: pd.DataFrame, rows_to_shuffle: np.ndarray) -> pd.Da
 
 
 def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
+    """
+    Introduce an outlier value in the specified cell coordinates.
+    """
     if cell_coordinates.size == 0:
         return dataset
     if cell_coordinates.ndim != 2:
@@ -77,8 +77,6 @@ def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame
         if isinstance(dataset.iat[row, col], int) or isinstance(
             dataset.iat[row, col], float
         ):
-            beginer_values = dataset.iat[row, col]
-            # Generate a random outlier value
             original_value = dataset.iat[row, col]
             if original_value == 0:
                 original_value = random.uniform(10, 100)
@@ -86,7 +84,6 @@ def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame
             outlier_value = original_value * random.uniform(10, 100)
             dataset.iat[row, col] = outlier_value
         else:
-            # Generate a random string as an outlier
             outlier_value = "".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=20))
             dataset.iat[row, col] = outlier_value
 
@@ -94,6 +91,9 @@ def outlier(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame
 
 
 def null(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
+    """
+    Introduce a null value in the specified cell coordinates.
+    """
     if cell_coordinates.size == 0:
         return dataset
     if cell_coordinates.ndim != 2:
@@ -176,7 +176,6 @@ def typo(dataset: pd.DataFrame, cell_coordinates: np.ndarray) -> pd.DataFrame:
                 replacement = random.choice("abcdefghijklmnopqrstuvwxyz")
             dataset.iat[row, col] = value[:idx] + replacement + value[idx + 1 :]
         else:
-            # If none of the above, leave value unchanged
             pass
     return dataset
 
@@ -192,6 +191,7 @@ def incorrect_datatype(
         return dataset
     if cell_coordinates.ndim != 2:
         raise ValueError("cell_coordinates must be a 2D array with shape (n, 2).")
+
     # Handle numpy integer and floating types if available
     numpy_integer = getattr(np, "integer", ())
     numpy_floating = getattr(np, "floating", ())
@@ -210,9 +210,6 @@ def incorrect_datatype(
         # If value is a bool, replace with a string
         elif isinstance(value, bool):
             dataset.iat[row, col] = "True" if value else "False"
-        # If value is a datetime, replace with a string
-        elif isinstance(value, (pd.Timestamp, np.datetime64)):
-            dataset.iat[row, col] = "not_a_date"
         # Otherwise, replace with a string
         else:
             dataset.iat[row, col] = "incorrect_type"

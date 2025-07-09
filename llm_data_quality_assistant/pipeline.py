@@ -1,6 +1,4 @@
-from pprint import pprint
 import pandas as pd
-import numpy as np
 from llm_data_quality_assistant.corruptor import (
     corrupt_dataset,
 )
@@ -11,10 +9,6 @@ from llm_data_quality_assistant.enums.CorruptionTypes import (
 
 from llm_data_quality_assistant.llm_integration import merge_datasets_by_primary_key
 from llm_data_quality_assistant.enums import Models
-from analysis.evaluation import (
-    evaluate_dataset_micro,
-    evaluate_dataset_macro,
-)
 
 
 class Pipeline:

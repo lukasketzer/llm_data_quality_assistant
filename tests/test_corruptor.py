@@ -24,6 +24,7 @@ from llm_data_quality_assistant.enums.CorruptionTypes import (
         CellCorruptionTypes.CASE_ERROR,
         CellCorruptionTypes.TRUNCATE,
         CellCorruptionTypes.ROUNDING_ERROR,
+        CellCorruptionTypes.INCORRECT_DATATYPE,
         CellCorruptionTypes.TYPO,
     ],
 )
@@ -42,7 +43,7 @@ def test_corrupt_dataset_severity_single_cell_type(cell_corruption_type):
     severity = 0.13
     output_size = 1
 
-    corrupted_dfs, coords = corrupt_dataset(
+    corrupted_dfs, _ = corrupt_dataset(
         dataset=df,
         row_corruption_types=row_corruption_types,
         cell_corruption_types=cell_corruption_types,

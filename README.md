@@ -1,6 +1,6 @@
 # LLM Data Quality Assistant
 
-A Python framework for data quality assessment, corruption simulation, and repair using Large Language Models (LLMs).
+A ready-to-use Python package for data quality assessment, corruption simulation, and repair using Large Language Models (LLMs). Simply install and integrate into your data processing workflows.
 
 ## Project Overview
 
@@ -16,12 +16,8 @@ The project focuses on evaluating the effectiveness of LLMs in data cleaning tas
 ## Installation
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd llm_data_quality_assistant
-
-# Install dependencies
-pip install -r requirements.txt
+# Install the package directly from GitHub
+pip install git+https://github.com/lukasketzer/llm_data_quality_assistant.git
 
 # Set up environment variables for API keys (create a .env file)
 touch .env
@@ -261,10 +257,42 @@ offline_repair = Pipeline.merge_with_llm(
 - `QWEN3_LATEST`: qwen3:latest
 - `LLAMA3_LATEST`: llama3:latest
 
-## Testing
+## Quick Start Guide
 
-Run the test suite to verify the framework components:
+After installation, you can immediately use the package in your Python projects:
 
-```bash
-pytest tests/
+```python
+# Import the main components
+from llm_data_quality_assistant.pipeline import Pipeline
+from llm_data_quality_assistant.enums import Models
+from llm_data_quality_assistant.enums.CorruptionTypes import CellCorruptionTypes
+
+# Load your dataset
+import pandas as pd
+df = pd.read_csv("your_dataset.csv")
+
+# Step 1: Introduce data quality issues (optional - skip if you already have corrupt data)
+corrupted_df = Pipeline.corrupt_dataset(
+    dataset=df,
+    cell_corruption_types=[CellCorruptionTypes.OUTLIER, CellCorruptionTypes.NULL],
+    severity=0.05,
+    columns_to_exclude=["id"]  # Protect your primary key
+)
+
+# Step 2: Repair your dataset with LLM
+repaired_df = Pipeline.merge_with_llm(
+    dataset=corrupted_df,
+    primary_key="id",
+    model_name=Models.OpenAIModels.GPT_4_1_NANO
+)
+
+# Step 3: Save your repaired dataset
+repaired_df.to_csv("repaired_dataset.csv", index=False)
 ```
+
+## Support
+
+If you encounter any issues with this package, please visit:
+
+- Issues page: [GitHub Issues](https://github.com/lukasketzer/llm_data_quality_assistant/issues)
+- Documentation: See the examples above and in-code documentation

@@ -281,7 +281,6 @@ def apply_cell_corruptions(
     return dataset
 
 
-# TODO: ints should stay ints
 def corrupt_dataset(
     dataset: pd.DataFrame,
     row_corruption_types: list[RowCorruptionTypes],

@@ -17,4 +17,4 @@ Homepage = "https://github.com/lukasketzer/llm_data_quality_assistant"
 Issues = "https://github.com/lukasketzer/llm_data_quality_assistant/issues"
 
 [tool.setuptools.packages.find]
-where = ["llm_data_quality_assistant"]
+where = ["."]

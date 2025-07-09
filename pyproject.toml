@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm_data_quality_assistant"
+version = "1.0.0"
+authors = [
+  { name = "Lukas Ketzer", email = "lukas.a.ketzer@tum.de" },
+  { name = "Franziska Kuch", email = "franziska.kuch@tum.de" },
+]
+requires-python = ">=3.9"
+readme = "README.md"
+
+[project.urls]
+Homepage = "https://github.com/lukasketzer/llm_data_quality_assistant"
+Issues = "https://github.com/lukasketzer/llm_data_quality_assistant/issues"
+
+[tool.setuptools.packages.find]
+where = ["llm_data_quality_assistant"]
